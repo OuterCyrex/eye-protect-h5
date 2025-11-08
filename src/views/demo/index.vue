@@ -2,7 +2,7 @@
   <section>
     <span class="title">Varlet</span>
     <var-space :size="[10, 10]" class="space">
-      <var-button>默认按钮</var-button>
+      <var-button @click="showVarletToast">默认按钮(点我弹出通知)</var-button>
       <var-button type="primary">主要按钮</var-button>
       <var-button type="info">信息按钮</var-button>
       <var-button type="success">成功按钮</var-button>
@@ -13,7 +13,7 @@
   <section>
     <span class="title">Vant</span>
     <div class="demo">
-      <van-button type="primary">主要按钮</van-button>
+      <van-button type="primary" @click="showVantToast">主要按钮(点我弹出通知)</van-button>
       <van-button type="success">成功按钮</van-button>
       <van-button type="default">默认按钮</van-button>
       <van-button type="warning">警告按钮</van-button>
@@ -23,7 +23,7 @@
   <section>
     <span class="title">NutUI</span>
     <div class="demo">
-      <nut-button type="primary">主要按钮</nut-button>
+      <nut-button type="primary" @click="showNutToast">主要按钮(点我弹出通知)</nut-button>
       <nut-button type="info">信息按钮</nut-button>
       <nut-button type="default">默认按钮</nut-button>
       <nut-button type="danger">危险按钮</nut-button>
@@ -33,7 +33,25 @@
   </section>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import { showToast as NutToast } from '@nutui/nutui';
+
+  const showVarletToast = () => {
+    Snackbar({
+      content: '我是 varlet 通知',
+      duration: 1000,
+      position: 'center',
+    });
+  };
+
+  const showVantToast = () => {
+    showToast('我是 vant 通知');
+  };
+
+  const showNutToast = () => {
+    NutToast.text('我是 nut 通知');
+  };
+</script>
 
 <style lang="scss" scoped>
   section {

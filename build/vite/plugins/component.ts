@@ -4,8 +4,10 @@
  */
 
 import Components from 'unplugin-vue-components/vite';
-import { VueUseComponentsResolver, VantResolver, VarletUIResolver } from 'unplugin-vue-components/resolvers';
+import { VueUseComponentsResolver } from 'unplugin-vue-components/resolvers';
 import NutUIResolver from '@nutui/auto-import-resolver';
+import { VarletImportResolver } from '@varlet/import-resolver';
+import { VantResolver } from '@vant/auto-import-resolver';
 
 export const ConfigAutoComponentsPlugin = () => {
   return Components({
@@ -18,6 +20,6 @@ export const ConfigAutoComponentsPlugin = () => {
     directives: true,
     include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
     exclude: [/[\\/]node_modules[\\/]/, /[\\/]\.git[\\/]/, /[\\/]\.nuxt[\\/]/],
-    resolvers: [VueUseComponentsResolver(), VantResolver(), VarletUIResolver(), NutUIResolver()],
+    resolvers: [VueUseComponentsResolver(), VantResolver(), VarletImportResolver(), NutUIResolver()],
   });
 };

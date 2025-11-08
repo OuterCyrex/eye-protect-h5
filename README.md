@@ -1,6 +1,8 @@
 # vue-h5-template
 
-基于 vue3 + vite + （nutui or varlet or vant） + sass + viewport 适配方案 + axios 封装，构建手机端模板脚手架
+基于 vue3 + vite + （nutui or varlet or vant） + ts + sass + viewport 适配方案 + axios 封装，构建手机端模板脚手架
+
+如果你对 `ts` 没有要求，想用纯 `js` 进行开发, 可以[点这里](https://github.com/sunniejs/vue-h5-template/tree/vue-h5-template-lite)来获取vue-h5-template-lite
 
 如果你不熟悉 vue3，想继续使用 vue2 开发的，可以[点这里](https://github.com/sunniejs/vue-h5-template/tree/vue2-h5-template)来获取 vue2-h5-template
 

@@ -1,6 +1,7 @@
 /**
- * @name  ConfigAutoComponentsPlugin
+ * @name ConfigAutoComponentsPlugin
  * @description 按需加载，自动引入组件
+ * @returns {import('vite').Plugin} Vite插件配置
  */
 
 import Components from 'unplugin-vue-components/vite';
@@ -11,7 +12,7 @@ import { VantResolver } from '@vant/auto-import-resolver';
 
 export const ConfigAutoComponentsPlugin = () => {
   return Components({
-    // dirs: ['src/components'],
+    dirs: ['src/components'],
     extensions: ['vue', 'md'],
     deep: true,
     dts: 'types/components.d.ts',
@@ -20,6 +21,6 @@ export const ConfigAutoComponentsPlugin = () => {
     directives: true,
     include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
     exclude: [/[\\/]node_modules[\\/]/, /[\\/]\.git[\\/]/, /[\\/]\.nuxt[\\/]/],
-    resolvers: [VueUseComponentsResolver(), VantResolver(), VarletImportResolver(), NutUIResolver()],
+    resolvers: [VueUseComponentsResolver(), VantResolver(), VarletImportResolver(), NutUIResolver({ importStyle: 'sass' })],
   });
 };

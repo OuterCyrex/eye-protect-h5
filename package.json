@@ -141,6 +141,7 @@
       "prettier --write"
     ]
   },
+  "packageManager": "pnpm@10.26.2",
   "config": {
     "commitizen": {
       "path": "node_modules/cz-git"

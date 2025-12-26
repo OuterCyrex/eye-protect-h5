@@ -1,5 +1,5 @@
 import { createVitePlugins } from './build/vite/plugins';
-import type { ConfigEnv, UserConfig } from 'vite';
+import type  { ConfigEnv, UserConfig } from 'vite';
 import { loadEnv } from 'vite';
 import { wrapperEnv } from './build/utils';
 import { fileURLToPath, URL } from 'node:url';
@@ -56,7 +56,10 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
     base: '/',
     root,
     resolve: {
-      alias: { '@': fileURLToPath(new URL('./src', import.meta.url)), '#': fileURLToPath(new URL('./types', import.meta.url)) },
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+        '#': fileURLToPath(new URL('./types', import.meta.url))
+      },
     },
     server: {
       host: true,
@@ -76,10 +79,8 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
     css: {
       preprocessorOptions: {
         scss: {
-          quietDeps: true,
-          silenceDeprecations: ['legacy-js-api'],
           // 配置 nutui 全局 scss 变量
-          additionalData: `@use "@nutui/nutui/dist/styles/variables.scss" as *; @use '@/styles/vant.scss' as *;`,
+         additionalData: `@import "@/styles/varible.scss";@import "@nutui/nutui/dist/styles/variables-jdt.scss";`
         },
       },
     },

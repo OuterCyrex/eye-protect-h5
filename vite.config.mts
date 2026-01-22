@@ -13,7 +13,7 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
   const env = loadEnv(mode, root);
   const viteEnv = wrapperEnv(env);
 
-  const devOptimizeDepsInclude: Array<string> = ['eruda', 'vant/es,@varlet/ui'];
+  const devOptimizeDepsInclude: Array<string> = ['eruda'];
   if (!isProduction) {
     const excludedDirs = ['utils', 'style', 'composables'];
     const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -80,7 +80,8 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
       preprocessorOptions: {
         scss: {
           // 配置 nutui 全局 scss 变量
-         additionalData: `@import "@/styles/varible.scss";@import "@nutui/nutui/dist/styles/variables-jdt.scss";`
+         additionalData: `@use "@/styles/variable.scss" as *;@use "@nutui/nutui/dist/styles/variables.scss" as *;`,
+         quietDeps: true,
         },
       },
     },

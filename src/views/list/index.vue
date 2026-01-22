@@ -27,7 +27,7 @@
 
 <style lang="scss" scoped>
   .nut-card {
-    padding: 15px;
+    padding: 15px 0;
     border-bottom: 1px solid #e5e5e5;
   }
 </style>

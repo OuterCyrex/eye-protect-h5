@@ -12,13 +12,29 @@
       </span>
     </div>
     <div>
-      <span>{{ details.data?.title }}}</span>
+      <span>{{ details.data?.title }}</span>
     </div>
   </section>
+
+  <!-- 底部固定购买栏 -->
+  <div :gutter="4" class="bottom-bar">
+    <div class="btn-icon">
+      <Dshop color="#fa2c19" />
+      <span>店铺</span>
+    </div>
+    <div class="btn-icon"><Dongdong /> <span>店铺</span></div>
+    <div class="btn-icon"><Cart /> <span>店铺</span></div>
+    <div class="btn-group">
+      <nut-button type="primary"> 加入购物车 </nut-button>
+      <nut-button type="warning"> 立即购买 </nut-button>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
   import { detailsData } from '../data';
+  import { Dshop, Dongdong, Cart } from '@nutui/icons-vue';
+
   const router = useRouter();
   const page = ref(1);
 
@@ -50,10 +66,52 @@
       display: inline-block;
       font-size: 32px;
       color: #f2270c;
+    }
+  }
 
-      em {
-        font-size: 56px;
-        font-style: normal;
+  .bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100px;
+    background-color: #fff;
+    box-shadow: 0 -2px 8px rgb(0 0 0 / 10%);
+
+    .btn-icon {
+      position: relative;
+      display: flex;
+      flex: 0 0 14%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+
+      .nut-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      span {
+        margin-top: 12px;
+        font-size: 18px;
+      }
+    }
+
+    .btn-group {
+      display: flex;
+      flex: 1;
+      justify-content: space-between;
+
+      .nut-button {
+        flex: 1;
+        padding: 0;
+        margin-right: 10px;
       }
     }
   }

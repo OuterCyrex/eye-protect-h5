@@ -1,4 +1,6 @@
-export const routes = [
+import type { RouteRecordRaw } from 'vue-router';
+
+export const routes: RouteRecordRaw[] = [
   {
     path: '/',
     redirect: '/home',
@@ -8,7 +10,7 @@ export const routes = [
         path: 'home',
         component: () => import('@/views/home/index.vue'),
         meta: {
-          title: 'tabbar.home',
+          title: 'common.tabbar.home',
           keepAlive: true,
         },
       },
@@ -16,7 +18,7 @@ export const routes = [
         path: 'list',
         component: () => import('@/views/list/index.vue'),
         meta: {
-          title: 'tabbar.list',
+          title: 'common.tabbar.list',
           keepAlive: true,
         },
       },
@@ -24,7 +26,7 @@ export const routes = [
         path: 'member',
         component: () => import('@/views/member/index.vue'),
         meta: {
-          title: 'tabbar.member',
+          title: 'common.tabbar.member',
           keepAlive: true,
         },
       },
@@ -32,7 +34,7 @@ export const routes = [
         path: 'demo',
         component: () => import('@/views/demo/index.vue'),
         meta: {
-          title: 'tabbar.demo',
+          title: 'common.tabbar.demo',
           keepAlive: true,
         },
       },
@@ -41,7 +43,7 @@ export const routes = [
         path: '/details',
         component: () => import('@/views/list/details/index.vue'),
         meta: {
-          title: 'list.details',
+          title: 'common.list.details',
           border: false,
         },
       },

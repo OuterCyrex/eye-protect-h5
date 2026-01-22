@@ -13,7 +13,6 @@ export type langType = {
   introduction: string;
   home: {
     support: string;
-    cssMultiLanguage: string;
   };
   list: {
     details: string;

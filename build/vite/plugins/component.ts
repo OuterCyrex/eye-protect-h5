@@ -21,6 +21,6 @@ export const ConfigAutoComponentsPlugin = () => {
     directives: true,
     include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
     exclude: [/[\\/]node_modules[\\/]/, /[\\/]\.git[\\/]/, /[\\/]\.nuxt[\\/]/],
-    resolvers: [VueUseComponentsResolver(), VantResolver(), VarletImportResolver(), NutUIResolver({ importStyle: 'sass' })],
+    resolvers: [VueUseComponentsResolver(), VantResolver(), VarletImportResolver(), NutUIResolver()],
   });
 };

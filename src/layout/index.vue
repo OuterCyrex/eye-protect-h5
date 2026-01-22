@@ -1,16 +1,25 @@
 <template>
-  <van-nav-bar :title="$t($route.meta.title as string)" :left-arrow="!tabbarVisible" @click-left="goBack" />
-  <div class="main-page" :class="{ tabbar: tabbarVisible, border: showBorder }">
-    <RouterView v-slot="{ Component }" v-if="$route.meta.keepAlive">
-      <keep-alive>
-        <component :is="Component" :key="$route.path" />
-      </keep-alive>
-    </RouterView>
-    <RouterView v-if="!$route.meta.keepAlive" :key="$route.path" />
+  <div class="main-page">
+    <van-nav-bar :title="$t($route.meta.title as string)" :left-arrow="!tabbarVisible" @click-left="goBack" />
+    <div class="main-box" :class="{ tabbar: tabbarVisible, border: showBorder }">
+      <RouterView v-slot="{ Component }" v-if="$route.meta.keepAlive">
+        <keep-alive>
+          <component :is="Component" :key="$route.path" />
+        </keep-alive>
+      </RouterView>
+      <RouterView v-if="!$route.meta.keepAlive" :key="$route.path" />
+    </div>
+    <nut-tabbar
+      unactive-color="#364636"
+      active-color="#1989fa"
+      v-model="activeTab"
+      v-show="tabbarVisible"
+      @tab-switch="tabSwitch"
+      safe-area-inset-bottom
+    >
+      <nut-tabbar-item v-for="item in tabItem" :key="item.key" :tab-title="$t(`common.tabbar.${item.key}`)" :icon="item.icon" />
+    </nut-tabbar>
   </div>
-  <nut-tabbar unactive-color="#364636" active-color="#1989fa" bottom v-model="activeTab" v-show="tabbarVisible" @tab-switch="tabSwitch">
-    <nut-tabbar-item v-for="item in tabItem" :key="item.key" :tab-title="$t(`tabbar.${item.key}`)" :icon="item.icon" />
-  </nut-tabbar>
 </template>
 
 <script lang="ts" setup name="BasicLayoutPage">
@@ -43,7 +52,7 @@
     { deep: true, immediate: true },
   );
 
-  const tabSwitch = (_item, index) => {
+  const tabSwitch = (_item: any, index: number) => {
     switch (index) {
       case 0:
         router.push('/home');
@@ -72,14 +81,16 @@
   }
 
   .main-page {
-    box-sizing: border-box;
-    height: calc(100vh - 92px);
-    overflow: hidden scroll;
-  }
+    display: flex;
+    flex-direction: column;
+    width: 100dvw;
+    height: 100dvh;
 
-  .tabbar {
-    height: calc(100vh - 92px);
-    padding-bottom: 100px;
+    .main-box {
+      flex: auto;
+      min-height: 0;
+      overflow: hidden auto;
+    }
   }
 
   .border {

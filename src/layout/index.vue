@@ -23,6 +23,7 @@
 </template>
 
 <script lang="ts" setup name="BasicLayoutPage">
+  import { ref, watch } from 'vue';
   import { useRouter } from 'vue-router';
   import { Home, Horizontal, My, Location } from '@nutui/icons-vue';
 

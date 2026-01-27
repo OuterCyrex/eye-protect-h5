@@ -18,7 +18,6 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
     const excludedDirs = ['utils', 'style', 'composables'];
     const __dirname = dirname(fileURLToPath(import.meta.url));
 
-    // 需要自动优化的 UI 库
     const uiLibraries = [
       { name: 'vant/es', path: 'node_modules/vant/es' },
       { name: '@nutui/nutui/dist/packages', path: 'node_modules/@nutui/nutui/dist/packages' },
@@ -68,9 +67,9 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
     plugins: createVitePlugins(viteEnv, isProduction),
     build: {
       minify: 'terser',
+      target: ['es2022', 'chrome91', 'edge91', 'firefox89', 'safari15'],
       terserOptions: {
         compress: {
-          //生产环境时移除console
           drop_console: true,
           drop_debugger: true,
         },
@@ -79,7 +78,6 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
     css: {
       preprocessorOptions: {
         scss: {
-          // 配置 nutui 全局 scss 变量
          additionalData: `@use "@/styles/variable.scss" as *;@use "@nutui/nutui/dist/styles/variables.scss" as *;`,
          quietDeps: true,
         },
@@ -87,6 +85,9 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
     },
     optimizeDeps: {
       include: [...devOptimizeDepsInclude],
+      esbuildOptions: {
+        target: 'es2022'
+      }
     },
   };
 }

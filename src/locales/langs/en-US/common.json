@@ -2,9 +2,9 @@
   "title": "VUE H5 development template",
   "tabbar": {
     "home": "Home",
-    "list": "List",
-    "member": "Member",
-    "demo": "demo"
+    "appoint": "Appointment",
+    "notice": "Notice",
+    "account": "My Account"
   },
   "language": {
     "en": "English",

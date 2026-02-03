@@ -2,9 +2,9 @@ export type langType = {
   title: string;
   tabbar: {
     home: string;
-    list: string;
-    member: string;
-    demo: string;
+    appoint: string;
+    notice: string;
+    account: string;
   };
   language: {
     en: string;

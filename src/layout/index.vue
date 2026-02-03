@@ -25,13 +25,13 @@
 <script lang="ts" setup name="BasicLayoutPage">
   import { ref, watch } from 'vue';
   import { useRouter } from 'vue-router';
-  import { Home, Horizontal, My, Location } from '@nutui/icons-vue';
+  import { Home, Date, Notice, My } from '@nutui/icons-vue';
 
   const tabItem = [
     { key: 'home', icon: Home },
-    { key: 'list', icon: Horizontal },
-    { key: 'member', icon: My },
-    { key: 'demo', icon: Location },
+    { key: 'appoint', icon: Date },
+    { key: 'notice', icon: Notice },
+    { key: 'account', icon: My },
   ];
 
   const router = useRouter();
@@ -59,13 +59,13 @@
         router.push('/home');
         break;
       case 1:
-        router.push('/list');
+        router.push('/appoint');
         break;
       case 2:
-        router.push('/member');
+        router.push('/notice');
         break;
       case 3:
-        router.push('/demo');
+        router.push('/account');
         break;
     }
     activeTab.value = index;
@@ -92,10 +92,5 @@
       min-height: 0;
       overflow: hidden auto;
     }
-  }
-
-  .border {
-    padding-right: 30px;
-    padding-left: 30px;
   }
 </style>

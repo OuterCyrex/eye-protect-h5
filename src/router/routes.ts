@@ -15,36 +15,28 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'list',
-        component: () => import('@/views/list/index.vue'),
+        path: 'appoint',
+        component: () => import('@/views/appoint/index.vue'),
         meta: {
-          title: 'common.tabbar.list',
+          title: 'common.tabbar.appoint',
           keepAlive: true,
         },
       },
       {
-        path: 'member',
-        component: () => import('@/views/member/index.vue'),
+        name: 'notice',
+        path: '/notice',
+        component: () => import('@/views/notice/index.vue'),
         meta: {
-          title: 'common.tabbar.member',
-          keepAlive: true,
-        },
-      },
-      {
-        path: 'demo',
-        component: () => import('@/views/demo/index.vue'),
-        meta: {
-          title: 'common.tabbar.demo',
-          keepAlive: true,
-        },
-      },
-      {
-        name: 'listDetails',
-        path: '/details',
-        component: () => import('@/views/list/details/index.vue'),
-        meta: {
-          title: 'common.list.details',
+          title: 'common.tabbar.notice',
           border: false,
+        },
+      },
+      {
+        path: 'account',
+        component: () => import('@/views/account/index.vue'),
+        meta: {
+          title: 'common.tabbar.account',
+          keepAlive: true,
         },
       },
     ],

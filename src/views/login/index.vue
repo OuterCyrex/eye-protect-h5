@@ -1,61 +1,50 @@
 <template>
-  <div class="login">
-    <h2>登录</h2>
-    <nut-form ref="ruleForm" :model-value="formData">
-      <nut-form-item label="用户名" required prop="name" :rules="[{ required: true, message: '请输入用户名' }]">
-        <nut-input v-model="formData.name" placeholder="请输入用户名" type="text" />
-      </nut-form-item>
-      <nut-form-item label="密码" required prop="pwd" :rules="[{ required: true, message: '请输入密码' }]">
-        <nut-input v-model="formData.pwd" placeholder="请输入密码" type="password" />
-      </nut-form-item>
-      <nut-button block type="info" @click="submit"> 登录 </nut-button>
-    </nut-form>
+  <div class="flex justify-center flex-col">
+    <div class="flex justify-center flex-col items-center my-12">
+      <div class="text-2xl font-semibold mb-2">近视防控侧</div>
+      <div class="text-gray-500 text-center">守护青少年光明未来</div>
+    </div>
+
+    <div class="mx-12 grid gap-6">
+      <InputBar prepend-icon="phone" v-model="phoneNumber" :validator="validatePhone" placeholder="输入手机号" />
+      <InputBar prepend-icon="lock" v-model="verifyCode" placeholder="请输入密码" />
+
+      <var-button class="login-btn" type="primary" block @click="handleLogin"> 登录/注册 </var-button>
+
+      <div class="flex items-center justify-center gap-4">
+        <div class="flex-1 h-px bg-gray-200"></div>
+        <span class="text-gray-500 text-sm whitespace-nowrap">其他登录方式</span>
+        <div class="flex-1 h-px bg-gray-200"></div>
+      </div>
+
+      <var-button text class="flex items-center">
+        <var-icon name="https://img.icons8.com/?size=100&id=4l0fwQnRnd10&format=png&color=000000" size="22" class="mr-2" />
+        <span class="text-lg">微信一键登录</span>
+      </var-button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import router from '@/router';
-  import { reactive, ref } from 'vue';
-  import { useUserStore } from '@/store/modules/user';
+  import { ref } from 'vue';
+  import InputBar from '@/templates/InputBar.vue';
 
-  const userStore = useUserStore();
-  const formData = reactive({
-    name: '',
-    pwd: '',
-  });
-  const ruleForm = ref<any>(null);
-  const submit = () => {
-    ruleForm.value.validate().then(async ({ valid, errors }: any) => {
-      if (valid) {
-        const userInfo = await userStore.login();
-        console.log(userInfo);
-        if (userInfo) {
-          router.push({ path: '/member' });
-        }
-      } else {
-        console.log('error submit!!', errors);
-      }
-    });
+  const phoneNumber = ref('');
+  const verifyCode = ref('');
+  const router = useRouter();
+
+  const validatePhone = (value: string) => {
+    if (!value) {
+      return '请输入手机号';
+    } else if (!/^1[3-9]\d{9}$/.test(value)) {
+      return '请输入正确的11位手机号';
+    }
+    return '';
+  };
+
+  const handleLogin = () => {
+    console.log('登录参数：', { phone: phoneNumber.value, code: verifyCode.value });
+    router.push({ path: '/' });
+    alert('登录/注册成功！');
   };
 </script>
-
-<style scoped lang="scss">
-  .login {
-    padding: 20px;
-
-    h2 {
-      text-align: center;
-      letter-spacing: 10px;
-    }
-
-    .nut-form-item {
-      margin-bottom: 20px;
-      background: #f2f3f5;
-      border-radius: 20px;
-
-      input {
-        background: transparent;
-      }
-    }
-  }
-</style>

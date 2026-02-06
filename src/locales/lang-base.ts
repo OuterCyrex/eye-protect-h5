@@ -12,7 +12,8 @@ export type langType = {
   };
   introduction: string;
   home: {
-    support: string;
+    achieve: string;
+    achieveDetail: string;
   };
   list: {
     details: string;

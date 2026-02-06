@@ -27,7 +27,7 @@
     </div>
 
     <div class="grid-cols-4 gap-3 grid">
-      <IconButton v-for="item in JumpButtons" :key="item.label" :icon-name="item.iconName" :label="item.label" />
+      <IconButton v-for="item in JumpButtons" :key="item.label" :icon-name="item.iconName" :label="item.label" :to="`${item.to}`" />
     </div>
 
     <var-paper class="flex items-center my-4 mx-3 p-2">
@@ -86,24 +86,24 @@
 
   const JumpButtons = ref([
     {
-      iconName: 'https://img.icons8.com/?size=100&id=Uj7cc1bM2V0K&format=png&color=000000',
+      iconName: 'src/assets/font/icon/home/home-btns-1.png',
       label: '视力档案',
-      to: 'achieve',
+      to: '/home/achieve',
     },
     {
-      iconName: 'https://img.icons8.com/?size=100&id=jYfUylYiP4W1&format=png&color=000000',
+      iconName: 'src/assets/font/icon/home/home-btns-2.png',
       label: '干预方案',
-      to: 'prevent',
+      to: '/home/prevent',
     },
     {
-      iconName: 'https://img.icons8.com/?size=100&id=iC17RWbYbVlO&format=png&color=000000',
+      iconName: 'src/assets/font/icon/home/home-btns-3.png',
       label: '预约配镜',
-      to: 'glasses',
+      to: '/home/glasses',
     },
     {
-      iconName: 'https://img.icons8.com/?size=100&id=55424&format=png&color=000000',
+      iconName: 'src/assets/font/icon/home/home-btns-4.png',
       label: '公益礼包',
-      to: 'charity',
+      to: '/home/charity',
     },
   ]);
 

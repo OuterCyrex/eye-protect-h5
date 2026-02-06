@@ -6,8 +6,6 @@
 </template>
 
 <script setup lang="ts">
-  import { useRouter } from 'vue-router';
-
   const router = useRouter();
 
   const props = defineProps<{
@@ -21,7 +19,7 @@
   }>();
 
   const handleClick = () => {
-    if (!!props.to) router.push('' + props.to);
+    if (!!props.to) router.push({ path: props.to });
     emits('click');
   };
 </script>

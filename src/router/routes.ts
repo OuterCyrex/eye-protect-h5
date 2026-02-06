@@ -39,6 +39,22 @@ export const routes: RouteRecordRaw[] = [
           keepAlive: true,
         },
       },
+      {
+        path: 'home/achieve',
+        component: () => import('@/views/home/achieve.vue'),
+        meta: {
+          title: 'common.home.achieve',
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'home/achieve/detail',
+        component: () => import('@/views/home/achieveDetail.vue'),
+        meta: {
+          title: 'common.home.achieveDetail',
+          keepAlive: true,
+        },
+      },
     ],
   },
   {
@@ -50,9 +66,7 @@ export const routes: RouteRecordRaw[] = [
       keepAlive: true,
     },
   },
-  // 匹配不到重定向会主页
   {
-    // 找不到路由重定向到404页面
     path: '/:pathMatch(.*)',
     redirect: '/Home',
   },

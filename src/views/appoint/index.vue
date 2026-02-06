@@ -13,7 +13,7 @@
       </div>
       <div class="my-4">
         <div class="font-semibold">预约类型</div>
-        <chip-tab size="large" class="m-4" :tabs="appointTabs" v-model="appointType" />
+        <chip-tab class="m-4" :tabs="appointTabs" v-model="appointType" />
       </div>
       <div class="my-4">
         <div class="font-semibold">选择日期</div>

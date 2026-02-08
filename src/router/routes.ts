@@ -55,6 +55,38 @@ export const routes: RouteRecordRaw[] = [
           keepAlive: true,
         },
       },
+      {
+        path: 'notice/detail',
+        component: () => import('@/views/notice/noticeDetail.vue'),
+        meta: {
+          title: 'common.notice.noticeDetail',
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'account/edit',
+        component: () => import('@/views/account/editInfo.vue'),
+        meta: {
+          title: 'common.account.editInfo',
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'account/appoint',
+        component: () => import('@/views/account/appoint.vue'),
+        meta: {
+          title: 'common.account.appoint',
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'account/appoint/detail',
+        component: () => import('@/views/account/appointDetail.vue'),
+        meta: {
+          title: 'common.account.appointDetail',
+          keepAlive: true,
+        },
+      },
     ],
   },
   {

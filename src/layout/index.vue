@@ -17,14 +17,7 @@
       @tab-switch="tabSwitch"
       safe-area-inset-bottom
     >
-      <nut-tabbar-item
-        v-for="item in tabItem"
-        :key="item.key"
-        :tab-title="$t(`common.tabbar.${item.key}`)"
-        :icon="item.icon"
-        :name="item.key"
-        :to="`/${item.key}`"
-      />
+      <nut-tabbar-item v-for="item in tabItem" :key="item.key" :tab-title="$t(`common.tabbar.${item.key}`)" :icon="item.icon" />
     </nut-tabbar>
   </div>
 </template>

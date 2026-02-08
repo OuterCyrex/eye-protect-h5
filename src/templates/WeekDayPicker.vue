@@ -3,7 +3,7 @@
     <div
       v-for="(day, index) in next15Days"
       :key="index"
-      class="flex flex-col items-center justify-center w-12 h-14 rounded-lg transition-all duration-200"
+      class="flex flex-col items-center justify-center w-10 h-12 rounded-lg transition-all duration-200"
       :class="{
         'bg-gray-100 text-gray-400 cursor-not-allowed': isDisabled(day),
         'bg-white text-gray-800 hover:bg-gray-50 cursor-pointer': !isDisabled(day) && !isSelected(day),
@@ -12,7 +12,7 @@
       @click="!isDisabled(day) && handleDayClick(day)"
     >
       <span class="text-sm">{{ day.dayOfWeekText }}</span>
-      <span class="text-lg font-semibold">{{ getDateNum(day.date) }}</span>
+      <span class="text-sm font-semibold">{{ getDateNum(day.date) }}</span>
     </div>
   </div>
 </template>

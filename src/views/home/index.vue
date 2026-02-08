@@ -1,36 +1,37 @@
 <template>
-  <div>
-    <div class="bg-blue-600 rounded-lg p-4 text-white m-3">
-      <div class="flex justify-between items-center mb-4">
-        <div class="text-sm font-semibold">最新筛查数据（2026-02-05）</div>
-        <var-chip size="small" type="danger" class="bg-red-500 text-white">高风险</var-chip>
-      </div>
-      <div class="flex gap-4 mb-4">
-        <div v-for="item in mockEyeData" :key="item.eye" class="flex-1 bg-blue-500 rounded-lg p-3 text-center">
-          <div class="flex items-center justify-center text-xs text-gray-200 mb-2">
-            <van-icon :name="item.eye === 'left' ? 'eye-o' : 'eye'" size="16" class="mr-1" />
-            <div>{{ item.eye === 'left' ? '左眼（OS）' : '右眼（OD）' }}</div>
+  <div class="bg-gray-100">
+    <div class="bg-white">
+      <div class="bg-blue-600 rounded-lg p-4 text-white m-3">
+        <div class="flex justify-between items-center mb-4">
+          <div class="text-sm font-semibold">最新筛查数据（2026-02-05）</div>
+          <var-chip size="small" type="danger" class="bg-red-500 text-white">高风险</var-chip>
+        </div>
+        <div class="flex gap-4 mb-4">
+          <div v-for="item in mockEyeData" :key="item.eye" class="flex-1 bg-blue-500 rounded-lg p-3 text-center">
+            <div class="flex items-center justify-center text-xs text-gray-200 mb-2">
+              <van-icon :name="item.eye === 'left' ? 'eye-o' : 'eye'" size="16" class="mr-1" />
+              <div>{{ item.eye === 'left' ? '左眼（OS）' : '右眼（OD）' }}</div>
+            </div>
+            <div class="text-4xl font-bold mb-1">{{ item.power }}</div>
+            <div class="text-xs text-gray-200">
+              {{ `S${item.sphere.toFixed(2)}/C${item.cylinder.toFixed(2)}/A${item.axis}` }}
+            </div>
           </div>
-          <div class="text-4xl font-bold mb-1">{{ item.power }}</div>
-          <div class="text-xs text-gray-200">
-            {{ `S${item.sphere.toFixed(2)}/C${item.cylinder.toFixed(2)}/A${item.axis}` }}
-          </div>
+        </div>
+
+        <var-divider class="my-2 bg-blue-400" />
+
+        <div class="flex justify-between items-center text-xs mt-3">
+          <div>风险提示：近视度数增长较快，建议复查</div>
+          <div class="text-blue-200 underline cursor-pointer">查看报告</div>
         </div>
       </div>
 
-      <var-divider class="my-2 bg-blue-400" />
+      <div class="grid-cols-4 gap-3 grid px-4 pb-3">
+        <IconButton v-for="item in JumpButtons" :key="item.label" :icon-name="item.iconName" :label="item.label" :to="`${item.to}`" /> </div
+    ></div>
 
-      <div class="flex justify-between items-center text-xs mt-3">
-        <div>风险提示：近视度数增长较快，建议复查</div>
-        <div class="text-blue-200 underline cursor-pointer">查看报告</div>
-      </div>
-    </div>
-
-    <div class="grid-cols-4 gap-3 grid">
-      <IconButton v-for="item in JumpButtons" :key="item.label" :icon-name="item.iconName" :label="item.label" :to="`${item.to}`" />
-    </div>
-
-    <var-paper class="flex items-center my-4 mx-3 p-2">
+    <var-paper class="flex items-center my-2 px-4 py-3">
       <var-icon name="bell" size="28" class="rounded-full p-1 bg-yellow-200 mr-4" color="rgb(250, 204, 21)" />
       <div class="flex justify-between">
         <div>
@@ -41,8 +42,8 @@
       <var-chip size="small" type="primary" class="ml-auto">去预约</var-chip>
     </var-paper>
 
-    <var-paper class="m-3 mt-6">
-      <div class="font-semibold mb-4">热门推荐</div>
+    <var-paper class="p-3">
+      <div class="font-semibold">热门推荐</div>
       <var-card
         class="my-3"
         v-for="item in recommendList"

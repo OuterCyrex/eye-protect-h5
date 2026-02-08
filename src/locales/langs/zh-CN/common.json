@@ -15,6 +15,15 @@
     "achieve": "视力档案记录",
     "achieveDetail": "视力档案详情"
   },
+  "notice": {
+    "notice": "通知",
+    "noticeDetail": "通知详情"
+  },
+  "account": {
+    "editInfo": "个人信息更改",
+    "appoint": "挂号预约记录",
+    "appointDetail": "挂号预约详情"
+  },
   "btn": {
     "confirm": "确认",
     "cancel": "取消"

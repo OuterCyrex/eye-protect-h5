@@ -1,29 +1,29 @@
 <template>
-  <div class="p-4">
+  <div class="p-4 bg-gray-100">
     <var-alert class="mb-4 text-xm rounded-md" variant="tonal">
       <template #content>挂号提示：请按预约时间提前15分钟到院签到。迟到需重新挂号排队。</template>
     </var-alert>
-    <var-card elevation="1">
+    <var-paper class="bg-white p-4 rounded-md">
       <div class="my-1">
-        <div class="font-semibold">预约医院</div>
+        <div class="font-semibold text-gray-400 text-sm">预约医院</div>
         <van-field class="my-2" readonly is-link placeholder="请选择医院" @click="showHospitalPicker = true" v-model="hospitalValue" />
         <van-popup v-model:show="showHospitalPicker" position="bottom">
           <van-picker show-toolbar :columns="columns" @cancel="showHospitalPicker = false" @confirm="onConfirm" />
         </van-popup>
       </div>
       <div class="my-4">
-        <div class="font-semibold">预约类型</div>
+        <div class="font-semibold text-gray-400 text-sm">预约类型</div>
         <chip-tab class="m-4" :tabs="appointTabs" v-model="appointType" />
       </div>
       <div class="my-4">
-        <div class="font-semibold">选择日期</div>
+        <div class="font-semibold text-gray-400 text-sm">选择日期</div>
         <WeekDayPicker class="my-4" v-model="selectedDay" />
       </div>
       <div class="my-4">
-        <div class="font-semibold">选择时段</div>
+        <div class="font-semibold text-gray-400 text-sm">选择时段</div>
         <DayTimePicker class="my-4" :slots="timeList" v-model="selectedTime" />
       </div>
-    </var-card>
+    </var-paper>
     <var-button class="my-4 w-full" type="primary">确认预约</var-button>
   </div>
 </template>

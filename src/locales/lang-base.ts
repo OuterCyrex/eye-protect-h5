@@ -15,8 +15,14 @@ export type langType = {
     achieve: string;
     achieveDetail: string;
   };
-  list: {
-    details: string;
+  account: {
+    editInfo: string;
+    appoint: string;
+    appointDetail: string;
+  };
+  notice: {
+    notice: string;
+    noticeDetail: string;
   };
   btn: {
     confirm: string;

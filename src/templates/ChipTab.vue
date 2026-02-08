@@ -1,7 +1,7 @@
 <template>
   <div class="m-3 flex">
     <div class="mr-5 flex items-center" v-for="(v, i) in tabs" :key="i" @click="handleChange(i)" style="cursor: pointer">
-      <div :class="'text-gray-500 text-center inline-block ' + GetPaddingSize(size)" v-if="i !== modelValue">{{ v }}</div>
+      <div :class="'text-gray-500 text-center text-sm inline-block ' + GetPaddingSize(size)" v-if="i !== modelValue">{{ v }}</div>
       <var-chip :size="size" :plain="plain" :type="i === modelValue ? 'primary' : 'default'" v-if="i === modelValue">
         <template #default>
           <div class="font-semibold">{{ v }}</div></template

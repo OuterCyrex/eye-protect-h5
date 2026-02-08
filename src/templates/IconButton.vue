@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center p-3" style="cursor: pointer" @click="handleClick">
+  <div class="flex flex-col items-center" style="cursor: pointer" @click="handleClick">
     <var-icon class="m-2" size="32" :name="iconName" />
     <div class="text-sm text-gray-600">{{ label }}</div>
   </div>

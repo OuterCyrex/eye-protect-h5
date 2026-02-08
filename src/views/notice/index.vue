@@ -3,6 +3,7 @@
     <chip-tab :tabs="tabs" v-model="tabValue" />
     <div class="mx-4 my-5">
       <var-paper
+        @click="router.push({ path: '/notice/detail' })"
         class="mb-4 p-4"
         :elevation="1"
         v-for="item in noticeList"
@@ -27,6 +28,7 @@
   import ChipTab from '@/templates/ChipTab.vue';
   import { noticeList } from './mock';
 
+  const router = useRouter();
   const tabs = ['全部', '随访提醒', '待办事项'];
   const tabValue = ref<number>(0);
 
@@ -41,9 +43,3 @@
     }
   };
 </script>
-
-<style scoped lang="scss">
-  .login-btn {
-    background-color: #d4e214;
-  }
-</style>

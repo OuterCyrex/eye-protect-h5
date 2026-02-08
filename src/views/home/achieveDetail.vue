@@ -1,199 +1,220 @@
 <template>
   <div class="bg-gray-50 min-h-screen">
-    <div class="p-3 max-w-md mx-auto">
-      <div class="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
-        <div class="flex justify-between items-center mb-3">
-          <div class="flex items-center gap-3">
-            <div class="text-sm font-semibold text-gray-800">{{ detailData.date }}</div>
-            <div class="text-sm text-gray-600 px-2 py-0.5 bg-gray-100 rounded">{{ detailData.type }}</div>
-          </div>
-          <div class="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded font-medium">
-            {{ detailData.location }}
-          </div>
+    <!-- 新增：患者基础信息模块（从ParentReportVO根节点取值） -->
+    <div class="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
+      <div class="text-sm font-semibold text-gray-800 mb-3 flex items-center">
+        <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
+        患者基础信息
+      </div>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <div class="flex flex-col gap-1">
+          <div class="text-xs text-gray-500">患者ID</div>
+          <div class="text-gray-800 font-medium">{{ reportData.patientId }}</div>
         </div>
-        <div class="flex justify-between text-sm text-gray-500">
-          <div>检查医生：{{ detailData.doctorSignature.split('/')[0] }}</div>
-          <div>患者ID：{{ detailData.patientId }}</div>
+        <div class="flex flex-col gap-1">
+          <div class="text-xs text-gray-500">患者姓名</div>
+          <div class="text-gray-800">{{ reportData.patientName }}</div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <div class="text-xs text-gray-500">性别</div>
+          <div class="text-gray-800">{{ reportData.gender }}</div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <div class="text-xs text-gray-500">年龄</div>
+          <div class="text-gray-800">{{ reportData.age }}岁</div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <div class="text-xs text-gray-500">出生日期</div>
+          <div class="text-gray-800">{{ formatDate(reportData.birthDate) }}</div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <div class="text-xs text-gray-500">联系方式</div>
+          <div class="text-gray-800">{{ reportData.phone }}</div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <div class="text-xs text-gray-500">学校/班级</div>
+          <div class="text-gray-800">{{ reportData.school }} {{ reportData.clazz }}</div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <div class="text-xs text-gray-500">防控手段</div>
+          <div class="text-gray-800 text-xs leading-relaxed">{{ reportData.interventionMeasures }}</div>
         </div>
       </div>
+    </div>
 
-      <div class="bg-white rounded-lg p-4 mb-4 border border-gray-100">
-        <div class="text-sm font-semibold text-gray-800 mb-2 flex items-center">
-          <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
-          患者主诉
+    <!-- 保留原有样式：检查记录基础信息（取最新的chartPoints数据） -->
+    <div class="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100" v-if="latestChartPoint">
+      <div class="flex justify-between items-center mb-3">
+        <div class="flex items-center gap-3">
+          <div class="text-sm font-semibold text-gray-800">{{ formatDate(latestChartPoint.checkDate) }}</div>
+          <div class="text-sm text-gray-600 px-2 py-0.5 bg-gray-100 rounded">视力检查记录</div>
         </div>
-        <div class="text-sm text-gray-600 leading-relaxed">{{ detailData.patientComplaints }}</div>
-      </div>
-
-      <div class="bg-white rounded-lg p-4 mb-4 border border-gray-100">
-        <div class="text-sm font-semibold text-gray-800 mb-3 flex items-center">
-          <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>
-          视力检查
-        </div>
-        <div class="grid grid-cols-2 gap-3 text-sm">
-          <div class="flex flex-col gap-1">
-            <div class="text-xs text-gray-500">主视眼</div>
-            <div class="text-gray-800 font-medium">{{ detailData.dominantEye.od ? '右眼(OD)' : '左眼(OS)' }}</div>
-          </div>
-          <div class="flex flex-col gap-1">
-            <div class="text-xs text-gray-500">裸眼远视力</div>
-            <div class="text-gray-800">OD:{{ detailData.uncorrectedDistant.od }} / OS:{{ detailData.uncorrectedDistant.os }}</div>
-          </div>
-          <div class="flex flex-col gap-1">
-            <div class="text-xs text-gray-500">裸眼近视力</div>
-            <div class="text-gray-800">OD:{{ detailData.uncorrectedNear.od }} / OS:{{ detailData.uncorrectedNear.os }}</div>
-          </div>
-          <div class="flex flex-col gap-1">
-            <div class="text-xs text-gray-500">矫正后视力</div>
-            <div class="text-green-600 font-medium">OD:{{ detailData.correctedVision.od }} / OS:{{ detailData.correctedVision.os }}</div>
-          </div>
+        <div class="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded font-medium">
+          风险预警：{{ latestChartPoint.riskWarning || '无' }}
         </div>
       </div>
-
-      <div class="bg-white rounded-lg p-4 mb-4 border border-gray-100">
-        <div class="text-sm font-semibold text-gray-800 mb-3 flex items-center">
-          <span class="w-1.5 h-1.5 bg-orange-500 rounded-full mr-2"></span>
-          验光数据
-        </div>
-        <div class="space-y-3 text-sm">
-          <div class="flex flex-col gap-1">
-            <div class="text-xs text-gray-500">旧镜度数</div>
-            <div class="grid grid-cols-2 gap-2 text-gray-800 text-xs leading-relaxed">
-              <div>右眼(OD)：{{ detailData.previousPrescription.od }}</div>
-              <div>左眼(OS)：{{ detailData.previousPrescription.os }}</div>
-            </div>
-          </div>
-          <div class="flex flex-col gap-1">
-            <div class="text-xs text-gray-500">电脑验光</div>
-            <div class="grid grid-cols-2 gap-2 text-gray-800 text-xs leading-relaxed">
-              <div>右眼(OD)：{{ detailData.autoRefraction.od }}</div>
-              <div>左眼(OS)：{{ detailData.autoRefraction.os }}</div>
-            </div>
-          </div>
-          <div class="flex flex-col gap-1">
-            <div class="text-xs text-gray-500">主观验光</div>
-            <div class="grid grid-cols-2 gap-2 text-gray-800 text-xs leading-relaxed">
-              <div>右眼(OD)：{{ detailData.subjectiveRefraction.od }}</div>
-              <div>左眼(OS)：{{ detailData.subjectiveRefraction.os }}</div>
-            </div>
-          </div>
-        </div>
+      <div class="flex justify-between text-sm text-gray-500">
+        <div>检查年龄：{{ latestChartPoint.age }}岁</div>
+        <div>风险分析：{{ reportData.analysis || '暂无' }}</div>
       </div>
+    </div>
 
-      <div class="bg-white rounded-lg p-4 mb-4 border border-gray-100">
-        <div class="text-sm font-semibold text-gray-800 mb-3 flex items-center">
-          <span class="w-1.5 h-1.5 bg-purple-500 rounded-full mr-2"></span>
-          眼压/眼轴
+    <!-- 保留原有样式：眼轴/身高核心数据模块 -->
+    <div class="bg-white rounded-lg p-4 mb-4 border border-gray-100" v-if="latestChartPoint?.axialLengthData">
+      <div class="text-sm font-semibold text-gray-800 mb-3 flex items-center">
+        <span class="w-1.5 h-1.5 bg-purple-500 rounded-full mr-2"></span>
+        眼轴/身高数据
+      </div>
+      <div class="space-y-3 text-sm">
+        <!-- 眼轴核心数据 -->
+        <div class="flex flex-col gap-1">
+          <div class="text-xs text-gray-500">眼轴长度</div>
+          <div class="grid grid-cols-2 gap-2 text-gray-800">
+            <div>本次测量：{{ latestChartPoint.axialLengthData.axialLength }}mm</div>
+            <div>上次测量：{{ latestChartPoint.axialLengthData.previousAxialLength || '无' }}mm</div>
+          </div>
         </div>
-        <div class="space-y-3 text-sm">
+        <div class="flex justify-between items-center">
+          <div class="text-xs text-gray-500">眼轴增长量</div>
+          <div class="text-gray-800 font-medium">{{ latestChartPoint.axialLengthData.growthAmount }}mm</div>
+        </div>
+        <div class="flex justify-between items-center">
+          <div class="text-xs text-gray-500">年增长速度</div>
+          <div class="text-gray-800 font-medium">{{ latestChartPoint.axialLengthData.growthRatePerYear }}mm/年</div>
+        </div>
+        <div class="flex justify-between items-center">
+          <div class="text-xs text-gray-500">该年龄临界值</div>
+          <div class="text-gray-800">{{ latestChartPoint.axialLengthData.ageCriticalValue }}mm</div>
+        </div>
+        <div class="flex justify-between items-center">
+          <div class="text-xs text-gray-500">同龄人临界值</div>
+          <div class="text-gray-800">{{ latestChartPoint.axialLengthData.ageCriticalAxialLength }}mm</div>
+        </div>
+
+        <!-- 身高数据 -->
+        <div class="border-t border-gray-100 pt-3 mt-3">
           <div class="flex justify-between items-center">
-            <div class="text-xs text-gray-500">眼压</div>
-            <div class="text-gray-800 font-medium"
-              >右眼(OD)：{{ detailData.eyePressure.od }} | 左眼(OS)：{{ detailData.eyePressure.os }}</div
-            >
+            <div class="text-xs text-gray-500">身高</div>
+            <div class="text-gray-800 font-medium">{{ latestChartPoint.heightData.height }}cm</div>
           </div>
-          <div class="flex justify-between items-center">
-            <div class="text-xs text-gray-500">眼轴长度</div>
-            <div class="text-gray-800">右眼(OD)：{{ detailData.axialLength.od }} | 左眼(OS)：{{ detailData.axialLength.os }}</div>
+          <div class="flex justify-between items-center mt-2">
+            <div class="text-xs text-gray-500">同龄人身高临界值</div>
+            <div class="text-gray-800">{{ latestChartPoint.heightData.ageCriticalHeight }}cm</div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="bg-white rounded-lg p-3 mb-4 border border-gray-100">
-        <div class="text-sm font-semibold text-gray-800 mb-2 flex items-center">
-          <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-2"></span>
-          诊断与建议
-        </div>
-        <div class="p-4 bg-gray-50 rounded-lg border border-gray-100">
-          <div class="text-sm text-gray-700 leading-relaxed">
-            {{ detailData.diagnosisSuggestions }}
-          </div>
-          <div class="text-right text-sm text-gray-500 mt-2 font-medium">
-            {{ detailData.doctorSignature }}
-          </div>
-        </div>
+    <!-- 以下模块可根据实际需求保留/调整，如需保留需适配新结构 -->
+    <div class="bg-white rounded-lg p-4 mb-4 border border-gray-100">
+      <div class="text-sm font-semibold text-gray-800 mb-2 flex items-center">
+        <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-2"></span>
+        风险分析
+      </div>
+      <div class="text-sm text-gray-600 leading-relaxed p-3 bg-gray-50 rounded-lg border border-gray-100">
+        {{ reportData.analysis || '暂无风险分析数据' }}
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
 
-  interface FollowupRecord {
-    id: string;
-    patientId: string;
-    date: string;
-    type: string;
-    location: string;
-    patientComplaints: string;
-    dominantEye: { od: boolean; os: boolean };
-    uncorrectedDistant: { od: string | null; os: string | null };
-    uncorrectedNear: { od: string | null; os: string | null };
-    correctedVision: { od: string | null; os: string | null };
-    previousPrescription: { od: string | null; os: string | null };
-    oldGlassesBrand: string;
-    lensType: string;
-    frameLensInspection: string;
-    eyePressure: { od: string | null; os: string | null };
-    autoRefraction: { od: string | null; os: string | null };
-    subjectiveRefraction: { od: string | null; os: string | null };
-    dilatedAutoRefraction: { od: string | null; os: string | null };
-    dilatedSubjectiveRefraction: { od: string | null; os: string | null };
-    visualFunction: { worth4Dot: string; eyePosition: string; npc: string | null; otherVisualTests: string };
-    fundusExam: { od: string | null; os: string | null };
-    axialLength: { od: string | null; os: string | null };
-    slitLampExam: { od: string | null; os: string | null };
-    diagnosisSuggestions: string;
-    doctorSignature: string;
+  // 适配后端ParentReportVO的TS接口
+  interface ParentReportVO {
+    patientId: number;
+    patientName: string;
+    gender: string;
+    age: number;
+    birthDate: string | null; // 后端LocalDateTime前端接收为字符串
+    phone: string;
+    school: string;
+    clazz: string;
+    interventionMeasures: string;
+    chartPoints: ChartPoint[];
+    analysis: string; // 修正后端字段名大小写（后端是Analysis，前端统一小写）
   }
 
-  const detailData = ref<FollowupRecord>({
-    id: 'F20260206001',
-    patientId: 'P20240512008',
-    date: '2026-01-15',
-    type: '复诊记录',
-    location: '电子科大附院',
-    patientComplaints: '左眼视物模糊1周，看电子屏幕后眼干、酸胀，无眼痛、畏光及流泪',
-    dominantEye: { od: false, os: true },
-    uncorrectedDistant: { od: '4.8', os: '4.3' },
-    uncorrectedNear: { od: '5.0', os: '4.7' },
-    correctedVision: { od: '5.0', os: '5.0' },
-    previousPrescription: {
-      od: '球镜-0.50DS，柱镜-0.25DC，轴位180°',
-      os: '球镜-2.00DS，柱镜-0.50DC，轴位175°',
-    },
-    oldGlassesBrand: '蔡司（ZEISS）',
-    lensType: '非球面防蓝光树脂镜片，折射率1.61',
-    frameLensInspection: '镜架无变形，镜片表面有轻微划痕，无脱膜、磨损，光学中心对齐',
-    eyePressure: { od: '18mmHg', os: '19mmHg' },
-    autoRefraction: {
-      od: '球镜-0.75DS，柱镜-0.25DC，轴位180°',
-      os: '球镜-2.25DS，柱镜-0.50DC，轴位175°',
-    },
-    subjectiveRefraction: {
-      od: '球镜-0.50DS，柱镜-0.25DC，轴位180°',
-      os: '球镜-2.00DS，柱镜-0.50DC，轴位175°',
-    },
-    dilatedAutoRefraction: { od: null, os: null },
-    dilatedSubjectiveRefraction: { od: null, os: null },
-    visualFunction: {
-      worth4Dot: '双眼单视，无复视、抑制',
-      eyePosition: '正位，集合功能正常，散开功能稍弱',
-      npc: '10cm',
-      otherVisualTests: '调节幅度：右眼10D，左眼8D；调节灵敏度：0.5cpm（左眼偏低）',
-    },
-    fundusExam: {
-      od: '视盘边界清，杯盘比0.3，视网膜平伏，血管走行正常，无渗出、出血',
-      os: '视盘边界清，杯盘比0.3，黄斑中心凹反光存在，视网膜周边无变性区',
-    },
-    axialLength: { od: '23.85mm', os: '24.52mm' },
-    slitLampExam: {
-      od: '结膜无充血，角膜透明，前房深度正常，瞳孔圆，对光反射灵敏',
-      os: '结膜轻度充血，角膜透明，前房清，晶状体透明，玻璃体无混浊',
-    },
-    diagnosisSuggestions:
-      '1. 双眼屈光不正（右眼轻度近视，左眼中度近视）；2. 视疲劳；3. 干眼症。建议：1. 更换左眼配镜度数，佩戴新镜；2. 减少电子屏幕使用，每30分钟远眺5分钟；3. 滴用玻璃酸钠滴眼液（0.1%），每日4次，缓解眼干；4. 每周行调节功能训练1-2次；5. 3个月后复查视力、眼压及眼轴长度，不适随诊。',
-    doctorSignature: '张眼科/2026-01-15',
+  interface ChartPoint {
+    checkDate: string | null;
+    age: number;
+    axialLengthData: AxialLengthData;
+    heightData: HeightData;
+    riskWarning: string;
+  }
+
+  interface AxialLengthData {
+    axialLength: number;
+    previousAxialLength: number | null;
+    growthAmount: number;
+    growthRatePerYear: number;
+    ageCriticalValue: number;
+    ageCriticalAxialLength: number;
+  }
+
+  interface HeightData {
+    height: number;
+    ageCriticalHeight: number;
+  }
+
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return '暂无';
+    return dateStr;
+  };
+
+  const reportData = ref<ParentReportVO>({
+    patientId: 20240512008,
+    patientName: '张小明',
+    gender: '男',
+    age: 8,
+    birthDate: '2018-05-12T00:00:00',
+    phone: '13800138000',
+    school: '电子科大附小',
+    clazz: '二年级(3)班',
+    interventionMeasures: '1. 每日户外2小时；2. 佩戴离焦镜；3. 每3个月复查眼轴',
+    analysis:
+      '患者8岁，眼轴长度24.52mm，超过同年龄临界值24.00mm，年增长速度0.45mm/年，属于中风险。建议加强户外时间，调整用眼习惯，每月监测眼轴变化。',
+    chartPoints: [
+      {
+        checkDate: '2026-01-15T09:30:00',
+        age: 8,
+        riskWarning: '中风险',
+        axialLengthData: {
+          axialLength: 24.52,
+          previousAxialLength: 24.07,
+          growthAmount: 0.45,
+          growthRatePerYear: 0.45,
+          ageCriticalValue: 24.0,
+          ageCriticalAxialLength: 23.8,
+        },
+        heightData: {
+          height: 135.5,
+          ageCriticalHeight: 130.0,
+        },
+      },
+      {
+        checkDate: '2025-10-15T09:30:00',
+        age: 7,
+        riskWarning: '低风险',
+        axialLengthData: {
+          axialLength: 24.07,
+          previousAxialLength: 23.85,
+          growthAmount: 0.22,
+          growthRatePerYear: 0.22,
+          ageCriticalValue: 23.9,
+          ageCriticalAxialLength: 23.7,
+        },
+        heightData: {
+          height: 132.0,
+          ageCriticalHeight: 128.0,
+        },
+      },
+    ],
+  });
+
+  // 获取最新的检查数据（取chartPoints第一条）
+  const latestChartPoint = computed(() => {
+    return reportData.value.chartPoints.length > 0 ? reportData.value.chartPoints[0] : null;
   });
 </script>

@@ -87,6 +87,14 @@ export const routes: RouteRecordRaw[] = [
           keepAlive: true,
         },
       },
+      {
+        path: 'account/coupon',
+        component: () => import('@/views/account/coupon.vue'),
+        meta: {
+          title: 'common.account.coupon',
+          keepAlive: true,
+        },
+      },
     ],
   },
   {

@@ -19,6 +19,7 @@ export type langType = {
     editInfo: string;
     appoint: string;
     appointDetail: string;
+    coupon: string;
   };
   notice: {
     notice: string;

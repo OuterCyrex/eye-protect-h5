@@ -22,7 +22,8 @@
   "account": {
     "editInfo": "个人信息更改",
     "appoint": "挂号预约记录",
-    "appointDetail": "挂号预约详情"
+    "appointDetail": "挂号预约详情",
+    "coupon": "我的公益券"
   },
   "btn": {
     "confirm": "确认",

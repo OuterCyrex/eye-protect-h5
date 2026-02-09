@@ -17,8 +17,6 @@
         <div class="text-gray-700 text-base leading-relaxed whitespace-pre-line">
           {{ noticeDetail.content }}
         </div>
-
-        <div class="mt-8 text-right text-gray-500 text-sm"> —— 视力健康管理平台 </div>
       </var-paper>
     </div>
   </div>

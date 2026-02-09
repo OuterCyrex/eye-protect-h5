@@ -39,7 +39,7 @@
           <div class="text-xs text-gray-500 mt-0.5">张美兰同学已3个月未进行视力复查</div>
         </div>
       </div>
-      <var-chip size="small" type="primary" class="ml-auto">去预约</var-chip>
+      <var-chip size="small" type="primary" class="ml-auto" @click="router.push({ path: 'appoint' })">去预约</var-chip>
     </var-paper>
 
     <var-paper class="p-3">
@@ -59,6 +59,8 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import IconButton from '@/templates/IconButton.vue';
+
+  const router = useRouter();
 
   interface EyeInfo {
     eye: 'left' | 'right';

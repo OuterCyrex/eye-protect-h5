@@ -15,7 +15,7 @@
           <van-icon size="24" class="mr-4" name="https://img.icons8.com/?size=100&id=151IAtg8gTZE&format=png&color=000000" />
         </template>
       </van-cell>
-      <van-cell title="我的公益券" center is-link>
+      <van-cell title="我的公益券" @click="router.push({ path: 'account/coupon' })" center is-link>
         <template #icon>
           <van-icon size="24" class="mr-4" name="https://img.icons8.com/?size=100&id=C9wli4zNyV7T&format=png&color=000000" />
         </template>

@@ -1,6 +1,5 @@
 <template>
-  <div class="bg-gray-50 min-h-screen">
-    <!-- 新增：患者基础信息模块（从ParentReportVO根节点取值） -->
+  <div class="bg-gray-50 h-full">
     <div class="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
       <div class="text-sm font-semibold text-gray-800 mb-3 flex items-center">
         <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
@@ -42,37 +41,15 @@
       </div>
     </div>
 
-    <!-- 保留原有样式：检查记录基础信息（取最新的chartPoints数据） -->
-    <div class="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100" v-if="latestChartPoint">
-      <div class="flex justify-between items-center mb-3">
-        <div class="flex items-center gap-3">
-          <div class="text-sm font-semibold text-gray-800">{{ formatDate(latestChartPoint.checkDate) }}</div>
-          <div class="text-sm text-gray-600 px-2 py-0.5 bg-gray-100 rounded">视力检查记录</div>
-        </div>
-        <div class="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded font-medium">
-          风险预警：{{ latestChartPoint.riskWarning || '无' }}
-        </div>
-      </div>
-      <div class="flex justify-between text-sm text-gray-500">
-        <div>检查年龄：{{ latestChartPoint.age }}岁</div>
-        <div>风险分析：{{ reportData.analysis || '暂无' }}</div>
-      </div>
-    </div>
-
-    <!-- 保留原有样式：眼轴/身高核心数据模块 -->
     <div class="bg-white rounded-lg p-4 mb-4 border border-gray-100" v-if="latestChartPoint?.axialLengthData">
       <div class="text-sm font-semibold text-gray-800 mb-3 flex items-center">
         <span class="w-1.5 h-1.5 bg-purple-500 rounded-full mr-2"></span>
         眼轴/身高数据
       </div>
       <div class="space-y-3 text-sm">
-        <!-- 眼轴核心数据 -->
-        <div class="flex flex-col gap-1">
+        <div class="flex justify-between items-center">
           <div class="text-xs text-gray-500">眼轴长度</div>
-          <div class="grid grid-cols-2 gap-2 text-gray-800">
-            <div>本次测量：{{ latestChartPoint.axialLengthData.axialLength }}mm</div>
-            <div>上次测量：{{ latestChartPoint.axialLengthData.previousAxialLength || '无' }}mm</div>
-          </div>
+          <div class="text-gray-800 font-medium">{{ latestChartPoint.axialLengthData.axialLength }}mm</div>
         </div>
         <div class="flex justify-between items-center">
           <div class="text-xs text-gray-500">眼轴增长量</div>
@@ -90,8 +67,6 @@
           <div class="text-xs text-gray-500">同龄人临界值</div>
           <div class="text-gray-800">{{ latestChartPoint.axialLengthData.ageCriticalAxialLength }}mm</div>
         </div>
-
-        <!-- 身高数据 -->
         <div class="border-t border-gray-100 pt-3 mt-3">
           <div class="flex justify-between items-center">
             <div class="text-xs text-gray-500">身高</div>
@@ -105,12 +80,17 @@
       </div>
     </div>
 
-    <!-- 以下模块可根据实际需求保留/调整，如需保留需适配新结构 -->
     <div class="bg-white rounded-lg p-4 mb-4 border border-gray-100">
-      <div class="text-sm font-semibold text-gray-800 mb-2 flex items-center">
-        <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-2"></span>
-        风险分析
+      <div class="text-sm font-semibold text-gray-800 mb-2 flex items-center justify-between">
+        <div class="flex items-center">
+          <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-2"></span>
+          风险分析
+        </div>
+        <div class="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded font-medium">
+          风险预警：{{ latestChartPoint?.riskWarning || '无' }}
+        </div>
       </div>
+
       <div class="text-sm text-gray-600 leading-relaxed p-3 bg-gray-50 rounded-lg border border-gray-100">
         {{ reportData.analysis || '暂无风险分析数据' }}
       </div>
@@ -121,19 +101,18 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue';
 
-  // 适配后端ParentReportVO的TS接口
   interface ParentReportVO {
     patientId: number;
     patientName: string;
     gender: string;
     age: number;
-    birthDate: string | null; // 后端LocalDateTime前端接收为字符串
+    birthDate: string | null;
     phone: string;
     school: string;
     clazz: string;
     interventionMeasures: string;
     chartPoints: ChartPoint[];
-    analysis: string; // 修正后端字段名大小写（后端是Analysis，前端统一小写）
+    analysis: string;
   }
 
   interface ChartPoint {
@@ -213,7 +192,6 @@
     ],
   });
 
-  // 获取最新的检查数据（取chartPoints第一条）
   const latestChartPoint = computed(() => {
     return reportData.value.chartPoints.length > 0 ? reportData.value.chartPoints[0] : null;
   });

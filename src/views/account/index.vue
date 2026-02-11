@@ -26,7 +26,9 @@
         </template>
       </van-cell>
     </var-paper>
-    <div class="flex justify-center mt-6"> <var-button class="w-96" color="#fef2f2" text outline type="danger">退出登录</var-button></div>
+    <div class="flex justify-center mt-6">
+      <var-button @click="router.push({ path: 'login' })" class="w-96" color="#fef2f2" text outline type="danger">退出登录</var-button></div
+    >
   </div>
 </template>
 

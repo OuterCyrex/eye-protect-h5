@@ -2,7 +2,7 @@ import { createFetch } from '@vueuse/core';
 import { showNotify } from 'vant';
 
 const useFetchApi = createFetch({
-  baseUrl: '',
+  baseUrl: import.meta.env.VITE_APP_BASE_API,
   options: {
     async beforeFetch({ options }) {
       const myToken = 'token';

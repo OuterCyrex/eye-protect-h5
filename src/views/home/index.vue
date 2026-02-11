@@ -43,14 +43,15 @@
     </var-paper>
 
     <var-paper class="p-3">
-      <div class="font-semibold">热门推荐</div>
-      <var-card
+      <div class="font-semibold mb-2">热门推荐</div>
+      <ConsultCard
         class="my-3"
         v-for="item in recommendList"
         :key="item.title"
         :title="item.title"
         :subtitle="item.subtitle"
         :src="item.src"
+        @click="router.push({ path: 'home/article' })"
       />
     </var-paper>
   </div>
@@ -59,6 +60,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import IconButton from '@/templates/IconButton.vue';
+  import ConsultCard from '@/templates/ConsultCard.vue';
 
   const router = useRouter();
 
@@ -96,7 +98,7 @@
     {
       iconName: 'src/assets/font/icon/home/home-btns-2.png',
       label: '干预方案',
-      to: '/home/prevent',
+      to: '/home/intervene',
     },
     {
       iconName: 'src/assets/font/icon/home/home-btns-3.png',
@@ -112,14 +114,29 @@
 
   const recommendList = ref([
     {
-      title: '本草纲目',
-      subtitle: '我表情悠哉 跳个大概',
-      src: 'https://varletjs.org/cat.jpg',
+      title: '2026新版儿童青少年近视防控指南解读：从离焦镜片到阿托品滴眼液的全流程干预方案',
+      subtitle: '科学防控近视',
+      src: 'https://copyright.bdstatic.com/vcg/creative/b1a6072d47411b2e45c2a3397295e0fc.jpg@wm_1,k_cGljX2JqaHdhdGVyLmpwZw==',
     },
     {
-      title: '本草纲目',
-      subtitle: '我表情悠哉 跳个大概',
-      src: 'https://varletjs.org/cat.jpg',
+      title: '离焦镜片vs普通单光镜片效果对比',
+      subtitle: '每3个月复查，调整镜片参数',
+      src: 'https://gips1.baidu.com/it/u=322139397,715049327&fm=3074&app=3074&f=JPEG',
+    },
+    {
+      title: '阿托品滴眼液使用指南',
+      subtitle: '0.01%浓度阿托品滴眼液适用年龄3-18岁，每晚睡前1滴，连续使用三个月需做视力筛查+眼轴检测',
+      src: 'https://img0.baidu.com/it/u=584537846,2555229289&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1067',
+    },
+    {
+      title: '眼科预约挂号流程',
+      subtitle: '电子科大附院线上预约支持微信公众号/小程序，提前1天预约，就诊前30分钟到院报到，迟到15分钟预约号作废',
+      src: 'https://b0.bdstatic.com/8a542792b87895828b04064da25f30bb.jpg@h_1280',
+    },
+    {
+      title: '【重要通知】2026年3月1日起执行新版眼科收费标准：验光/配镜/近视防控项目价格调整详情',
+      subtitle: '医保报销比例不变',
+      src: 'https://img4.cheshi-img.com/202510/12/39e1739f78.jpg',
     },
   ]);
 </script>

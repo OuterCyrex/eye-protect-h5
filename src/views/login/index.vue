@@ -28,6 +28,7 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import InputBar from '@/templates/InputBar.vue';
+  import { loginPassword } from '@/api';
 
   const phoneNumber = ref('');
   const verifyCode = ref('');
@@ -43,8 +44,9 @@
   };
 
   const handleLogin = () => {
-    console.log('登录参数：', { phone: phoneNumber.value, code: verifyCode.value });
-    router.push({ path: '/' });
-    alert('登录/注册成功！');
+    loginPassword({ phone: phoneNumber.value, password: verifyCode.value }).then(() => {
+      showToast('登录成功');
+      router.push({ path: '/' });
+    });
   };
 </script>

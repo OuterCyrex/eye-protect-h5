@@ -13,7 +13,9 @@
   "introduction": "一个快速开发vue3的移动端模板",
   "home": {
     "achieve": "视力档案记录",
-    "achieveDetail": "视力档案详情"
+    "achieveDetail": "视力档案详情",
+    "intervene": "干预方案",
+    "article": "推荐内容"
   },
   "notice": {
     "notice": "通知",

@@ -2,9 +2,12 @@ import axios from 'axios';
 import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { showToast } from 'vant';
 
+const baseURL = import.meta.env.VITE_APP_BASE_URL;
+
 const service: AxiosInstance = axios.create({
   withCredentials: false,
   timeout: 10000,
+  baseURL: baseURL,
 });
 
 service.interceptors.request.use(

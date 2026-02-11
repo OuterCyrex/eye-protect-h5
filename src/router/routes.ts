@@ -95,6 +95,22 @@ export const routes: RouteRecordRaw[] = [
           keepAlive: true,
         },
       },
+      {
+        path: 'home/intervene',
+        component: () => import('@/views/home/intervene.vue'),
+        meta: {
+          title: 'common.home.intervene',
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'home/article',
+        component: () => import('@/views/home/article.vue'),
+        meta: {
+          title: 'common.home.article',
+          keepAlive: true,
+        },
+      },
     ],
   },
   {

@@ -59,7 +59,7 @@
   import { reactive, ref } from 'vue';
   import { DatePicker } from 'vant';
   import { fetchGetInstitutions } from '@/api/appoint';
-  import { fetchAddStudent } from '@/api/student';
+  import { fetchUpdateStudent, fetchGetCurrentStudent } from '@/api/student';
 
   const router = useRouter();
 
@@ -104,13 +104,28 @@
   };
 
   const handleSubmit = async () => {
-    await fetchAddStudent(formData).then(() => {
+    await fetchUpdateStudent(formData).then(() => {
       showToast('添加成功');
       router.push('/account/children');
     });
   };
 
+  const handleGetStudentInfo = async () => {
+    await fetchGetCurrentStudent().then((res: API.Student.studentInfo) => {
+      formData.birthDate = res.birthDate;
+      formData.className = res.className;
+      formData.gender = res.gender;
+      formData.idCard = res.idCard;
+      formData.name = res.name;
+      formData.parentName = res.parentName;
+      formData.province = res.province;
+      formData.schoolId = res.schoolId;
+    });
+    console.log(formData.name);
+  };
+
   onMounted(async () => {
     await handleGetInstitutions();
+    await handleGetStudentInfo();
   });
 </script>

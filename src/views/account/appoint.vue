@@ -8,61 +8,56 @@
     >
       <div class="flex justify-between items-center mb-2">
         <div class="flex items-center gap-2">
-          <div class="text-sm font-semibold">{{ item.date }}</div>
-          <div class="text-sm font-semibold">{{ item.type }}</div>
+          <div class="text-sm font-semibold">{{ item.scheduleDate }}</div>
+          <div class="text-sm font-semibold">{{ item.appointmentTypeDesc }}</div>
         </div>
         <div
           class="text-xs px-2 py-0.5 rounded"
           :class="[
-            item.status === '已预约'
+            item.status === 0 || item.status === 1
               ? 'text-blue-500 bg-blue-50'
-              : item.status === '已完成'
+              : item.status === 2
                 ? 'text-green-500 bg-green-50'
                 : 'text-gray-500 bg-gray-100',
           ]"
         >
-          {{ item.status }}
+          {{ statusMap[`${item.status}` as '0' | '1' | '2' | '-1'] }}
         </div>
       </div>
 
       <div class="flex justify-between text-sm text-gray-600">
-        <div>就诊时段: {{ item.timeSlot }}</div>
-        <div>地点 : {{ item.hospital }}</div>
+        <div>就诊时段: {{ timeSlotsMap[item.timeSlot] }}</div>
+        <div>地点 : {{ item.institutionName }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+  import { fetchGetReservationList } from '@/api/reservation';
+  import { useUserStore } from '@/store/modules/user';
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
 
   const router = useRouter();
+  const userStore = useUserStore();
 
-  const appointmentData = ref([
-    {
-      id: 1,
-      date: '2026-02-10',
-      type: '眼科复诊',
-      status: '已预约',
-      timeSlot: '09:00-10:00',
-      hospital: '电子科大附院',
-    },
-    {
-      id: 2,
-      date: '2026-01-05',
-      type: '视力检查',
-      status: '已完成',
-      timeSlot: '14:30-15:30',
-      hospital: '眼科私立诊所',
-    },
-    {
-      id: 3,
-      date: '2026-02-18',
-      type: '验光配镜',
-      status: '已取消',
-      timeSlot: '10:30-11:30',
-      hospital: '市第一人民医院',
-    },
-  ]);
+  const appointmentData = ref<Array<API.reservation.reservationInfo>>([]);
+
+  const handleGetReservationList = () => {
+    fetchGetReservationList(userStore.getInfo.id).then((res) => {
+      appointmentData.value = res;
+    });
+  };
+
+  const timeSlotsMap = ['8:00-9:00', '9:00-10:00', '10:00-11:30', '14:30-15:30', '15:30-16:30', '16:30-18:00'];
+  const statusMap = {
+    '0': '待就诊',
+    '1': '就诊中',
+    '2': '已就诊',
+    '-1': '已取消',
+  };
+  onMounted(() => {
+    handleGetReservationList();
+  });
 </script>

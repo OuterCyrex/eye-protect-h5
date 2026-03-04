@@ -84,7 +84,7 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('@/views/account/editChild.vue'),
         meta: {
           title: 'common.account.editChild',
-          keepAlive: true,
+          keepAlive: false,
         },
       },
       {

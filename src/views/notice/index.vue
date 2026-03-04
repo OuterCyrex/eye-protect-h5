@@ -4,7 +4,7 @@
     <div class="mx-4 my-5">
       <var-paper
         @click="router.push({ path: '/notice/detail' })"
-        class="mb-4 p-4"
+        class="mb-4 p-2"
         :elevation="1"
         v-for="item in noticeList"
         :key="item.title"

@@ -92,4 +92,34 @@ declare namespace API {
       parentName: string;
     }
   }
+
+  namespace reservation {
+    interface reservationInfo {
+      id: string;
+      patientId: string;
+      scheduleDate: string;
+      timeSlot: number;
+      appointmentType: number;
+      appointmentTypeDesc: string;
+      isFirstVisit: boolean;
+      institutionName: string;
+      institutionId: string;
+      status: number;
+      createdAt: string;
+    }
+
+    interface reservationTimeRequest {
+      institutionId: string;
+      date: string;
+      type: number;
+    }
+
+    interface reserveRequest {
+      patientId: string;
+      institutionId: string;
+      type: number;
+      date: string;
+      timeSlot: number;
+    }
+  }
 }

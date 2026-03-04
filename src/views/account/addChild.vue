@@ -99,7 +99,7 @@
   };
   const showSchoolPicker = ref<boolean>(false);
   const onSchoolChange = (value: any) => {
-    formData.schoolId = value.selectedOptions[0].text;
+    formData.schoolId = value.selectedOptions[0].value;
     showSchoolPicker.value = false;
   };
 

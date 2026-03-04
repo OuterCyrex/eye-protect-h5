@@ -72,6 +72,30 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: 'account/children',
+        component: () => import('@/views/account/children.vue'),
+        meta: {
+          title: 'common.account.children',
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'account/editChild',
+        component: () => import('@/views/account/editChild.vue'),
+        meta: {
+          title: 'common.account.editChild',
+          keepAlive: true,
+        },
+      },
+      {
+        path: 'account/addChild',
+        component: () => import('@/views/account/addChild.vue'),
+        meta: {
+          title: 'common.account.addChild',
+          keepAlive: true,
+        },
+      },
+      {
         path: 'account/appoint',
         component: () => import('@/views/account/appoint.vue'),
         meta: {

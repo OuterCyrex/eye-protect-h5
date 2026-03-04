@@ -1,6 +1,7 @@
 import axios from 'axios';
 import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { showToast } from 'vant';
+import { useUserStore } from '@/store/modules/user';
 
 const baseURL = import.meta.env.VITE_APP_BASE_URL;
 
@@ -23,8 +24,8 @@ service.interceptors.response.use(
   (response: AxiosResponse) => {
     const res = response.data;
     if (res.code !== 200) {
-      showToast(res.msg);
-      return Promise.reject(res.msg || 'Error');
+      showToast(res.message);
+      return Promise.reject(res.message || 'Error');
     } else {
       return res.data;
     }
@@ -51,6 +52,46 @@ export const http = {
 
   delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
     return service.delete(url, config);
+  },
+};
+
+const userStore = useUserStore();
+
+export const httpAuth = {
+  get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return service.get(url, {
+      ...config,
+      headers: {
+        Authorization: userStore.getToken,
+      },
+    });
+  },
+
+  post<T = any>(url: string, data?: object, config?: AxiosRequestConfig): Promise<T> {
+    return service.post(url, data, {
+      ...config,
+      headers: {
+        Authorization: userStore.getToken,
+      },
+    });
+  },
+
+  put<T = any>(url: string, data?: object, config?: AxiosRequestConfig): Promise<T> {
+    return service.put(url, data, {
+      ...config,
+      headers: {
+        Authorization: userStore.getToken,
+      },
+    });
+  },
+
+  delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    return service.delete(url, {
+      ...config,
+      headers: {
+        Authorization: userStore.getToken,
+      },
+    });
   },
 };
 

@@ -22,6 +22,9 @@ export type langType = {
     appoint: string;
     appointDetail: string;
     coupon: string;
+    children: string;
+    editChild: string;
+    addChild: string;
   };
   notice: {
     notice: string;

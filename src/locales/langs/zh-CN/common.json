@@ -25,7 +25,10 @@
     "editInfo": "个人信息更改",
     "appoint": "挂号预约记录",
     "appointDetail": "挂号预约详情",
-    "coupon": "我的公益券"
+    "coupon": "我的公益券",
+    "children": "切换学生",
+    "editChild": "编辑学生信息",
+    "addChild": "绑定学生信息"
   },
   "btn": {
     "confirm": "确认",

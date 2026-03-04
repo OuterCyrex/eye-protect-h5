@@ -33,9 +33,10 @@
   import ChipTab from '@/templates/ChipTab.vue';
   import WeekDayPicker from '@/templates/WeekDayPicker.vue';
   import DayTimePicker from '@/templates/DayTimePicker.vue';
+  import { fetchGetInstitutions } from '@/api/appoint';
 
   const showHospitalPicker = ref<boolean>(false);
-  const columns = ref([{ text: '电子科大附院（成都市第一人民医院）', value: '电子科大附院（成都市第一人民医院）' }]);
+  const columns = ref<Array<{ text: string; value: string }>>([]);
   const hospitalValue = ref<string>('');
 
   const onConfirm = (value: any) => {
@@ -58,6 +59,17 @@
     { duration: '15:00-16:00', valid: true },
     { duration: '16:00-17:00', valid: true },
   ];
+
+  const handleGetInstitutions = () => {
+    fetchGetInstitutions().then((res) => {
+      const Hospitals = res.records.filter((item: { type: string }) => item.type === '医院');
+      columns.value = Hospitals.map((item: API.Misc.institution) => ({ text: item.name, value: item.id }));
+    });
+  };
+
+  onMounted(() => {
+    handleGetInstitutions();
+  });
 </script>
 
 <style scoped lang="scss"></style>

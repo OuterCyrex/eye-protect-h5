@@ -29,10 +29,13 @@
   import { ref } from 'vue';
   import InputBar from '@/templates/InputBar.vue';
   import { loginPassword } from '@/api';
+  import { useUserStore } from '@/store/modules/user';
+  import { fetchGetUserInfo } from '@/api/user';
 
   const phoneNumber = ref('');
   const verifyCode = ref('');
   const router = useRouter();
+  const userStore = useUserStore();
 
   const validatePhone = (value: string) => {
     if (!value) {
@@ -43,10 +46,14 @@
     return '';
   };
 
-  const handleLogin = () => {
-    loginPassword({ phone: phoneNumber.value, password: verifyCode.value }).then(() => {
+  const handleLogin = async () => {
+    await loginPassword({ phone: phoneNumber.value, password: verifyCode.value }).then((res) => {
       showToast('登录成功');
       router.push({ path: '/' });
+      userStore.setToken(res.token);
+    });
+    await fetchGetUserInfo().then((res) => {
+      userStore.setInfo(res);
     });
   };
 </script>

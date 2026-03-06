@@ -1,11 +1,18 @@
 import { httpAuth } from '@/utils/request';
 
 /**
- * 获取用户信息
+ * 获取用户详细信息
  * @returns
  */
-export function fetchGetUserInfo() {
+export function fetchGetUserInfoDetail() {
   return httpAuth.get(`/auth/getUserDetail`);
+}
+
+/**
+ * 获取用户信息
+ */
+export function fetchGetUserInfo() {
+  return httpAuth.get(`/auth/getUserInfo`);
 }
 
 /**

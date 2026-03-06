@@ -39,7 +39,7 @@
 
 <script lang="ts" setup>
   import { logout } from '@/api';
-  import { fetchGetUserInfo } from '@/api/user';
+  import { fetchGetUserInfoDetail } from '@/api/user';
   import { useUserStore } from '@/store/modules/user';
 
   const router = useRouter();
@@ -56,7 +56,7 @@
 
   onMounted(async () => {
     if (!userStore.getInfo) {
-      await fetchGetUserInfo().then((res) => {
+      await fetchGetUserInfoDetail().then((res) => {
         userStore.setInfo(res);
       });
       userInfo.value = userStore.getInfo;

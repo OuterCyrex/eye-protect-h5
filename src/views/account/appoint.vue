@@ -4,7 +4,7 @@
       v-for="item in appointmentData"
       :key="item.id"
       class="rounded-lg p-4 mb-3 bg-white"
-      @click="router.push({ path: '/account/appoint/detail' })"
+      @click="router.push({ path: '/account/appoint/detail', query: { id: item.id } })"
     >
       <div class="flex justify-between items-center mb-2">
         <div class="flex items-center gap-2">
@@ -30,6 +30,8 @@
         <div>地点 : {{ item.institutionName }}</div>
       </div>
     </div>
+
+    <LoadLay v-model="loading" />
   </div>
 </template>
 
@@ -38,14 +40,15 @@
   import { useUserStore } from '@/store/modules/user';
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
+  import LoadLay from '@/templates/LoadLay.vue';
 
   const router = useRouter();
   const userStore = useUserStore();
+  const loading = ref<boolean>(false);
+  const appointmentData = ref<Array<API.Reservation.reservationInfo>>([]);
 
-  const appointmentData = ref<Array<API.reservation.reservationInfo>>([]);
-
-  const handleGetReservationList = () => {
-    fetchGetReservationList(userStore.getInfo.id).then((res) => {
+  const handleGetReservationList = async () => {
+    await fetchGetReservationList(userStore.getInfo.id).then((res) => {
       appointmentData.value = res;
     });
   };
@@ -57,7 +60,9 @@
     '2': '已就诊',
     '-1': '已取消',
   };
-  onMounted(() => {
-    handleGetReservationList();
+  onMounted(async () => {
+    loading.value = true;
+    await handleGetReservationList();
+    loading.value = false;
   });
 </script>

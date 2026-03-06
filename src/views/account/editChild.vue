@@ -52,6 +52,8 @@
     <van-popup v-model:show="showSchoolPicker" position="bottom">
       <van-picker :columns="schoolColumns" @cancel="showSchoolPicker = false" @confirm="onSchoolChange" />
     </van-popup>
+
+    <LoadLay v-model="loading" />
   </div>
 </template>
 
@@ -60,8 +62,10 @@
   import { DatePicker } from 'vant';
   import { fetchGetInstitutions } from '@/api/appoint';
   import { fetchUpdateStudent, fetchGetCurrentStudent } from '@/api/student';
+  import LoadLay from '@/templates/LoadLay.vue';
 
   const router = useRouter();
+  const loading = ref<boolean>(false);
 
   const formData = reactive<API.Student.addStudentRequest>({
     name: '',
@@ -106,10 +110,14 @@
   };
 
   const handleSubmit = async () => {
+    loading.value = true;
+
     await fetchUpdateStudent(formData).then(() => {
       showToast('添加成功');
       router.back();
     });
+
+    loading.value = false;
   };
 
   const handleGetStudentInfo = async () => {
@@ -122,12 +130,15 @@
       formData.parentName = res.parentName;
       formData.province = res.province;
       formData.schoolId = res.schoolId;
+
+      schoolName.value = schoolColumns.value.find((item) => `${item.value}` === formData.schoolId)?.text || '';
     });
-    schoolName.value = schoolColumns.value.find((item) => `${item.value}` === formData.schoolId)?.text || '';
   };
 
   onMounted(async () => {
+    loading.value = true;
     await handleGetInstitutions();
     await handleGetStudentInfo();
+    loading.value = false;
   });
 </script>

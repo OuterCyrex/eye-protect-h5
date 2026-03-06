@@ -31,6 +31,7 @@
   import { loginPassword } from '@/api';
   import { useUserStore } from '@/store/modules/user';
   import { fetchGetUserInfo } from '@/api/user';
+  import { fetchGetCurrentStudent } from '@/api/student';
 
   const phoneNumber = ref('');
   const verifyCode = ref('');
@@ -54,6 +55,9 @@
     });
     await fetchGetUserInfo().then((res) => {
       userStore.setInfo(res);
+    });
+    await fetchGetCurrentStudent().then((res: API.Student.studentInfo) => {
+      userStore.setStudent(res);
     });
   };
 </script>

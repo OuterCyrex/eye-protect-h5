@@ -32,6 +32,8 @@
         <div class="text-sm font-medium ml-2">绑定新学生</div>
       </div>
     </div>
+
+    <LoadLay v-model="loading" />
   </div>
 </template>
 
@@ -41,12 +43,15 @@
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
   import { calculateAge } from '@/utils/time';
+  import { useUserStore } from '@/store/modules/user';
+  import LoadLay from '@/templates/LoadLay.vue';
 
   const router = useRouter();
-
+  const userStore = useUserStore();
   const studentList = ref<Array<API.Student.studentInfo>>([]);
   const schoolsList = ref<Array<API.Misc.institution>>([]);
   const currentStuID = ref('0');
+  const loading = ref<boolean>(false);
 
   const handleGetStudentList = () => {
     fetchGetStudentList().then((res) => {
@@ -73,21 +78,26 @@
 
   const handleSwitchChild = async (id: string) => {
     if (currentStuID.value === id) return;
+    loading.value = true;
     await fetchSwitchChild(id).then(() => {
       showToast('切换成功');
     });
-    await handleGetCurrentStudentID();
+    await handleGetCurrentStudent();
+    loading.value = false;
   };
 
-  const handleGetCurrentStudentID = async () => {
+  const handleGetCurrentStudent = async () => {
     await fetchGetCurrentStudent().then((res: API.Student.studentInfo) => {
+      userStore.setStudent(res);
       currentStuID.value = res.id;
     });
   };
 
   onMounted(async () => {
+    loading.value = true;
     await handleGetStudentList();
     await handleGetInstitutions();
-    await handleGetCurrentStudentID();
+    await handleGetCurrentStudent();
+    loading.value = false;
   });
 </script>

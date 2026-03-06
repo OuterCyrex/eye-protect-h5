@@ -1,35 +1,125 @@
 <template>
-  <div class="p-4">
-    <div :class="'mb-3 p-4 rounded-md ' + bgColor[item.type]" v-for="item in mockData" :key="item.id">
-      <div :class="'font-semibold text-sm ' + textColor[item.type]">{{ item.title }}</div>
-      <div class="text-gray-600 text-sm">{{ item.description }}</div>
+  <div class="bg-gray-50 min-h-screen">
+    <div class="max-w-3xl mx-auto">
+      <div class="bg-white p-4 mb-3 border border-gray-200">
+        <div class="text-sm font-semibold text-gray-800 mb-2 flex items-center">
+          <span class="w-1.5 h-1.5 bg-gray-700 rounded-full mr-2"></span>
+          基础信息
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-sm">
+          <div class="flex flex-col">
+            <div class="text-xs text-gray-500 mb-0.5">机构名称</div>
+            <div class="text-gray-800 font-medium">{{ data.institutionName }}</div>
+          </div>
+          <div class="flex flex-col">
+            <div class="text-xs text-gray-500 mb-0.5">方案类型</div>
+            <div class="text-gray-800">{{ data.planType }}</div>
+          </div>
+          <div class="flex flex-col">
+            <div class="text-xs text-gray-500 mb-0.5">医生签名</div>
+            <div class="text-gray-800">{{ data.doctorSignature || '—' }}</div>
+          </div>
+          <div class="flex flex-col">
+            <div class="text-xs text-gray-500 mb-0.5">方案日期</div>
+            <div class="text-gray-800">{{ data.planDate }}</div>
+          </div>
+          <div class="flex flex-col col-span-2">
+            <div class="text-xs text-gray-500 mb-0.5">下次复查日期</div>
+            <div class="text-gray-800 font-medium">{{ data.nextReviewDate }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white p-3 mb-3 border border-gray-200">
+        <div class="text-sm font-semibold text-gray-800 mb-3 flex items-center">
+          <span class="w-1.5 h-1.5 bg-gray-700 rounded-full mr-2"></span>
+          诊断与干预
+        </div>
+
+        <div class="mb-3 pl-0.5">
+          <div class="text-xs text-gray-500 mb-1.5">诊断结果</div>
+          <div class="text-sm text-gray-800 font-medium">
+            {{ data.structuredDiagnosis.diagnosisSuggestion.diagnosisTypes.join('、') }}
+          </div>
+        </div>
+
+        <div class="pl-0.5">
+          <div class="text-xs text-gray-500 mb-1.5">干预方案</div>
+          <div class="text-sm text-gray-800 space-y-2">
+            <div v-for="item in data.structuredDiagnosis.planItems" :key="item.index" class="flex items-start">
+              <span class="w-5 text-gray-700 font-medium">{{ item.index }}.</span>
+              <div>
+                <span class="font-medium">{{ item.name }}</span
+                >：<span class="text-gray-600">{{ item.remark }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white p-3 border border-gray-200">
+        <div class="text-sm font-semibold text-gray-800 mb-2 flex items-center">
+          <span class="w-1.5 h-1.5 bg-gray-700 rounded-full mr-2"></span>
+          复查建议
+        </div>
+        <div class="text-sm text-gray-800 leading-relaxed">
+          {{ data.reviewRule }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-  const bgColor = ['bg-blue-50', 'bg-green-50', 'bg-yellow-50', 'bg-red-50'];
+<script setup lang="ts">
+  import { fetchGetLastIntervention } from '@/api/intervention';
+  import { useUserStore } from '@/store/modules/user';
+  import { ref } from 'vue';
+  const userStore = useUserStore();
 
-  const textColor = ['text-blue-600', 'text-green-600', 'text-yellow-600', 'text-red-600'];
+  const data = ref<API.Intervene.interveneInfo>({
+    institutionName: '',
+    doctorSignature: '',
+    planType: '',
+    diagnosis: '',
+    structuredDiagnosis: {
+      planItems: [],
+      diagnosisSuggestion: {
+        diagnosisTypes: [],
+        opticalIntervention: {
+          enabled: false,
+          frameGlasses: null,
+          contactLenses: null,
+          controlLenses: null,
+        },
+        drugIntervention: {
+          enabled: false,
+          drugs: null,
+        },
+        visualTraining: {
+          enabled: false,
+          trainingItems: null,
+        },
+        environmentalIntervention: {
+          enabled: false,
+          items: [],
+        },
+      },
+      reviewTime: '',
+    },
+    axisRatioCalculation: null,
+    visualFunctionDiagnosis: '',
+    planDate: '',
+    nextReviewDate: '',
+    reviewRule: '',
+  });
 
-  const mockData = [
-    {
-      id: 1,
-      type: 1,
-      title: '配镜方案',
-      description: '采用“离焦镜片”进行光学干预，控制眼轴增长速率。',
-    },
-    {
-      id: 2,
-      type: 2,
-      title: '户外运动建议',
-      description: '建议每日保持不少于“2小时”的户外自然光下运动。',
-    },
-    {
-      id: 3,
-      type: 3,
-      title: '药物建议',
-      description: '每晚睡前点用“0.01%阿托品”滴眼液1滴，连用三个月后复查。',
-    },
-  ];
+  const handleGetIntervention = async () => {
+    await fetchGetLastIntervention(userStore.getStudent.patientId).then((res) => {
+      data.value = res;
+    });
+  };
+
+  onMounted(async () => {
+    await handleGetIntervention();
+  });
 </script>

@@ -56,6 +56,14 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: 'home/charity',
+        component: () => import('@/views/home/charity.vue'),
+        meta: {
+          title: 'common.home.charity',
+          keepAlive: false,
+        },
+      },
+      {
         path: 'notice/detail',
         component: () => import('@/views/notice/noticeDetail.vue'),
         meta: {
@@ -108,7 +116,7 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('@/views/account/appointDetail.vue'),
         meta: {
           title: 'common.account.appointDetail',
-          keepAlive: true,
+          keepAlive: false,
         },
       },
       {

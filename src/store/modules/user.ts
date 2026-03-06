@@ -8,17 +8,20 @@ console.log(token);
 interface StoreUser {
   token: string;
   info: Record<any, any>;
+  student: Record<any, any>;
 }
 
 export const useUserStore = defineStore('user', {
   state: (): StoreUser => ({
     token: '',
     info: {},
+    student: {},
   }),
 
   getters: {
     getToken: (state) => state.token,
     getInfo: (state) => state.info,
+    getStudent: (state) => state.student,
   },
 
   actions: {
@@ -28,15 +31,19 @@ export const useUserStore = defineStore('user', {
     setInfo(info: Record<string, any>) {
       this.info = info;
     },
+    setStudent(student: Record<string, any>) {
+      this.student = student;
+    },
     logout() {
       this.token = '';
       this.info = {};
+      this.student = {};
     },
   },
 
   persist: {
     key: 'user',
-    pick: ['token', 'info'],
+    pick: ['token', 'info', 'student'],
     storage: localStorage,
   },
 });

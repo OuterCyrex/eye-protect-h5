@@ -28,7 +28,7 @@ Object.keys(modules).forEach((path) => {
 
         const namespace: any = m[1];
         if (modules[p]) {
-          const mod: any = await modules[p]();
+          const mod: any = await modules[p]!();
           messages[namespace] = mod.default;
         }
       }

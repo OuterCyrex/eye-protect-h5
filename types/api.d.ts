@@ -50,6 +50,49 @@ declare namespace API {
     }
   }
 
+  namespace Intervene {
+    interface interveneInfo {
+      institutionName: string;
+      doctorSignature: string;
+      planType: string;
+      diagnosis: string;
+      structuredDiagnosis: {
+        planItems: Array<{
+          index: number;
+          name: string;
+          remark: string;
+        }>;
+        diagnosisSuggestion: {
+          diagnosisTypes: string[];
+          opticalIntervention: {
+            enabled: boolean;
+            frameGlasses: null | string;
+            contactLenses: null | string;
+            controlLenses: null | string;
+          };
+          drugIntervention: {
+            enabled: boolean;
+            drugs: null | string;
+          };
+          visualTraining: {
+            enabled: boolean;
+            trainingItems: null | string;
+          };
+          environmentalIntervention: {
+            enabled: boolean;
+            items: string[];
+          };
+        };
+        reviewTime: string;
+      };
+      axisRatioCalculation: null | string;
+      visualFunctionDiagnosis: string;
+      planDate: string;
+      nextReviewDate: string;
+      reviewRule: string;
+    }
+  }
+
   namespace Student {
     interface studentInfo {
       id: string;
@@ -89,7 +132,40 @@ declare namespace API {
     }
   }
 
-  namespace reservation {
+  namespace Coupon {
+    interface couponInfo {
+      id: string;
+      institutionId: string;
+      institutionName: string;
+      name: string;
+      type: number;
+      description: string;
+      maxCouponCount: number;
+      validStartDate: string;
+      validEndDate: string;
+      usageRules: string;
+      status: number;
+    }
+
+    interface MyCoupon {
+      id: string;
+      voucherId: string;
+      voucherCode: string;
+      status: number;
+      type: number;
+      receiveTime: string;
+      usedTime: string;
+      expireDate: string;
+      institutionId: string;
+      usedInstitutionId: string;
+      usedInstitutionName: string;
+      usageRules: string;
+      orderNumber: string;
+      note: string;
+    }
+  }
+
+  namespace Reservation {
     interface reservationInfo {
       id: string;
       patientId: string;

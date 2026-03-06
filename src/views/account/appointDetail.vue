@@ -2,42 +2,48 @@
   <div class="p-3 mx-auto bg-gray-50 h-full">
     <div class="rounded-md p-4 bg-white mb-4">
       <div class="flex mb-3">
-        <div class="text-base font-semibold text-gray-800">{{ mockData.type }}</div>
+        <div class="text-base font-semibold text-gray-800">{{ reservation.appointmentTypeDesc }}</div>
       </div>
 
       <div class="pt-3 space-y-2">
         <div class="flex justify-between text-sm">
           <span class="text-gray-500">就诊医院：</span>
-          <span class="text-gray-700 font-medium">{{ mockData.hospital }}</span>
-        </div>
-        <div class="flex justify-between text-sm">
-          <span class="text-gray-500">就诊科室：</span>
-          <span class="text-gray-700 font-medium">{{ mockData.department }}</span>
-        </div>
-        <div class="flex justify-between text-sm">
-          <span class="text-gray-500">接诊医生：</span>
-          <span class="text-gray-700 font-medium">{{ mockData.doctor }}</span>
+          <span class="text-gray-700 font-medium">{{ reservation.institutionName }}</span>
         </div>
         <div class="flex justify-between text-sm">
           <span class="text-gray-500">就诊时段：</span>
-          <span class="text-gray-700 font-medium">{{ mockData.timeSlot }}</span>
+          <span class="text-gray-700 font-medium">{{ timeSlotsMap[reservation.timeSlot] }}</span>
         </div>
         <div class="flex justify-between text-sm">
           <span class="text-gray-500">预约编号：</span>
-          <span class="text-gray-700 font-medium">{{ mockData.orderNo }}</span>
-        </div>
-        <div class="flex justify-between text-sm">
-          <span class="text-gray-500">就诊人：</span>
-          <span class="text-gray-700 font-medium">{{ mockData.patientName }}</span>
-        </div>
-        <div class="flex justify-between text-sm">
-          <span class="text-gray-500">联系电话：</span>
-          <span class="text-gray-700 font-medium">{{ mockData.phone }}</span>
+          <span class="text-gray-700 font-medium">{{ reservation.id }}</span>
         </div>
 
         <div class="flex justify-between text-sm">
+          <span class="text-gray-500">是否就诊：</span>
+          <span class="text-gray-700 font-medium">{{ reservation.isFirstVisit ? '是' : '否' }}</span>
+        </div>
+        <div class="flex justify-between text-sm">
           <span class="text-gray-500">预约日期：</span>
-          <div class="text-sm ml-auto text-gray-700">{{ mockData.date }}</div>
+          <div class="text-sm ml-auto text-gray-700">{{ reservation.scheduleDate }}</div>
+        </div>
+
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-500">状态：</span>
+          <span class="text-gray-700 font-medium">
+            <div
+              class="text-xs px-2 py-0.5 rounded"
+              :class="[
+                reservation.status === 0 || reservation.status === 1
+                  ? 'text-blue-500 bg-blue-50'
+                  : reservation.status === 2
+                    ? 'text-green-500 bg-green-50'
+                    : 'text-gray-500 bg-gray-100',
+              ]"
+            >
+              {{ statusMap[`${reservation.status}` as '0' | '1' | '2' | '-1'] }}
+            </div></span
+          >
         </div>
       </div>
     </div>
@@ -55,32 +61,50 @@
     </div>
     <div class="fixed bottom-0 left-0 right-0 z-10">
       <div class="max-w-md mx-auto px-4 py-3">
-        <van-button v-if="mockData.status === '已预约'" type="primary" class="w-full"> 取消预约 </van-button>
+        <van-button v-if="reservation.status === 0" type="primary" class="w-full"> 取消预约 </van-button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+  import { fetchGetReservationInfo } from '@/api/reservation';
   import { ref } from 'vue';
 
-  const mockData = ref({
-    id: 1,
-    date: '2026-02-10',
-    type: '眼科复诊',
-    status: '已预约',
-    doctor: '王医生',
-    department: '小儿眼科',
-    timeSlot: '上午09:00-10:00',
-    hospital: '电子科大附院',
-    orderNo: 'YY2026021000123',
-    patientName: '张小明',
-    phone: '13800138000',
-    patientAge: '8岁',
-    patientGender: '男',
-    registerFee: '15.5元',
-    paymentStatus: '已支付',
-    remark: '需携带上次验光报告',
+  const route = useRoute();
+  const id = route.query.id;
+
+  const reservation = ref<API.Reservation.reservationInfo>({
+    id: '',
+    patientId: '',
+    scheduleDate: '',
+    timeSlot: 0,
+    appointmentType: 0,
+    appointmentTypeDesc: '',
+    isFirstVisit: true,
+    institutionName: '',
+    institutionId: '',
+    status: 0,
+    createdAt: '',
+  });
+
+  const handleGetReservationInfo = async (id: string) => {
+    await fetchGetReservationInfo(id).then((res) => {
+      reservation.value = res;
+    });
+  };
+  const timeSlotsMap = ['8:00-9:00', '9:00-10:00', '10:00-11:30', '14:30-15:30', '15:30-16:30', '16:30-18:00'];
+  const statusMap = {
+    '0': '待就诊',
+    '1': '就诊中',
+    '2': '已就诊',
+    '-1': '已取消',
+  };
+
+  onMounted(() => {
+    if (id) {
+      handleGetReservationInfo(id as string);
+    }
   });
 </script>
 

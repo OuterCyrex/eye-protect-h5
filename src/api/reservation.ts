@@ -6,11 +6,11 @@ export function fetchGetReservationList(id: string) {
   });
 }
 
-export function fetchGetReservationTime(data: API.reservation.reservationTimeRequest) {
+export function fetchGetReservationTime(data: API.Reservation.reservationTimeRequest) {
   return httpAuth.post('/reservation/numbers', data);
 }
 
-export function fetchReserve(data: API.reservation.reserveRequest) {
+export function fetchReserve(data: API.Reservation.reserveRequest) {
   return httpAuth.post('/reservation', data);
 }
 

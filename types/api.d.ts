@@ -17,20 +17,16 @@ declare namespace API {
 
     interface UserInfo {
       id: string;
-      name: string;
       phone: string;
-      idCard: string;
+      name: string;
       gender: string;
-      birthDate: string;
-      email: string;
+      idCard: string;
+      status: string;
+      lastLoginTime: string;
       emergencyContact: string;
       emergencyPhone: string;
       address: string;
       currentStudentId: string;
-      status: string;
-      createdAt: string;
-      updatedAt: string;
-      deleted: number;
     }
   }
 

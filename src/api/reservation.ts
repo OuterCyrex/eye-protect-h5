@@ -13,3 +13,7 @@ export function fetchGetReservationTime(data: API.reservation.reservationTimeReq
 export function fetchReserve(data: API.reservation.reserveRequest) {
   return httpAuth.post('/reservation', data);
 }
+
+export function fetchGetReservationInfo(id: string) {
+  return httpAuth.get(`/reservation/record/${id}`);
+}

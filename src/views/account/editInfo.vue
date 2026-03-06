@@ -41,10 +41,12 @@
   import { useUserStore } from '@/store/modules/user';
   const userStore = useUserStore();
   const userInfo = ref<API.Auth.UserInfo>(userStore.getInfo as API.Auth.UserInfo);
+  const router = useRouter();
 
   const handleUpdateUserInfo = () => {
     fetchUpdateUserInfo(userInfo.value).then(() => {
       showToast('信息更新成功');
+      router.back();
     });
   };
 

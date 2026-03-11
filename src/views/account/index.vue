@@ -44,7 +44,7 @@
 
   const router = useRouter();
   const userStore = useUserStore();
-  const userInfo = ref<API.Auth.UserInfo>(userStore.getInfo as API.Auth.UserInfo);
+  const userInfo = ref<API.Auth.UserDetail | null>(null);
 
   const handleLogout = () => {
     logout().then(() => {
@@ -54,13 +54,14 @@
     });
   };
 
+  const handleGetUserDetail = async () => {
+    await fetchGetUserInfoDetail().then((res) => {
+      userInfo.value = res;
+    });
+  };
+
   onMounted(async () => {
-    if (!userStore.getInfo) {
-      await fetchGetUserInfoDetail().then((res) => {
-        userStore.setInfo(res);
-      });
-      userInfo.value = userStore.getInfo;
-    }
+    await handleGetUserDetail();
   });
 </script>
 

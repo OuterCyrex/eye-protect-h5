@@ -19,6 +19,6 @@ export function fetchGetUserInfo() {
  * 更新用户信息
  * @returns
  */
-export function fetchUpdateUserInfo(data: API.Auth.UserInfo) {
-  return httpAuth.put(`/auth/user-detail`, { ...data, userType: 'parent' });
+export function fetchUpdateUserInfo(id: string, data: API.Auth.UpdateUserInfoRequest) {
+  return httpAuth.put(`/auth/user-detail`, { ...data, userType: 'parent', id });
 }

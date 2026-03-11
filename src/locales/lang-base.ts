@@ -12,8 +12,7 @@ export type langType = {
   };
   introduction: string;
   home: {
-    achieve: string;
-    achieveDetail: string;
+    report: string;
     intervene: string;
     article: string;
     charity: string;

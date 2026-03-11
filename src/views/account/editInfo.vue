@@ -33,21 +33,56 @@
     <van-popup v-model:show="showGenderPicker" position="bottom">
       <van-picker :columns="genderColumns" @cancel="showGenderPicker = false" @confirm="onGenderChange" />
     </van-popup>
+
+    <LoadLay v-model="loading" />
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { fetchUpdateUserInfo } from '@/api/user';
-  import { useUserStore } from '@/store/modules/user';
-  const userStore = useUserStore();
-  const userInfo = ref<API.Auth.UserInfo>(userStore.getInfo as API.Auth.UserInfo);
-  const router = useRouter();
+  import { fetchUpdateUserInfo, fetchGetUserInfoDetail } from '@/api/user';
+  import LoadLay from '@/templates/LoadLay.vue';
 
-  const handleUpdateUserInfo = () => {
-    fetchUpdateUserInfo(userInfo.value).then(() => {
-      showToast('信息更新成功');
-      router.back();
+  const userInfo = ref<API.Auth.UserDetail>({
+    id: '',
+    phone: '',
+    name: '',
+    gender: '',
+    idCard: '',
+    status: '',
+    lastLoginTime: '',
+    emergencyContact: '',
+    emergencyPhone: '',
+    address: '',
+  });
+  const router = useRouter();
+  const loading = ref<boolean>(false);
+
+  const handleGetUserDetail = async () => {
+    await fetchGetUserInfoDetail().then((res) => {
+      userInfo.value = res;
     });
+  };
+
+  const handleUpdateUserInfo = async () => {
+    loading.value = true;
+    await fetchUpdateUserInfo(userInfo.value.id, {
+      name: userInfo.value.name,
+      phone: userInfo.value.phone,
+      idCard: userInfo.value.idCard,
+      gender: userInfo.value.gender,
+      birthDate: '',
+      email: '',
+      status: '',
+      password: '',
+      lastLoginTime: '',
+    })
+      .then(() => {
+        showToast('信息更新成功');
+        router.back();
+      })
+      .finally(() => {
+        loading.value = false;
+      });
   };
 
   const genderColumns = ref([
@@ -56,8 +91,13 @@
   ]);
   const showGenderPicker = ref<boolean>(false);
   const onGenderChange = (value: any) => {
-    if (!userInfo.value) return;
     userInfo.value.gender = value.selectedOptions[0].text;
     showGenderPicker.value = false;
   };
+
+  onMounted(async () => {
+    loading.value = true;
+    await handleGetUserDetail();
+    loading.value = false;
+  });
 </script>

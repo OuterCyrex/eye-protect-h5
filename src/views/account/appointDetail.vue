@@ -64,15 +64,19 @@
         <van-button v-if="reservation.status === 0" type="primary" class="w-full"> 取消预约 </van-button>
       </div>
     </div>
+
+    <LoadLay v-model="loading" />
   </div>
 </template>
 
 <script lang="ts" setup>
   import { fetchGetReservationInfo } from '@/api/reservation';
   import { ref } from 'vue';
+  import LoadLay from '@/templates/LoadLay.vue';
 
   const route = useRoute();
   const id = route.query.id;
+  const loading = ref<boolean>(false);
 
   const reservation = ref<API.Reservation.reservationInfo>({
     id: '',
@@ -101,9 +105,11 @@
     '-1': '已取消',
   };
 
-  onMounted(() => {
+  onMounted(async () => {
     if (id) {
-      handleGetReservationInfo(id as string);
+      loading.value = true;
+      await handleGetReservationInfo(id as string);
+      loading.value = false;
     }
   });
 </script>

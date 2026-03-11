@@ -18,6 +18,25 @@ declare namespace API {
     interface UserInfo {
       id: string;
       phone: string;
+      password: string;
+      role: string;
+      userDetailId: string;
+      userDetailType: string;
+      lastLoginTime: string;
+      loginCount: number;
+      status: string;
+      createdAt: string;
+      updatedAt: string;
+      deleted: number;
+      remainingCouponCount: number;
+      wechatOpenId: string;
+      wechatUnionId: string;
+      wechatGender: string;
+    }
+
+    interface UserDetail {
+      id: string;
+      phone: string;
       name: string;
       gender: string;
       idCard: string;
@@ -26,7 +45,18 @@ declare namespace API {
       emergencyContact: string;
       emergencyPhone: string;
       address: string;
-      currentStudentId: string;
+    }
+
+    interface UpdateUserInfoRequest {
+      name: string;
+      phone: string;
+      idCard: string;
+      gender: string;
+      birthDate: string;
+      email: string;
+      status: string;
+      password: string;
+      lastLoginTime: string;
     }
   }
 
@@ -47,6 +77,14 @@ declare namespace API {
       status: string;
       createdAt: string;
       updatedAt: string;
+    }
+
+    interface AxiosChartUnit {
+      id: string;
+      recordDate: string;
+      odAxialLength: number;
+      osAxialLength: number;
+      details: string;
     }
   }
 
@@ -91,6 +129,36 @@ declare namespace API {
       nextReviewDate: string;
       reviewRule: string;
     }
+
+    interface report {
+      patientId: number;
+      patientName: string;
+      gender: string;
+      age: number;
+      birthDate: string;
+      phone: string;
+      school: string;
+      clazz: string;
+      interventionMeasures: string;
+      chartPoints?: {
+        checkDate: string;
+        age: number;
+        axialLengthData: {
+          axialLength: number;
+          previousAxialLength: number;
+          growthAmount: number;
+          growthRatePerYear: number;
+          ageCriticalValue: number;
+          ageCriticalAxialLength: number;
+        };
+        heightData: {
+          height: number;
+          ageCriticalHeight: number;
+        };
+        riskWarning: string;
+      };
+      analysis: string;
+    }
   }
 
   namespace Student {
@@ -99,15 +167,17 @@ declare namespace API {
       name: string;
       gender: string;
       birthDate: string;
-      idCard: any;
+      idCard: string;
       className: string;
       schoolId: string;
-      province: any;
+      province: string;
       parentName: string;
       phone: string;
       cancelCount: number;
-      lastCheckupDate: any;
-      nextFollowupDate: any;
+      patientId: string;
+      schoolName: string;
+      lastCheckupDate: string;
+      nextFollowupDate: string;
       leftBareVision: number;
       leftSphere: number;
       leftCylinder: number;
@@ -116,8 +186,8 @@ declare namespace API {
       rightSphere: number;
       rightCylinder: number;
       rightAxis: number;
-      glassesWearingHabits: any;
-      diagnosisSuggestions: any;
+      leftWarningRisk: string;
+      rightWarningRisk: string;
     }
 
     interface addStudentRequest {

@@ -53,10 +53,14 @@
   const currentStuID = ref('0');
   const loading = ref<boolean>(false);
 
-  const handleGetStudentList = () => {
-    fetchGetStudentList().then((res) => {
-      studentList.value = res;
-    });
+  const handleGetStudentList = async () => {
+    await fetchGetStudentList()
+      .then((res) => {
+        studentList.value = res;
+      })
+      .finally(() => {
+        loading.value = false;
+      });
   };
 
   const handleAddStudent = () => {

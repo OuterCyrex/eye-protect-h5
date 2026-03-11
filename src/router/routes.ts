@@ -40,18 +40,10 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'home/achieve',
-        component: () => import('@/views/home/achieve.vue'),
+        path: 'home/report',
+        component: () => import('@/views/home/report.vue'),
         meta: {
-          title: 'common.home.achieve',
-          keepAlive: true,
-        },
-      },
-      {
-        path: 'home/achieve/detail',
-        component: () => import('@/views/home/achieveDetail.vue'),
-        meta: {
-          title: 'common.home.achieveDetail',
+          title: 'common.home.report',
           keepAlive: true,
         },
       },

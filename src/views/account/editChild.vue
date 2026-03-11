@@ -113,7 +113,7 @@
     loading.value = true;
 
     await fetchUpdateStudent(formData).then(() => {
-      showToast('添加成功');
+      showToast('更新成功');
       router.back();
     });
 

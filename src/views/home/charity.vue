@@ -10,7 +10,7 @@
         <div class="w-12 h-12 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-3">
           <var-icon name="tag-outline" />
         </div>
-        <p class="text-white">暂无可用优惠券</p>
+        <p class="text-white">暂无可领取的公益券</p>
       </div>
 
       <div

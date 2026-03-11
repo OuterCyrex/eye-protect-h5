@@ -5,3 +5,7 @@ export function fetchGetLastIntervention(id: string) {
     params: { patientId: id },
   });
 }
+
+export function fetchGetLastReport(patientId: string) {
+  return httpAuth.get(`/report/parent/${patientId}`);
+}

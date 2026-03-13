@@ -16,6 +16,7 @@ export type langType = {
     intervene: string;
     article: string;
     charity: string;
+    glasses: string;
   };
   account: {
     editInfo: string;
@@ -25,6 +26,7 @@ export type langType = {
     children: string;
     editChild: string;
     addChild: string;
+    feedback: string;
   };
   notice: {
     notice: string;

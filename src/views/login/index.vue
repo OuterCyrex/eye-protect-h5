@@ -32,6 +32,7 @@
   import { useUserStore } from '@/store/modules/user';
   import { fetchGetUserInfo } from '@/api/user';
   import { fetchGetCurrentStudent } from '@/api/student';
+  import { ws, channels } from '@/utils/stomp';
 
   const phoneNumber = ref('');
   const verifyCode = ref('');
@@ -49,8 +50,6 @@
 
   const handleLogin = async () => {
     await loginPassword({ phone: phoneNumber.value, password: verifyCode.value }).then((res) => {
-      showToast('登录成功');
-      router.push({ path: '/' });
       userStore.setToken(res.token);
     });
     await fetchGetUserInfo().then((res) => {
@@ -59,5 +58,13 @@
     await fetchGetCurrentStudent().then((res: API.Student.studentInfo) => {
       userStore.setStudent(res);
     });
+
+    await ws.init();
+    await ws.subscribe(channels.UNREAD, (message: any) => {
+      userStore.setUnread(JSON.parse(message.body));
+    });
+
+    showToast('登录成功');
+    router.push({ path: '/' });
   };
 </script>

@@ -86,6 +86,18 @@ declare namespace API {
       osAxialLength: number;
       details: string;
     }
+
+    interface timeSlotInfo {
+      timeSlot: number;
+      description: string;
+      availableNumber: number;
+    }
+
+    interface feedbackRequest {
+      title: string;
+      content: string;
+      images: string[];
+    }
   }
 
   namespace Intervene {
@@ -158,6 +170,32 @@ declare namespace API {
         riskWarning: string;
       };
       analysis: string;
+    }
+
+    interface glassInfo {
+      id: string;
+      patientId: string;
+      institutionId: string;
+      prescriptionDate: string;
+      productName: string;
+      frameModel: string;
+      lensModel: string;
+      lensType: string;
+      quantity: number;
+      totalPrice: number;
+      remarks: string;
+      rightSphere: number;
+      rightCylinder: number;
+      rightAxis: number;
+      rightVisualAcuity: string;
+      rightAdd: number;
+      leftSphere: number;
+      leftCylinder: number;
+      leftAxis: number;
+      leftVisualAcuity: string;
+      leftAdd: number;
+      createdAt: string;
+      updatedAt: string;
     }
   }
 
@@ -262,6 +300,19 @@ declare namespace API {
       type: number;
       date: string;
       timeSlot: number;
+    }
+  }
+
+  namespace Message {
+    interface messageInfo {
+      id: string;
+      phone: string;
+      type: number;
+      title: string;
+      content: string;
+      images: any[];
+      isRead: number;
+      createdAt: string;
     }
   }
 }

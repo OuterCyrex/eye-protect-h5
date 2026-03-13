@@ -9,6 +9,7 @@ interface StoreUser {
   token: string;
   info: Record<any, any>;
   student: Record<any, any>;
+  unread: number;
 }
 
 export const useUserStore = defineStore('user', {
@@ -16,12 +17,14 @@ export const useUserStore = defineStore('user', {
     token: '',
     info: {},
     student: {},
+    unread: 0,
   }),
 
   getters: {
     getToken: (state) => state.token,
     getInfo: (state) => state.info,
     getStudent: (state) => state.student,
+    getUnread: (state) => state.unread,
   },
 
   actions: {
@@ -34,6 +37,9 @@ export const useUserStore = defineStore('user', {
     setStudent(student: Record<string, any>) {
       this.student = student;
     },
+    setUnread(unread: number) {
+      this.unread = unread;
+    },
     logout() {
       this.token = '';
       this.info = {};
@@ -43,7 +49,7 @@ export const useUserStore = defineStore('user', {
 
   persist: {
     key: 'user',
-    pick: ['token', 'info', 'student'],
+    pick: ['token', 'info', 'student', 'unread'],
     storage: localStorage,
   },
 });

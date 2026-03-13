@@ -3,7 +3,7 @@
     <div
       v-for="(day, index) in next15Days"
       :key="index"
-      class="flex flex-col items-center justify-center w-10 h-12 rounded-lg transition-all duration-200"
+      class="flex flex-col items-center justify-center w-9 h-12 rounded-lg transition-all duration-200"
       :class="{
         'bg-gray-100 text-gray-400 cursor-not-allowed': isDisabled(day),
         'bg-white text-gray-800 hover:bg-gray-50 cursor-pointer': !isDisabled(day) && !isSelected(day),

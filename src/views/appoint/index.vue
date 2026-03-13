@@ -54,14 +54,8 @@
   const selectedDay = ref<string>('');
   const showDayTimeSelector = ref<boolean>(false);
 
-  const selectedTime = ref<string>('');
-  const timeSlotsMap = ['8:00-9:00', '9:00-10:00', '10:00-11:30', '14:30-15:30', '15:30-16:30', '16:30-18:00'];
-  const timeSlots = ref<
-    Array<{
-      duration: string;
-      valid: boolean;
-    }>
-  >([]);
+  const selectedTime = ref<number>(0);
+  const timeSlots = ref<Array<API.Misc.timeSlotInfo>>([]);
 
   const handleGetInstitutions = () => {
     fetchGetInstitutions().then((res) => {
@@ -70,39 +64,35 @@
     });
   };
 
-  const handleGetTimeList = () => {
+  const handleGetTimeList = async () => {
     if (hospitalName.value === '' || selectedDay.value === '') return;
-    fetchGetReservationTime({
+    await fetchGetReservationTime({
       institutionId: hospitalValue.value,
       date: selectedDay.value,
       type: appointType.value + 1,
     }).then((res) => {
-      timeSlots.value = timeSlotsMap.map((text, index) => ({
-        duration: text,
-        valid: res[index] !== 0,
-      }));
+      timeSlots.value = res;
     });
   };
 
   const handleSubmitReservation = () => {
-    if (hospitalName.value === '' || selectedDay.value === '' || selectedTime.value === '') {
+    if (hospitalName.value === '' || selectedDay.value === '') {
       showToast('请完善预约信息');
       return;
     }
     fetchReserve({
-      patientId: userStore.getInfo.id,
+      patientId: userStore.getStudent.patientId,
       institutionId: hospitalValue.value,
       type: appointType.value,
       date: selectedDay.value,
-      timeSlot: timeSlotsMap.indexOf(selectedTime.value),
+      timeSlot: selectedTime.value,
     }).then(() => {
       showToast('预约成功');
     });
   };
 
-  onMounted(() => {
-    handleGetInstitutions();
-    console.log(userStore.getInfo.id);
+  onMounted(async () => {
+    await handleGetInstitutions();
   });
 
   watch(

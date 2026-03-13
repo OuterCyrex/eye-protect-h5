@@ -56,6 +56,14 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: 'home/glasses',
+        component: () => import('@/views/home/glasses.vue'),
+        meta: {
+          title: 'common.home.glasses',
+          keepAlive: false,
+        },
+      },
+      {
         path: 'notice/detail',
         component: () => import('@/views/notice/noticeDetail.vue'),
         meta: {
@@ -76,7 +84,7 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('@/views/account/children.vue'),
         meta: {
           title: 'common.account.children',
-          keepAlive: true,
+          keepAlive: false,
         },
       },
       {
@@ -92,7 +100,7 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('@/views/account/addChild.vue'),
         meta: {
           title: 'common.account.addChild',
-          keepAlive: true,
+          keepAlive: false,
         },
       },
       {
@@ -100,7 +108,7 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('@/views/account/appoint.vue'),
         meta: {
           title: 'common.account.appoint',
-          keepAlive: true,
+          keepAlive: false,
         },
       },
       {
@@ -116,7 +124,15 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('@/views/account/coupon.vue'),
         meta: {
           title: 'common.account.coupon',
-          keepAlive: true,
+          keepAlive: false,
+        },
+      },
+      {
+        path: 'account/feedback',
+        component: () => import('@/views/account/feedback.vue'),
+        meta: {
+          title: 'common.account.feedback',
+          keepAlive: false,
         },
       },
       {

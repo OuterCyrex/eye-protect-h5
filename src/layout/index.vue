@@ -17,7 +17,13 @@
       @tab-switch="tabSwitch"
       safe-area-inset-bottom
     >
-      <nut-tabbar-item v-for="item in tabItem" :key="item.key" :tab-title="$t(`common.tabbar.${item.key}`)" :icon="item.icon" />
+      <nut-tabbar-item
+        v-for="item in tabItem"
+        :key="item.key"
+        :tab-title="$t(`common.tabbar.${item.key}`)"
+        :icon="item.icon"
+        :dot="item.showBadge"
+      />
     </nut-tabbar>
   </div>
 </template>
@@ -26,12 +32,15 @@
   import { ref, watch } from 'vue';
   import { useRouter } from 'vue-router';
   import { Home, Date, Notice, My } from '@nutui/icons-vue';
+  import { useUserStore } from '@/store/modules/user';
+
+  const userStore = useUserStore();
 
   const tabItem = [
-    { key: 'home', icon: Home },
-    { key: 'appoint', icon: Date },
-    { key: 'notice', icon: Notice },
-    { key: 'account', icon: My },
+    { key: 'home', icon: Home, showBadge: false },
+    { key: 'appoint', icon: Date, showBadge: false },
+    { key: 'notice', icon: Notice, showBadge: userStore.getUnread !== 0 },
+    { key: 'account', icon: My, showBadge: false },
   ];
 
   const router = useRouter();

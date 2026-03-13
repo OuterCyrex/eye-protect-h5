@@ -12,22 +12,27 @@
     <var-paper class="p-2">
       <van-cell title="学生信息管理" @click="router.push({ path: 'account/children' })" center is-link>
         <template #icon>
-          <van-icon size="24" class="mr-4" name="https://img.icons8.com/?size=100&id=151IAtg8gTZE&format=png&color=000000" />
+          <van-icon size="24" class="mr-4" name="src/assets/font/icon/account/account-btns-1.png" />
         </template>
       </van-cell>
       <van-cell title="个人信息修改" @click="router.push({ path: 'account/edit' })" center is-link>
         <template #icon>
-          <van-icon size="24" class="mr-4" name="https://img.icons8.com/?size=100&id=151IAtg8gTZE&format=png&color=000000" />
+          <van-icon size="24" class="mr-4" name="src/assets/font/icon/account/account-btns-2.png" />
         </template>
       </van-cell>
       <van-cell title="我的公益券" @click="router.push({ path: 'account/coupon' })" center is-link>
         <template #icon>
-          <van-icon size="24" class="mr-4" name="https://img.icons8.com/?size=100&id=C9wli4zNyV7T&format=png&color=000000" />
+          <van-icon size="24" class="mr-4" name="src/assets/font/icon/account/account-btns-3.png" />
         </template>
       </van-cell>
       <van-cell title="挂号记录查询" @click="router.push({ path: 'account/appoint' })" center is-link>
         <template #icon>
-          <van-icon size="24" class="mr-4" name="https://img.icons8.com/?size=100&id=uEQBYqT3Wt27&format=png&color=000000" />
+          <van-icon size="24" class="mr-4" name="src/assets/font/icon/account/account-btns-4.png" />
+        </template>
+      </van-cell>
+      <van-cell title="用户反馈" @click="router.push({ path: 'account/feedback' })" center is-link>
+        <template #icon>
+          <van-icon size="24" class="mr-4" name="src/assets/font/icon/account/account-btns-5.png" />
         </template>
       </van-cell>
     </var-paper>
@@ -41,6 +46,7 @@
   import { logout } from '@/api';
   import { fetchGetUserInfoDetail } from '@/api/user';
   import { useUserStore } from '@/store/modules/user';
+  import { ws } from '@/utils/stomp';
 
   const router = useRouter();
   const userStore = useUserStore();
@@ -50,6 +56,10 @@
     logout().then(() => {
       router.push({ path: 'login' });
       userStore.setToken('token');
+      userStore.setInfo({});
+      userStore.setStudent({});
+      userStore.setUnread(0);
+      ws.disconnect();
       showToast('退出登录成功');
     });
   };

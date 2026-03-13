@@ -65,7 +65,8 @@
   };
   onMounted(async () => {
     loading.value = true;
-    await handleGetReservationList();
-    loading.value = false;
+    await handleGetReservationList().finally(() => {
+      loading.value = false;
+    });
   });
 </script>

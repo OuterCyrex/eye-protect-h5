@@ -173,7 +173,8 @@
 
   onMounted(async () => {
     loading.value = true;
-    reportData.value = await fetchGetLastReport(userStore.getStudent.patientId);
-    loading.value = false;
+    reportData.value = await fetchGetLastReport(userStore.getStudent.patientId).finally(() => {
+      loading.value = false;
+    });
   });
 </script>

@@ -75,6 +75,9 @@ export default function ({ command, mode }: ConfigEnv): UserConfig {
         },
       },
     },
+    define: {
+      global: 'window'
+    },
     css: {
       preprocessorOptions: {
         scss: {

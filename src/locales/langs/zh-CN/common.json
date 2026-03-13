@@ -15,7 +15,8 @@
     "report": "检查报告",
     "intervene": "干预方案",
     "article": "推荐内容",
-    "charity": "公益礼包"
+    "charity": "公益礼包",
+    "glasses": "配镜信息"
   },
   "notice": {
     "notice": "通知",
@@ -28,7 +29,8 @@
     "coupon": "我的公益券",
     "children": "切换学生",
     "editChild": "编辑学生信息",
-    "addChild": "绑定学生信息"
+    "addChild": "绑定学生信息",
+    "feedback": "用户反馈"
   },
   "btn": {
     "confirm": "确认",

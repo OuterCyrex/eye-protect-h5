@@ -11,9 +11,9 @@
               <van-icon name="eye" size="16" class="mr-1" />
               <div>左眼（OS）</div>
             </div>
-            <div class="text-4xl font-bold mb-1">{{ EyeInfo.leftBareVision }}</div>
+            <div class="text-4xl font-bold mb-1">{{ EyeInfo.leftBareVision || 0 }}</div>
             <div class="text-xs text-gray-200">
-              {{ `S${EyeInfo.leftSphere.toFixed(2)}/C${EyeInfo.leftCylinder.toFixed(2)}/A${EyeInfo.leftAxis}` }}
+              {{ `S${(EyeInfo.leftSphere || 0).toFixed(2)}/C${(EyeInfo.leftCylinder || 0).toFixed(2)}/A${EyeInfo.leftAxis || 0}` }}
             </div>
           </div>
           <div class="flex-1 bg-blue-500 rounded-lg p-3 text-center">
@@ -21,9 +21,9 @@
               <van-icon name="eye" size="16" class="mr-1" />
               <div>右眼（OD）</div>
             </div>
-            <div class="text-4xl font-bold mb-1">{{ EyeInfo.rightBareVision }}</div>
+            <div class="text-4xl font-bold mb-1">{{ EyeInfo.rightBareVision || 0 }}</div>
             <div class="text-xs text-gray-200">
-              {{ `S${EyeInfo.rightSphere.toFixed(2)}/C${EyeInfo.rightCylinder.toFixed(2)}/A${EyeInfo.rightAxis}` }}
+              {{ `S${(EyeInfo.rightSphere || 0).toFixed(2)}/C${(EyeInfo.rightCylinder || 0).toFixed(2)}/A${EyeInfo.rightAxis || 0}` }}
             </div>
           </div>
         </div>
@@ -34,10 +34,10 @@
         <div class="flex justify-between items-center text-xs mt-3">
           <div class="ml-3">
             <div class="mb-1 flex items-center">
-              <div class="w-16 text-gray-200">左眼(OS):</div> <span> {{ EyeInfo.leftWarningRisk }}</span></div
+              <div class="w-16 text-gray-200">左眼(OS):</div> <span> {{ EyeInfo.leftWarningRisk || '暂无信息' }}</span></div
             >
             <div class="flex items-center"
-              ><div class="w-16 text-gray-200">右眼(OD):</div> <span> {{ EyeInfo.rightWarningRisk }}</span></div
+              ><div class="w-16 text-gray-200">右眼(OD):</div> <span> {{ EyeInfo.rightWarningRisk || '暂无信息' }}</span></div
             >
           </div>
           <div class="text-blue-200 underline cursor-pointer" @click="router.push({ path: 'home/report' })">查看报告</div>
@@ -131,7 +131,7 @@
     },
     {
       iconName: 'src/assets/font/icon/home/home-btns-3.png',
-      label: '预约配镜',
+      label: '配镜信息',
       to: '/home/glasses',
     },
     {

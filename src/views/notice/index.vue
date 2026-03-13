@@ -1,45 +1,44 @@
 <template>
   <div>
-    <chip-tab :tabs="tabs" v-model="tabValue" />
     <div class="mx-4 my-5">
-      <var-paper
-        @click="router.push({ path: '/notice/detail' })"
-        class="mb-4 p-2"
-        :elevation="1"
-        v-for="item in noticeList"
-        :key="item.title"
-        :style="`border-left: 3px solid ` + GetType(item.type)"
-      >
-        <div class="flex justify-between">
-          <div class="font-semibold flex items-center">
-            <var-chip type="danger" size="small" dot class="mr-3" v-if="!item.isRead">未读</var-chip>
-            <var-chip type="info" size="small" dot class="mr-3" v-if="item.isRead">已读</var-chip>
-            <div class="font-semibold">{{ item.title }}</div>
+      <div @click="router.push({ path: '/notice/detail' })" v-for="item in noticeList" :key="item.title">
+        <div class="mb-4 p-2">
+          <div class="flex justify-between items-center">
+            <div class="font-semibold flex items-center">
+              <var-ellipsis :tooltip="false" class="font-semibold flex items-center" :line-clamp="1">
+                <var-chip plain size="small" class="mr-1 text-xs mb-1" :text-color="typeColors[item.type]">
+                  {{ tabs[item.type] }}
+                </var-chip>
+                {{ item.title }}
+              </var-ellipsis>
+            </div>
+            <div v-if="!item.isRead" class="w-2 h-2 bg-red-500 rounded-full"></div>
           </div>
-          <div class="text-gray-500 text-sm">{{ item.time }}</div>
+          <var-ellipsis :tooltip="false" class="m-2 text-gray-500" :line-clamp="2">{{ item.content }} </var-ellipsis>
+
+          <div class="text-gray-500 text-sm flex justify-end">{{ item.createdAt }}</div>
         </div>
-        <div class="text-gray-500 text-sm my-2">{{ item.content }}</div>
-      </var-paper>
+        <var-divider />
+      </div>
     </div>
+
+    <nut-empty v-if="!noticeList || noticeList.length <= 0" description="目前暂无消息"></nut-empty>
+    <LoadLay v-model="loading" />
   </div>
 </template>
 
 <script lang="ts" setup>
-  import ChipTab from '@/templates/ChipTab.vue';
-  import { noticeList } from './mock';
+  import { fetchGetHistoryMessage } from '@/api/message';
+  import LoadLay from '@/templates/LoadLay.vue';
 
+  const loading = ref<boolean>(false);
   const router = useRouter();
-  const tabs = ['全部', '随访提醒', '待办事项'];
-  const tabValue = ref<number>(0);
+  const tabs = ['', '配镜提醒', '叫号通知', '报告生成', '复查提醒', '视力预警', '系统通知', '意见反馈'];
+  const typeColors = ['', '#7CB3F8', '#8ED869', '#F0C078', '#A9ACB0', '#F89898', '#9E7CF5', '#4DCFCF'];
 
-  const GetType = (val: string) => {
-    switch (val) {
-      case 'policy':
-        return '#5ec8e2';
-      case 'remind':
-        return '#d4e214';
-      default:
-        return '';
-    }
-  };
+  const noticeList = ref<Array<API.Message.messageInfo>>([]);
+
+  onMounted(async () => {
+    noticeList.value = await fetchGetHistoryMessage();
+  });
 </script>

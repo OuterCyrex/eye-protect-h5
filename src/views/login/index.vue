@@ -32,7 +32,6 @@
   import { useUserStore } from '@/store/modules/user';
   import { fetchGetUserInfo } from '@/api/user';
   import { fetchGetCurrentStudent } from '@/api/student';
-  import { ws, channels } from '@/utils/stomp';
 
   const phoneNumber = ref('');
   const verifyCode = ref('');
@@ -59,10 +58,7 @@
       userStore.setStudent(res);
     });
 
-    await ws.init();
-    await ws.subscribe(channels.UNREAD, (message: any) => {
-      userStore.setUnread(JSON.parse(message.body));
-    });
+    userStore.initWebsocket();
 
     showToast('登录成功');
     router.push({ path: '/' });

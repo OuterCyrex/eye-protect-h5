@@ -46,7 +46,6 @@
   import { logout } from '@/api';
   import { fetchGetUserInfoDetail } from '@/api/user';
   import { useUserStore } from '@/store/modules/user';
-  import { ws } from '@/utils/stomp';
 
   const router = useRouter();
   const userStore = useUserStore();
@@ -55,11 +54,7 @@
   const handleLogout = () => {
     logout().then(() => {
       router.push({ path: 'login' });
-      userStore.setToken('token');
-      userStore.setInfo({});
-      userStore.setStudent({});
-      userStore.setUnread(0);
-      ws.disconnect();
+      userStore.logout();
       showToast('退出登录成功');
     });
   };

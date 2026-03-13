@@ -9,7 +9,7 @@ export enum channels {
   UNREAD = `/user/queue/unread`,
 }
 
-class WebsocketManager {
+export class WebsocketManager {
   private client!: Stomp.Client;
   private token: string = '';
   private isConnected = false;
@@ -17,8 +17,7 @@ class WebsocketManager {
   private subscriptions = new Map<channels, Stomp.Subscription>();
 
   constructor() {
-    const userStore = useUserStore();
-    this.token = userStore.getToken || '';
+    this.token = '';
   }
 
   init(): Promise<void> {
@@ -74,14 +73,7 @@ class WebsocketManager {
       this.subscriptions.delete(c);
     }
 
-    const subscription = this.client.subscribe(c, (message) => {
-      try {
-        const data = JSON.parse(message.body);
-        func(data);
-      } catch (e: any) {
-        console.warn(e);
-      }
-    });
+    const subscription = this.client.subscribe(c, func);
 
     this.subscriptions.set(c, subscription);
     return subscription;
@@ -109,5 +101,3 @@ class WebsocketManager {
     }
   }
 }
-
-export const ws = new WebsocketManager();

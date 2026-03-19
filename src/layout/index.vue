@@ -22,7 +22,7 @@
         :key="item.key"
         :tab-title="$t(`common.tabbar.${item.key}`)"
         :icon="item.icon"
-        :dot="item.showBadge"
+        :dot="item.key === 'notice' && userStore.getUnread !== 0"
       />
     </nut-tabbar>
   </div>
@@ -37,10 +37,10 @@
   const userStore = useUserStore();
 
   const tabItem = [
-    { key: 'home', icon: Home, showBadge: false },
-    { key: 'appoint', icon: Date, showBadge: false },
-    { key: 'notice', icon: Notice, showBadge: userStore.getUnread !== 0 },
-    { key: 'account', icon: My, showBadge: false },
+    { key: 'home', icon: Home },
+    { key: 'appoint', icon: Date },
+    { key: 'notice', icon: Notice },
+    { key: 'account', icon: My },
   ];
 
   const router = useRouter();

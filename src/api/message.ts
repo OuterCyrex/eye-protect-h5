@@ -7,3 +7,7 @@ export function fetchGetHistoryMessage() {
 export function fetchGetUnreadCount() {
   return httpAuth.get(`/message/unread/count`);
 }
+
+export function fetchSetMessageRead(id: string) {
+  return httpAuth.put(`/message/read/${id}`);
+}

@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <div class="bg-white rounded-lg p-4 mb-4 border border-gray-100" v-if="reportData.chartPoints">
+    <div class="bg-white rounded-lg p-4 mb-4 border border-gray-100" v-if="reportData.chartPoints?.axialLengthData">
       <div class="text-sm font-semibold text-gray-800 mb-3 flex items-center">
         <span class="w-1.5 h-1.5 bg-purple-500 rounded-full mr-2"></span>
         眼轴/身高数据

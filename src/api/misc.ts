@@ -17,7 +17,7 @@ export function fetchUploadPicture(files: Array<File>) {
 }
 
 export function fetchSubmitFeedback(hospitalId: string, data: API.Misc.feedbackRequest) {
-  return httpAuth.post(`/feedback/submit`, data, {
+  return httpAuth.post(`/feedback/submit/hospital`, data, {
     params: { id: hospitalId },
   });
 }

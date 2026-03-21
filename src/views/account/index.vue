@@ -2,7 +2,7 @@
   <div class="bg-gray-100 p-2 min-h-full">
     <var-paper class="p-6 mt-1 mb-3">
       <div class="flex items-center gap-4">
-        <var-avatar size="large" src="https://b0.bdstatic.com/ugc/img//2025-08-02/6920d9259b909ea2ebc07abc4cc1db64.png" />
+        <var-avatar size="large" />
         <div class="flex flex-col gap-1">
           <div class="text-2xl font-semibold">{{ userInfo?.name }}</div>
           <div class="text-gray-500 text-sm">绑定手机：{{ userInfo?.phone }}</div>

@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <button class="bg-red-500 text-white text-sm px-4 py-1.5 rounded-full cursor-pointer"> 去使用 </button>
+    <button class="bg-red-500 text-white text-sm px-4 py-1.5 rounded-full cursor-pointer" @click="router.push('/appoint')"> 去使用 </button>
   </div>
 </template>
 
@@ -18,6 +18,8 @@
   defineProps<{
     coupon: API.Coupon.MyCoupon;
   }>();
+
+  const router = useRouter();
 
   const getCouponDescText = (type: number) => {
     const typeMap: Record<number, string> = {

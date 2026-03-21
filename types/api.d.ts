@@ -107,26 +107,28 @@ declare namespace API {
       planType: string;
       diagnosis: string;
       structuredDiagnosis: {
-        planItems: Array<{
+        planItems: {
           index: number;
           name: string;
           remark: string;
-        }>;
+        }[];
         diagnosisSuggestion: {
           diagnosisTypes: string[];
           opticalIntervention: {
             enabled: boolean;
-            frameGlasses: null | string;
-            contactLenses: null | string;
-            controlLenses: null | string;
+            frameGlasses: string[];
+            contactLenses: string[];
+            controlLenses: string[];
           };
           drugIntervention: {
             enabled: boolean;
-            drugs: null | string;
+            drugs: {
+              name: string;
+            }[];
           };
           visualTraining: {
             enabled: boolean;
-            trainingItems: null | string;
+            trainingItems: string[];
           };
           environmentalIntervention: {
             enabled: boolean;
@@ -135,7 +137,7 @@ declare namespace API {
         };
         reviewTime: string;
       };
-      axisRatioCalculation: null | string;
+      axisRatioCalculation: number;
       visualFunctionDiagnosis: string;
       planDate: string;
       nextReviewDate: string;

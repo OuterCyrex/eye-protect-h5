@@ -33,7 +33,7 @@
 
     const minVal = Math.min(...allData);
     const maxVal = Math.max(...allData);
-    const step = 0.2;
+    const step = 0.05;
     const yMin = (Math.floor(minVal / step) * step).toFixed(2);
     const yMax = (Math.ceil(maxVal / step) * step).toFixed(2);
 
@@ -192,20 +192,18 @@
 
   onMounted(async () => {
     await nextTick();
-    axialLengthData.value = props.data;
-    setTimeout(() => {
-      initChart();
-    }, 200);
-
+    initChart();
     window.addEventListener('resize', resizeChart);
   });
 
   watch(
-    axialLengthData,
-    () => {
-      nextTick(() => initChart());
+    () => props.data,
+    async (data) => {
+      axialLengthData.value = Array.isArray(data) ? data : [];
+      await nextTick();
+      initChart();
     },
-    { deep: true },
+    { deep: true, immediate: true },
   );
 
   onUnmounted(() => {

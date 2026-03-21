@@ -54,13 +54,15 @@
     await fetchGetUserInfo().then((res) => {
       userStore.setInfo(res);
     });
-    await fetchGetCurrentStudent().then((res: API.Student.studentInfo) => {
-      userStore.setStudent(res);
-    });
 
     userStore.initWebsocket();
 
     showToast('登录成功');
-    router.push({ path: '/' });
+    const redirect = typeof router.currentRoute.value.query.redirect === 'string' ? router.currentRoute.value.query.redirect : '/';
+    router.replace(redirect);
+
+    await fetchGetCurrentStudent().then((res: API.Student.studentInfo) => {
+      userStore.setStudent(res);
+    });
   };
 </script>

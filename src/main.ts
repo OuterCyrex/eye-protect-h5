@@ -14,12 +14,12 @@ import '@nutui/nutui/dist/packages/imagepreview/style/css';
 
 const app = createApp(App);
 
+app.use(store);
 app.use(router);
 
 // 国际化
 await setupI18n(app);
 
 // 状态管理
-app.use(store);
 app.use(Icon);
 app.mount('#app');

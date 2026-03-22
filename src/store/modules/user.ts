@@ -36,7 +36,7 @@ export const useUserStore = defineStore('user', {
       this.student = student;
     },
     setUnread(unread: number) {
-      this.unread = unread;
+      this.unread = Math.max(0, unread);
     },
     logout() {
       this.token = '';
@@ -50,7 +50,7 @@ export const useUserStore = defineStore('user', {
       const ws = new WebsocketManager();
       await ws.init();
       ws.subscribe(channels.UNREAD, (message) => {
-        this.setUnread(parseInt(message.body));
+        this.setUnread(Number.parseInt(message.body, 10) || 0);
       });
       return ws;
     },

@@ -22,7 +22,7 @@
         :key="item.key"
         :tab-title="$t(`common.tabbar.${item.key}`)"
         :icon="item.icon"
-        :dot="item.key === 'notice' && userStore.getUnread !== 0"
+        :dot="item.key === 'notice' && Number(userStore.getUnread) > 0"
       />
     </nut-tabbar>
   </div>

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { showToast } from 'vant';
+import store from '@/store';
 import { useUserStore } from '@/store/modules/user';
 
 const baseURL = import.meta.env.VITE_APP_BASE_URL;
@@ -55,42 +56,40 @@ export const http = {
   },
 };
 
-const userStore = useUserStore();
+const getAuthHeaders = (config?: AxiosRequestConfig) => {
+  const userStore = useUserStore(store);
+  return {
+    ...config?.headers,
+    Authorization: userStore.getToken,
+  };
+};
 
 export const httpAuth = {
   get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
     return service.get(url, {
       ...config,
-      headers: {
-        Authorization: userStore.getToken,
-      },
+      headers: getAuthHeaders(config),
     });
   },
 
   post<T = any>(url: string, data?: object, config?: AxiosRequestConfig): Promise<T> {
     return service.post(url, data, {
       ...config,
-      headers: {
-        Authorization: userStore.getToken,
-      },
+      headers: getAuthHeaders(config),
     });
   },
 
   put<T = any>(url: string, data?: object, config?: AxiosRequestConfig): Promise<T> {
     return service.put(url, data, {
       ...config,
-      headers: {
-        Authorization: userStore.getToken,
-      },
+      headers: getAuthHeaders(config),
     });
   },
 
   delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
     return service.delete(url, {
       ...config,
-      headers: {
-        Authorization: userStore.getToken,
-      },
+      headers: getAuthHeaders(config),
     });
   },
 };

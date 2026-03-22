@@ -28,7 +28,7 @@
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
-  import { fetchGetHistoryMessage, fetchSetMessageRead } from '@/api/message';
+  import { fetchGetHistoryMessage, fetchSetMessageRead, fetchGetUnreadCount } from '@/api/message';
   import { useUserStore } from '@/store/modules/user';
   import LoadLay from '@/templates/LoadLay.vue';
   import { WebsocketManager, channels } from '@/utils/stomp';
@@ -57,6 +57,7 @@
   onMounted(async () => {
     loading.value = true;
     noticeList.value = await fetchGetHistoryMessage();
+    userStore.setUnread(Number(await fetchGetUnreadCount()) || 0);
 
     const ws = new WebsocketManager();
     await ws.init();
@@ -65,6 +66,9 @@
       const isExist = noticeList.value.some((item) => item.id === newMsg.id);
       if (!isExist) {
         noticeList.value.unshift(newMsg);
+        if (!newMsg.isRead) {
+          userStore.setUnread(userStore.getUnread + 1);
+        }
       }
     });
     loading.value = false;

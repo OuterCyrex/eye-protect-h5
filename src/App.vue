@@ -2,11 +2,13 @@
   <router-view />
 </template>
 <script setup lang="ts">
+  import { fetchGetUnreadCount } from '@/api/message';
   import { useUserStore } from './store/modules/user';
   const userStore = useUserStore();
 
   onMounted(async () => {
     if (userStore.getToken) {
+      userStore.setUnread(Number(await fetchGetUnreadCount()) || 0);
       await userStore.initWebsocket();
     }
   });

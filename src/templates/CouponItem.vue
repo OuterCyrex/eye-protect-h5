@@ -6,11 +6,22 @@
       <div class="text-sm text-gray-600 ml-2">
         <div class="font-semibold text-gray-800">{{ getCouponDescText(coupon.type) }}</div>
         <div class="text-sm text-gray-500">适用医院：{{ coupon.usedInstitutionName || '任意医院适用' }}</div>
-        <div class="text-red-600 mt-1"> {{ coupon.expireDate }} 过期 </div>
+        <div class="text-red-600 mt-1" v-if="coupon.status === 1"> {{ coupon.expireDate }} 过期 </div>
+        <div class="text-gray-400 mt-1" v-if="coupon.status === 2"> 已使用 </div>
+        <div class="text-gray-400 mt-1" v-if="coupon.status === 3"> 已过期 </div>
       </div>
     </div>
 
-    <button class="bg-red-500 text-white text-sm px-4 py-1.5 rounded-full cursor-pointer" @click="router.push('/appoint')"> 去使用 </button>
+    <button
+      class="bg-red-500 text-white text-sm px-4 py-1.5 rounded-full cursor-pointer"
+      v-if="coupon.status !== 3"
+      @click="router.push('/appoint')"
+    >
+      去使用
+    </button>
+    <button class="bg-gray-300 text-white text-sm px-4 py-1.5 rounded-full cursor-pointer" v-else @click="router.push('/appoint')">
+      去使用
+    </button>
   </div>
 </template>
 

@@ -41,10 +41,6 @@
         </div>
         <div class="space-y-3 text-sm">
           <div>
-            <div class="text-xs text-gray-500 mb-1">诊断结果</div>
-            <div class="text-gray-800 leading-6">{{ displayText(data?.diagnosis) }}</div>
-          </div>
-          <div>
             <div class="text-xs text-gray-500 mb-1">诊断类型</div>
             <div class="text-gray-800 leading-6">{{ joinOrDefault(diagnosisTypes) }}</div>
           </div>

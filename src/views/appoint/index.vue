@@ -50,6 +50,7 @@
 
   const appointTabs = ref<Array<string>>(['常规检查', '视功能训练']);
   const appointType = ref<number>(0);
+  const reservationTypeMap = [1, 2];
 
   const selectedDay = ref<string>('');
   const showDayTimeSelector = ref<boolean>(false);
@@ -69,7 +70,7 @@
     await fetchGetReservationTime({
       institutionId: hospitalValue.value,
       date: selectedDay.value,
-      type: appointType.value + 1,
+      type: reservationTypeMap[appointType.value] ?? 1,
     }).then((res) => {
       timeSlots.value = res;
     });
@@ -83,7 +84,7 @@
     fetchReserve({
       patientId: userStore.getStudent.patientId,
       institutionId: hospitalValue.value,
-      type: appointType.value,
+      type: reservationTypeMap[appointType.value] ?? 1,
       date: selectedDay.value,
       timeSlot: selectedTime.value,
     }).then(() => {

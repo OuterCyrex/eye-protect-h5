@@ -259,6 +259,7 @@ declare namespace API {
 
     interface MyCoupon {
       id: string;
+      status: number;
       voucherId: string;
       voucherCode: string;
       status: number;
@@ -281,6 +282,7 @@ declare namespace API {
       patientId: string;
       scheduleDate: string;
       timeSlot: number;
+      timeSlotDesc: string;
       appointmentType: number;
       appointmentTypeDesc: string;
       isFirstVisit: boolean;

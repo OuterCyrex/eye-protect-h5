@@ -12,7 +12,7 @@
         </div>
         <div class="flex justify-between text-sm">
           <span class="text-gray-500">就诊时段：</span>
-          <span class="text-gray-700 font-medium">{{ timeSlotsMap[reservation.timeSlot] }}</span>
+          <span class="text-gray-700 font-medium">{{ reservation.timeSlotDesc }}</span>
         </div>
         <div class="flex justify-between text-sm">
           <span class="text-gray-500">预约编号：</span>
@@ -83,6 +83,7 @@
     patientId: '',
     scheduleDate: '',
     timeSlot: 0,
+    timeSlotDesc: '',
     appointmentType: 0,
     appointmentTypeDesc: '',
     isFirstVisit: true,
@@ -97,7 +98,6 @@
       reservation.value = res;
     });
   };
-  const timeSlotsMap = ['8:00-9:00', '9:00-10:00', '10:00-11:30', '14:30-15:30', '15:30-16:30', '16:30-18:00'];
   const statusMap = {
     '0': '待就诊',
     '1': '就诊中',

@@ -15,6 +15,17 @@ declare namespace API {
       password: string;
     }
 
+    interface LoginVerificationCodeRequest {
+      phone: string;
+      verificationCode: string;
+    }
+
+    interface ChangePasswordRequest {
+      phone: string;
+      verificationCode: string;
+      newPassword: string;
+    }
+
     interface UserInfo {
       id: string;
       phone: string;
@@ -41,6 +52,7 @@ declare namespace API {
       gender: string;
       idCard: string;
       status: string;
+      avatarUrl: string;
       lastLoginTime: string;
       emergencyContact: string;
       emergencyPhone: string;
@@ -48,15 +60,23 @@ declare namespace API {
     }
 
     interface UpdateUserInfoRequest {
-      name: string;
-      phone: string;
-      idCard: string;
-      gender: string;
-      birthDate: string;
-      email: string;
-      status: string;
-      password: string;
-      lastLoginTime: string;
+      id: string;
+      userType: string;
+      baseInfo: {
+        name: string;
+        phone: string;
+        idCard: string;
+        gender: string;
+        status: string;
+        password: string;
+      };
+      parentExtension: {
+        birthDate: string;
+        email: string;
+        emergencyContact: string;
+        emergencyPhone: string;
+        address: string;
+      };
     }
   }
 

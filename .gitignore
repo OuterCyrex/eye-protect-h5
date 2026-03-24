@@ -26,3 +26,5 @@ types/components.d.ts
 *.njsproj
 *.sln
 *.sw?
+.env.local
+.env.*.local

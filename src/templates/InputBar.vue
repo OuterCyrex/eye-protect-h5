@@ -25,6 +25,7 @@
     prependIcon?: string;
     modelValue: string;
     placeholder?: string;
+    isNumber?: boolean;
     validator?: (value: string) => string;
     validateTrigger?: boolean;
   }>();
@@ -36,8 +37,11 @@
   const isInputted = ref(false);
   const handleInput = (e: Event) => {
     const target = e.target as HTMLInputElement;
-    const pureNumber = target.value.replace(/\D/g, '');
-    emits('update:modelValue', pureNumber);
+    let inputValue = target.value;
+    if (props.isNumber) {
+      inputValue = inputValue.replace(/\D/g, '');
+    }
+    emits('update:modelValue', inputValue);
     if (!isInputted.value) {
       isInputted.value = true;
     }

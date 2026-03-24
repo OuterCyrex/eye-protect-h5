@@ -27,7 +27,7 @@
         </div>
 
         <div class="flex justify-between text-sm text-gray-600">
-          <div>就诊时段: {{ timeSlotsMap[item.timeSlot] }}</div>
+          <div>就诊时段: {{ item.timeSlotDesc }}</div>
           <div>地点 : {{ item.institutionName }}</div>
         </div>
       </div></div
@@ -56,7 +56,6 @@
     });
   };
 
-  const timeSlotsMap = ['8:00-9:00', '9:00-10:00', '10:00-11:30', '14:30-15:30', '15:30-16:30', '16:30-18:00'];
   const statusMap = {
     '0': '待就诊',
     '1': '就诊中',
@@ -64,6 +63,10 @@
     '-1': '已取消',
   };
   onMounted(async () => {
+    if (!userStore.getStudent.patientId) {
+      showToast('暂无学生信息');
+      return;
+    }
     loading.value = true;
     await handleGetReservationList().finally(() => {
       loading.value = false;

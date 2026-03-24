@@ -19,6 +19,29 @@ export function fetchGetUserInfo() {
  * 更新用户信息
  * @returns
  */
-export function fetchUpdateUserInfo(id: string, data: API.Auth.UpdateUserInfoRequest) {
-  return httpAuth.put(`/auth/user-detail`, { ...data, userType: 'parent', id });
+export function fetchUpdateUserInfo(data: API.Auth.UpdateUserInfoRequest) {
+  return httpAuth.put(`/auth/user-detail/current`, data);
+}
+
+export function fetchSendLoginCode(phone: string) {
+  return httpAuth.post(`/auth/send-code`, { phone, type: 1 });
+}
+
+export function fetchSendChangePasswordCode(phone: string) {
+  return httpAuth.post(`/auth/send-code`, { phone, type: 2 });
+}
+
+export function fetchChangePassword(data: API.Auth.ChangePasswordRequest) {
+  return httpAuth.post('/auth/forgot-password/reset', data);
+}
+
+export function fetchUploadAvatar(file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  return httpAuth.post(`/auth/upload-avatar`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 }

@@ -80,6 +80,14 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: 'account/changePassword',
+        component: () => import('@/views/account/changePassword.vue'),
+        meta: {
+          title: '更改密码',
+          keepAlive: false,
+        },
+      },
+      {
         path: 'account/children',
         component: () => import('@/views/account/children.vue'),
         meta: {

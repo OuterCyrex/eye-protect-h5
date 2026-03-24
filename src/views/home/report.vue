@@ -123,6 +123,11 @@
       </div>
     </div>
 
+    <var-paper class="p-4">
+      <div class="font-semibold mb-2">眼轴记录</div>
+      <axiosChart :data="axiosData" />
+    </var-paper>
+
     <LoadLay v-model="loading" />
   </div>
 </template>
@@ -130,8 +135,10 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import LoadLay from '@/templates/LoadLay.vue';
+  import axiosChart from '@/templates/chart/axiosChart.vue';
   import { fetchGetLastReport } from '@/api/intervention';
   import { useUserStore } from '@/store/modules/user';
+  import { fetchGetAxiosChart } from '@/api/misc';
 
   const loading = ref<boolean>(false);
   const userStore = useUserStore();
@@ -140,6 +147,8 @@
     if (!dateStr || dateStr === '') return '暂无';
     return dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
   };
+
+  const axiosData = ref<Array<API.Misc.AxiosChartUnit>>([]);
 
   const reportData = ref<API.Intervene.report>({
     patientId: 0,
@@ -173,6 +182,7 @@
 
   onMounted(async () => {
     loading.value = true;
+    axiosData.value = await fetchGetAxiosChart(userStore.getStudent.patientId);
     reportData.value = await fetchGetLastReport(userStore.getStudent.patientId).finally(() => {
       loading.value = false;
     });

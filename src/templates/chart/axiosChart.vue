@@ -98,7 +98,7 @@
         },
       },
       grid: {
-        left: 12,
+        left: 0,
         right: 12,
         bottom: 30,
         top: 30,

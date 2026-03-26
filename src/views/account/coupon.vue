@@ -1,7 +1,7 @@
 <template>
   <div class="bg-gray-100 min-h-screen p-3">
     <div v-if="couponList && couponList.length >= 0">
-      <div v-for="item of couponList" :key="item.id"> <CouponItem :coupon="item" /> </div
+      <div v-for="item of couponList" :key="item.id"> <CouponItem class="mb-2" :coupon="item" /> </div
     ></div>
     <nut-empty v-if="!couponList || couponList.length <= 0" description="没有可用的公益券"></nut-empty>
     <LoadLay v-model="loading" />

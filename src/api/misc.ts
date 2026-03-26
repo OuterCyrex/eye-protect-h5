@@ -21,3 +21,7 @@ export function fetchSubmitFeedback(hospitalId: string, data: API.Misc.feedbackR
     params: { id: hospitalId },
   });
 }
+
+export function fetchGetArticleList(data: API.Misc.GetArticleListRequest) {
+  return httpAuth.post(`api/news/articles/page`, data);
+}

@@ -17,3 +17,7 @@ export function fetchReserve(data: API.Reservation.reserveRequest) {
 export function fetchGetReservationInfo(id: string) {
   return httpAuth.get(`/reservation/record/${id}`);
 }
+
+export function fetchDeleteReservation(id: string) {
+  return httpAuth.delete(`/reservation/${id}`);
+}

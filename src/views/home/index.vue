@@ -1,93 +1,100 @@
 <template>
   <div class="bg-gray-100">
     <div class="bg-white">
-      <div class="bg-blue-600 rounded-lg p-4 text-white m-3">
-        <div class="flex justify-between items-center mb-4">
+      <div class="m-3 rounded-lg bg-blue-600 p-4 text-white">
+        <div class="mb-4 flex items-center justify-between">
           <div class="text-sm font-semibold">最新筛查数据</div>
         </div>
-        <div class="flex gap-4 mb-4">
-          <div class="flex-1 bg-blue-500 rounded-lg p-3 text-center">
-            <div class="flex items-center justify-center text-xs text-gray-200 mb-2">
+        <div class="mb-4 flex gap-4">
+          <div class="flex-1 rounded-lg bg-blue-500 p-3 text-center">
+            <div class="mb-2 flex items-center justify-center text-xs text-gray-200">
               <van-icon name="eye" size="16" class="mr-1" />
-              <div>左眼（OS）</div>
+              <div>左眼(OS)</div>
             </div>
-            <div class="text-4xl font-bold mb-1">{{ EyeInfo.leftBareVision || 0 }}</div>
+            <div class="mb-1 text-4xl font-bold">{{ EyeInfo.leftBareVision || 0 }}</div>
             <div class="text-xs text-gray-200">
               {{ `S${(EyeInfo.leftSphere || 0).toFixed(2)}/C${(EyeInfo.leftCylinder || 0).toFixed(2)}/A${EyeInfo.leftAxis || 0}` }}
             </div>
           </div>
-          <div class="flex-1 bg-blue-500 rounded-lg p-3 text-center">
-            <div class="flex items-center justify-center text-xs text-gray-200 mb-2">
+          <div class="flex-1 rounded-lg bg-blue-500 p-3 text-center">
+            <div class="mb-2 flex items-center justify-center text-xs text-gray-200">
               <van-icon name="eye" size="16" class="mr-1" />
-              <div>右眼（OD）</div>
+              <div>右眼(OD)</div>
             </div>
-            <div class="text-4xl font-bold mb-1">{{ EyeInfo.rightBareVision || 0 }}</div>
+            <div class="mb-1 text-4xl font-bold">{{ EyeInfo.rightBareVision || 0 }}</div>
             <div class="text-xs text-gray-200">
               {{ `S${(EyeInfo.rightSphere || 0).toFixed(2)}/C${(EyeInfo.rightCylinder || 0).toFixed(2)}/A${EyeInfo.rightAxis || 0}` }}
             </div>
           </div>
         </div>
 
-        <div class="text-xs justify-end flex text-gray-300">(数据仅供参考)</div>
+        <div class="flex justify-end text-xs text-gray-300">(数据仅供参考)</div>
         <var-divider class="my-2 bg-blue-400" />
 
-        <div class="flex justify-between items-center text-xs mt-3">
+        <div class="mt-3 flex items-center justify-between text-xs">
           <div class="ml-3">
             <div class="mb-1 flex items-center">
-              <div class="w-16 text-gray-200">左眼(OS):</div> <span> {{ EyeInfo.leftWarningRisk || '暂无信息' }}</span></div
-            >
-            <div class="flex items-center"
-              ><div class="w-16 text-gray-200">右眼(OD):</div> <span> {{ EyeInfo.rightWarningRisk || '暂无信息' }}</span></div
-            >
+              <div class="w-16 text-gray-200">左眼(OS):</div>
+              <span>{{ EyeInfo.leftWarningRisk || '暂无信息' }}</span>
+            </div>
+            <div class="flex items-center">
+              <div class="w-16 text-gray-200">右眼(OD):</div>
+              <span>{{ EyeInfo.rightWarningRisk || '暂无信息' }}</span>
+            </div>
           </div>
-          <div class="text-blue-200 underline cursor-pointer" @click="router.push({ path: 'home/report' })">查看报告</div>
+          <div class="cursor-pointer text-blue-200 underline" @click="router.push({ path: 'home/report' })">查看报告</div>
         </div>
       </div>
 
-      <div class="grid-cols-4 gap-3 grid px-4 pb-3">
-        <IconButton v-for="item in JumpButtons" :key="item.label" :icon-name="item.iconName" :label="item.label" :to="`${item.to}`" /> </div
-    ></div>
+      <div class="grid grid-cols-4 gap-3 px-4 pb-3">
+        <IconButton v-for="item in JumpButtons" :key="item.label" :icon-name="item.iconName" :label="item.label" :to="item.to" />
+      </div>
+    </div>
 
-    <var-paper class="flex items-center my-2 px-4 py-3">
-      <var-icon name="bell" size="28" class="rounded-full p-1 bg-yellow-200 mr-4" color="rgb(250, 204, 21)" />
+    <var-paper class="my-2 flex items-center px-4 py-3">
+      <var-icon name="bell" size="28" class="mr-4 rounded-full bg-yellow-200 p-1" color="rgb(250, 204, 21)" />
       <div class="flex justify-between">
         <div>
-          <div class="font-semibold text-sm">复查提醒</div>
-          <div class="text-xs text-gray-500 mt-0.5">请及时查看医院信息进行视力复查</div>
+          <div class="text-sm font-semibold">复查提醒</div>
+          <div class="mt-0.5 text-xs text-gray-500">请及时查看医院信息并进行视力复查</div>
         </div>
       </div>
       <var-chip size="small" type="primary" class="ml-auto" @click="router.push({ path: 'appoint' })">去预约</var-chip>
     </var-paper>
 
-    <!-- <var-paper class="p-3">
-      <div class="font-semibold mb-2">热门推荐</div>
-      <ConsultCard
-        class="my-3"
-        v-for="item in recommendList"
-        :key="item.title"
-        :title="item.title"
-        :subtitle="item.subtitle"
-        :src="item.src"
-        @click="router.push({ path: 'home/article' })"
-      />
-    </var-paper> -->
-
     <var-paper class="p-4">
-      <div class="font-semibold mb-2">眼轴记录</div>
+      <div class="mb-2 font-semibold">眼轴记录</div>
       <axiosChart :data="axiosData" />
+    </var-paper>
+
+    <var-paper class="p-3 mt-2">
+      <div class="mb-2 font-semibold">热门推荐</div>
+      <var-list :finished="articleFinished" :immediate-check="true" v-model:loading="articleLoading" @load="GetArticlesList">
+        <ConsultCard
+          v-for="item in recommendList"
+          :key="item.id"
+          class="my-3"
+          :title="item.title"
+          :subtitle="item.summary"
+          :src="item.coverImage"
+          @click="router.push({ path: 'home/article' })"
+        />
+      </var-list>
     </var-paper>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import IconButton from '@/templates/IconButton.vue';
+  import { fetchGetArticleList, fetchGetAxiosChart } from '@/api/misc';
   import axiosChart from '@/templates/chart/axiosChart.vue';
+  import IconButton from '@/templates/IconButton.vue';
   import { useUserStore } from '@/store/modules/user';
-  import { fetchGetAxiosChart } from '@/api/misc';
+  import ConsultCard from '@/templates/ConsultCard.vue';
 
   const router = useRouter();
   const userStore = useUserStore();
+
   const EyeInfo = ref<API.Student.studentInfo>({
     id: '',
     name: '',
@@ -117,6 +124,19 @@
   });
 
   const axiosData = ref<Array<API.Misc.AxiosChartUnit>>([]);
+  const recommendList = ref<Array<API.Misc.articleInfo>>([]);
+  const articleLoading = ref(false);
+  const articleFinished = ref(false);
+  const articleQuery = ref<API.Misc.GetArticleListRequest>({
+    current: 1,
+    size: 10,
+    title: '',
+    source: '',
+    tagId: '',
+    status: 0,
+    orderBy: '',
+    orderDirection: '',
+  });
 
   const JumpButtons = ref([
     {
@@ -140,6 +160,29 @@
       to: '/home/charity',
     },
   ]);
+
+  const GetArticlesList = async () => {
+    if (articleFinished.value) {
+      articleLoading.value = false;
+      return;
+    }
+
+    const res = await fetchGetArticleList(articleQuery.value);
+    const records = res?.records || [];
+
+    recommendList.value.push(...records);
+    articleLoading.value = false;
+
+    const reachedLastPageByPages = typeof res?.pages === 'number' && articleQuery.value.current >= res.pages;
+    const reachedLastPageBySize = records.length < articleQuery.value.size;
+
+    if (reachedLastPageByPages || reachedLastPageBySize) {
+      articleFinished.value = true;
+      return;
+    }
+
+    articleQuery.value.current += 1;
+  };
 
   onMounted(async () => {
     EyeInfo.value = userStore.getStudent as API.Student.studentInfo;

@@ -99,6 +99,33 @@ declare namespace API {
       updatedAt: string;
     }
 
+    interface GetArticleListRequest {
+      current: number;
+      size: number;
+      title: string;
+      source: string;
+      tagId: string;
+      status: number;
+      orderBy: string;
+      orderDirection: string;
+    }
+
+    interface articleInfo {
+      id: string;
+      title: string;
+      source: string;
+      link: string;
+      coverImage: string;
+      summary: string;
+      tags: string[];
+      viewCount: number;
+      status: number;
+      statusDesc: string;
+      publishTime: string;
+      createdAt: string;
+      updatedAt: string;
+    }
+
     interface AxiosChartUnit {
       id: string;
       recordDate: string;

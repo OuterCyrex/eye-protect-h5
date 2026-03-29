@@ -47,7 +47,7 @@
       </div>
 
       <div class="grid grid-cols-4 gap-3 px-4 pb-3">
-        <IconButton v-for="item in JumpButtons" :key="item.label" :icon-name="item.iconName" :label="item.label" :to="item.to" />
+        <IconButton v-for="item in jumpButtons" :key="item.label" :icon-name="item.iconName" :label="item.label" :to="item.to" />
       </div>
     </div>
 
@@ -67,9 +67,9 @@
       <axiosChart :data="axiosData" />
     </var-paper>
 
-    <var-paper class="p-3 mt-2">
+    <var-paper class="mt-2 p-3">
       <div class="mb-2 font-semibold">热门推荐</div>
-      <var-list :finished="articleFinished" :immediate-check="true" v-model:loading="articleLoading" @load="GetArticlesList">
+      <var-list :finished="articleFinished" :immediate-check="true" v-model:loading="articleLoading" @load="getArticlesList">
         <ConsultCard
           v-for="item in recommendList"
           :key="item.id"
@@ -87,10 +87,14 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { fetchGetArticleList, fetchGetAxiosChart } from '@/api/misc';
+  import homeBtn1 from '@/assets/font/icon/home/home-btns-1.png';
+  import homeBtn2 from '@/assets/font/icon/home/home-btns-2.png';
+  import homeBtn3 from '@/assets/font/icon/home/home-btns-3.png';
+  import homeBtn4 from '@/assets/font/icon/home/home-btns-4.png';
   import axiosChart from '@/templates/chart/axiosChart.vue';
+  import ConsultCard from '@/templates/ConsultCard.vue';
   import IconButton from '@/templates/IconButton.vue';
   import { useUserStore } from '@/store/modules/user';
-  import ConsultCard from '@/templates/ConsultCard.vue';
 
   const router = useRouter();
   const userStore = useUserStore();
@@ -138,30 +142,30 @@
     orderDirection: '',
   });
 
-  const JumpButtons = ref([
+  const jumpButtons = ref([
     {
-      iconName: 'src/assets/font/icon/home/home-btns-1.png',
+      iconName: homeBtn1,
       label: '检查报告',
       to: '/home/report',
     },
     {
-      iconName: 'src/assets/font/icon/home/home-btns-2.png',
+      iconName: homeBtn2,
       label: '干预方案',
       to: '/home/intervene',
     },
     {
-      iconName: 'src/assets/font/icon/home/home-btns-3.png',
-      label: '配镜信息',
-      to: '/home/glasses',
+      iconName: homeBtn3,
+      label: '专家风采',
+      to: '/home/experts',
     },
     {
-      iconName: 'src/assets/font/icon/home/home-btns-4.png',
+      iconName: homeBtn4,
       label: '公益礼包',
       to: '/home/charity',
     },
   ]);
 
-  const GetArticlesList = async () => {
+  const getArticlesList = async () => {
     if (articleFinished.value) {
       articleLoading.value = false;
       return;

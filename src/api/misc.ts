@@ -25,3 +25,23 @@ export function fetchSubmitFeedback(hospitalId: string, data: API.Misc.feedbackR
 export function fetchGetArticleList(data: API.Misc.GetArticleListRequest) {
   return httpAuth.post(`api/news/articles/page`, data);
 }
+
+export function fetchGetExpertList(data: API.Misc.GetExpertListRequest) {
+  return httpAuth.post('/expert/page', data);
+}
+
+export function fetchGetExpertInfo(expertId: string) {
+  return httpAuth.get(`/expert/${expertId}`);
+}
+
+export function fetchGetProvinceList() {
+  return httpAuth.get('/api/region/provinces');
+}
+
+export function fetchGetCityList(provinceCode: string) {
+  return httpAuth.get(`/api/region/cities`, {
+    params: {
+      provinceCode: provinceCode,
+    },
+  });
+}

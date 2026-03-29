@@ -64,6 +64,22 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: 'home/experts',
+        component: () => import('@/views/home/experts.vue'),
+        meta: {
+          title: '专家风采',
+          keepAlive: false,
+        },
+      },
+      {
+        path: 'home/experts/detail',
+        component: () => import('@/views/home/expertDetail.vue'),
+        meta: {
+          title: '专家详情',
+          keepAlive: false,
+        },
+      },
+      {
         path: 'notice/detail',
         component: () => import('@/views/notice/noticeDetail.vue'),
         meta: {
@@ -148,7 +164,15 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('@/views/home/intervene.vue'),
         meta: {
           title: 'common.home.intervene',
-          keepAlive: true,
+          keepAlive: false,
+        },
+      },
+      {
+        path: 'home/intervene/detail',
+        component: () => import('@/views/home/interveneDetail.vue'),
+        meta: {
+          title: '干预方案详情',
+          keepAlive: false,
         },
       },
       {

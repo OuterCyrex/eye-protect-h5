@@ -53,6 +53,8 @@ declare namespace API {
       idCard: string;
       status: string;
       avatarUrl: string;
+      areaCode: string;
+      areaName: string;
       lastLoginTime: string;
       emergencyContact: string;
       emergencyPhone: string;
@@ -69,6 +71,7 @@ declare namespace API {
         gender: string;
         status: string;
         password: string;
+        areaCode: string;
       };
       parentExtension: {
         birthDate: string;
@@ -110,6 +113,30 @@ declare namespace API {
       orderDirection: string;
     }
 
+    interface ExpertInfo {
+      id: string;
+      name: string;
+      title: string;
+      introduction: string;
+      imageUrl: string;
+      areaCode: string;
+      areaName: string;
+      sortOrder: number;
+      status: number;
+      statusDesc: string;
+    }
+
+    interface GetExpertListRequest {
+      current: number;
+      size: number;
+      name: string;
+      title: string;
+      areaCode: string;
+      status: number;
+      orderBy: string;
+      orderDirection: string;
+    }
+
     interface articleInfo {
       id: string;
       title: string;
@@ -124,6 +151,11 @@ declare namespace API {
       publishTime: string;
       createdAt: string;
       updatedAt: string;
+    }
+
+    interface AreaInfo {
+      code: string;
+      name: string;
     }
 
     interface AxiosChartUnit {
@@ -192,7 +224,7 @@ declare namespace API {
     }
 
     interface report {
-      patientId: number;
+      patientId: string;
       patientName: string;
       gender: string;
       age: number;
@@ -201,22 +233,260 @@ declare namespace API {
       school: string;
       clazz: string;
       interventionMeasures: string;
-      chartPoints?: {
-        checkDate: string;
+      chartPoints: {
+        id: string;
+        recordDate: string;
+        odAxialLength: number;
+        osAxialLength: number;
+        odAxialChange: number;
+        osAxialChange: number;
+        details: string;
+      }[];
+      archiveDetail: {
+        id: string;
+        patientId: string;
+        patientName: string;
+        gender: string;
         age: number;
-        axialLengthData: {
-          axialLength: number;
-          previousAxialLength: number;
-          growthAmount: number;
-          growthRatePerYear: number;
-          ageCriticalValue: number;
-          ageCriticalAxialLength: number;
+        birthDate: string;
+        parentPhone: string;
+        schoolName: string;
+        className: string;
+        archiveNumber: string;
+        lastCheckupDate: string;
+        nextFollowupDate: string;
+        fatherMyopia: boolean;
+        fatherRefraction: string;
+        motherMyopia: boolean;
+        motherRefraction: string;
+        visitReason: string;
+        visitSource: string;
+        previousCheckupDate: string;
+        glassesWearingHabits: string;
+        lensType: string;
+        comfortLevel: string;
+        oldGlassesDeformation: string;
+        replacementCycle: string;
+        eyeHabits: string;
+        dailyNearWorkHours: number;
+        readingWritingHours: number;
+        bookDistance: number;
+        screenTimeHours: number;
+        screenDistance: number;
+        screenHeight: string;
+        penHoldingStyle: string;
+        dailyOutdoorHours: number;
+        sleepHours: number;
+        familyHistory: string;
+        maternalIllnessDuringPregnancy: boolean;
+        medicalHistory: string;
+        eyeDiseaseHistory: string;
+        isPrematureBirth: boolean;
+        birthWeight: number;
+        eyeSurgeryHistory: string;
+        refractiveSurgeryHistory: string;
+        allergyHistory: string;
+        createdAt: string;
+        updatedAt: string;
+        visionExaminations: {
+          id: string;
+          examinationDate: string;
+          examType: string;
+          diagnosis: string;
+          recommendations: string;
+          examiner: string;
+          diagnosisSuggestions: string;
+          remarks: string;
+          axisRatioCalculation: number;
+          leftEye: {
+            uncorrectedDistant: number;
+            uncorrectedDistantSign: number;
+            uncorrectedNear: number;
+            uncorrectedNearSign: number;
+            correctedVision: number;
+            correctedVisionSign: number;
+            previousPrescriptionS: string;
+            previousPrescriptionC: string;
+            previousPrescriptionA: string;
+            pd: number;
+            eyePressure: number;
+            axialLength: number;
+            autoRefractionS: string;
+            autoRefractionC: string;
+            autoRefractionA: string;
+            subjectiveRefractionS: string;
+            subjectiveRefractionC: string;
+            subjectiveRefractionA: string;
+            subjectiveRefractionVa: string;
+            dilatedAutoRefractionS: string;
+            dilatedAutoRefractionC: string;
+            dilatedAutoRefractionA: string;
+            dilatedSubjectiveRefractionS: string;
+            dilatedSubjectiveRefractionC: string;
+            dilatedSubjectiveRefractionA: string;
+            dilatedSubjectiveRefractionVa: string;
+            slitLampExam: string;
+            fundusExam: string;
+            keratometryFlatK: string;
+            keratometrySteepK: string;
+            keratometryCornealAstigmatism: string;
+            prescriptionS: string;
+            prescriptionC: string;
+            prescriptionA: string;
+            pupilHeight: string;
+          };
+          rightEye: {
+            uncorrectedDistant: number;
+            uncorrectedDistantSign: number;
+            uncorrectedNear: number;
+            uncorrectedNearSign: number;
+            correctedVision: number;
+            correctedVisionSign: number;
+            previousPrescriptionS: string;
+            previousPrescriptionC: string;
+            previousPrescriptionA: string;
+            pd: number;
+            eyePressure: number;
+            axialLength: number;
+            autoRefractionS: string;
+            autoRefractionC: string;
+            autoRefractionA: string;
+            subjectiveRefractionS: string;
+            subjectiveRefractionC: string;
+            subjectiveRefractionA: string;
+            subjectiveRefractionVa: string;
+            dilatedAutoRefractionS: string;
+            dilatedAutoRefractionC: string;
+            dilatedAutoRefractionA: string;
+            dilatedSubjectiveRefractionS: string;
+            dilatedSubjectiveRefractionC: string;
+            dilatedSubjectiveRefractionA: string;
+            dilatedSubjectiveRefractionVa: string;
+            slitLampExam: string;
+            fundusExam: string;
+            keratometryFlatK: string;
+            keratometrySteepK: string;
+            keratometryCornealAstigmatism: string;
+            prescriptionS: string;
+            prescriptionC: string;
+            prescriptionA: string;
+            pupilHeight: string;
+          };
+          createdAt: string;
         };
-        heightData: {
-          height: number;
-          ageCriticalHeight: number;
-        };
-        riskWarning: string;
+        visualFunctionTests: {
+          id: string;
+          examDate: string;
+          worth4DotDistant: string;
+          worth4DotNear: string;
+          distantStereoVision: string;
+          nearStereoVision: string;
+          coverTest: string;
+          distancePhoria: string;
+          nearPhoria: string;
+          npc: string;
+          distanceBi: string;
+          distanceBo: string;
+          nearBi: string;
+          nearBo: string;
+          addPlus100: string;
+          addMinus100: string;
+          acaRatio: number;
+          nra: number;
+          bcc: number;
+          pra: number;
+          odAccommodationAmplitude: number;
+          osAccommodationAmplitude: number;
+          ouAccommodationAmplitude: number;
+          odAccommodationFacility: number;
+          osAccommodationFacility: number;
+          ouAccommodationFacility: number;
+          visualFunctionDiagnosis: string;
+          createdAt: string;
+        }[];
+        followupRecords: {
+          id: string;
+          recordDate: string;
+          patientComplaints: string;
+          odDominantEye: boolean;
+          osDominantEye: boolean;
+          oldGlassesBrand: string;
+          frameLensInspection: string;
+          visualFunction: string;
+          worth4Dot: string;
+          eyePosition: string;
+          npc: string;
+          otherVisualTests: string;
+          diagnosisSuggestions: string;
+          doctorSignature: string;
+          leftEye: {
+            uncorrectedDistant: number;
+            uncorrectedDistantSign: number;
+            uncorrectedNear: number;
+            uncorrectedNearSign: number;
+            correctedVision: number;
+            correctedVisionSign: number;
+            previousPrescriptionS: string;
+            previousPrescriptionC: string;
+            previousPrescriptionA: string;
+            eyePressure: number;
+            axialLength: number;
+            autoRefractionS: string;
+            autoRefractionC: string;
+            autoRefractionA: string;
+            subjectiveRefractionS: string;
+            subjectiveRefractionC: string;
+            subjectiveRefractionA: string;
+            dilatedAutoRefractionS: string;
+            dilatedAutoRefractionC: string;
+            dilatedAutoRefractionA: string;
+            dilatedSubjectiveRefractionS: string;
+            dilatedSubjectiveRefractionC: string;
+            dilatedSubjectiveRefractionA: string;
+            fundusExam: string;
+            slitLampExam: string;
+            keratometry: string;
+            distantStereoVision: string;
+            nearStereoVision: string;
+            coverTest: string;
+            correctDegreeD: number;
+            correctDegreeN: number;
+          };
+          rightEye: {
+            uncorrectedDistant: number;
+            uncorrectedDistantSign: number;
+            uncorrectedNear: number;
+            uncorrectedNearSign: number;
+            correctedVision: number;
+            correctedVisionSign: number;
+            previousPrescriptionS: string;
+            previousPrescriptionC: string;
+            previousPrescriptionA: string;
+            eyePressure: number;
+            axialLength: number;
+            autoRefractionS: string;
+            autoRefractionC: string;
+            autoRefractionA: string;
+            subjectiveRefractionS: string;
+            subjectiveRefractionC: string;
+            subjectiveRefractionA: string;
+            dilatedAutoRefractionS: string;
+            dilatedAutoRefractionC: string;
+            dilatedAutoRefractionA: string;
+            dilatedSubjectiveRefractionS: string;
+            dilatedSubjectiveRefractionC: string;
+            dilatedSubjectiveRefractionA: string;
+            fundusExam: string;
+            slitLampExam: string;
+            keratometry: string;
+            distantStereoVision: string;
+            nearStereoVision: string;
+            coverTest: string;
+            correctDegreeD: number;
+            correctDegreeN: number;
+          };
+          createdAt: string;
+        }[];
       };
       analysis: string;
     }

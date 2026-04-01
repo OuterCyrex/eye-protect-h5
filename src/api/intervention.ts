@@ -13,6 +13,13 @@ export function fetchGetInterventionList(patientId: string) {
     },
   });
 }
+
+export function fetchGetInterventionInfo(id: string) {
+  return httpAuth.get(`/intervention/query/byId`, {
+    params: { id: id },
+  });
+}
+
 export function fetchGetLastReport(patientId: string) {
   return httpAuth.get(`/report/parent/${patientId}`);
 }

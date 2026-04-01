@@ -1,175 +1,138 @@
 <template>
   <div class="h-full bg-gray-50">
     <div class="space-y-4">
-      <section class="overflow-hidden rounded-lg border border-slate-200 bg-white">
-        <div class="border-b border-slate-200 bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-700">患者基本信息</div>
-        <table class="min-w-full border-collapse text-sm">
+      <section class="overflow-hidden rounded-lg border bg-white">
+        <div class="border-b px-4 py-3 text-sm font-semibold bg-slate-100">患者基本信息</div>
+        <table class="min-w-full text-sm">
           <tbody>
-            <tr v-for="item in basicInfoRows" :key="item.label" class="align-top">
-              <td class="w-32 border-b border-r border-slate-200 bg-slate-50 px-3 py-2 text-slate-500">{{ item.label }}</td>
-              <td class="border-b border-slate-200 px-3 py-2 whitespace-pre-wrap break-all text-slate-800">{{ item.value }}</td>
+            <tr v-for="item in basicInfoRows" :key="item.label">
+              <td class="w-32 border px-2 py-1 bg-slate-50 text-gray-500">{{ item.label }}</td>
+              <td class="border px-2 py-1">{{ item.value }}</td>
             </tr>
           </tbody>
         </table>
       </section>
 
-      <section class="overflow-hidden rounded-lg border border-slate-200 bg-white">
-        <div class="border-b border-slate-200 bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-700">建档信息</div>
-        <table class="min-w-full border-collapse text-sm">
+      <section class="overflow-hidden rounded-lg border bg-white">
+        <div class="border-b px-4 py-3 text-sm font-semibold bg-slate-100">建档信息</div>
+        <table class="min-w-full text-sm">
           <tbody>
-            <tr v-for="item in archiveRows" :key="item.label" class="align-top">
-              <td class="w-36 border-b border-r border-slate-200 bg-slate-50 px-3 py-2 text-slate-500">{{ item.label }}</td>
-              <td class="border-b border-slate-200 px-3 py-2 whitespace-pre-wrap break-all text-slate-800">{{ item.value }}</td>
+            <tr v-for="item in archiveRows" :key="item.label">
+              <td class="w-36 border px-2 py-1 bg-slate-50 text-gray-500">{{ item.label }}</td>
+              <td class="border px-2 py-1">{{ item.value }}</td>
             </tr>
           </tbody>
         </table>
       </section>
 
-      <section class="overflow-hidden rounded-lg border border-slate-200 bg-white">
-        <div class="border-b border-slate-200 bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-700">眼轴记录</div>
+      <section class="overflow-hidden rounded-lg border bg-white">
+        <div class="border-b px-4 py-3 text-sm font-semibold bg-slate-100">眼轴记录</div>
         <div v-if="chartRows.length" class="overflow-x-auto">
-          <table class="min-w-full border-collapse text-sm">
+          <table class="min-w-full text-sm">
             <thead>
-              <tr class="bg-slate-50 text-slate-600">
-                <th class="border-b border-r border-slate-200 px-3 py-2 text-left font-medium">日期</th>
-                <th class="border-b border-r border-slate-200 px-3 py-2 text-left font-medium">右眼眼轴</th>
-                <th class="border-b border-r border-slate-200 px-3 py-2 text-left font-medium">左眼眼轴</th>
-                <th class="border-b border-r border-slate-200 px-3 py-2 text-left font-medium">右眼变化</th>
-                <th class="border-b border-r border-slate-200 px-3 py-2 text-left font-medium">左眼变化</th>
-                <th class="border-b border-slate-200 px-3 py-2 text-left font-medium">备注</th>
+              <tr>
+                <th class="border px-2 py-1">日期</th>
+                <th class="border px-2 py-1">右眼</th>
+                <th class="border px-2 py-1">左眼</th>
+                <th class="border px-2 py-1">右变化</th>
+                <th class="border px-2 py-1">左变化</th>
+                <th class="border px-2 py-1">备注</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in chartRows" :key="item.id" class="text-slate-700">
-                <td class="border-b border-r border-slate-200 px-3 py-2 align-top whitespace-nowrap">{{ formatDate(item.recordDate) }}</td>
-                <td class="border-b border-r border-slate-200 px-3 py-2 align-top whitespace-nowrap">{{
-                  formatNumber(item.odAxialLength, 'mm')
-                }}</td>
-                <td class="border-b border-r border-slate-200 px-3 py-2 align-top whitespace-nowrap">{{
-                  formatNumber(item.osAxialLength, 'mm')
-                }}</td>
-                <td class="border-b border-r border-slate-200 px-3 py-2 align-top whitespace-nowrap">{{
-                  formatNumber(item.odAxialChange, 'mm')
-                }}</td>
-                <td class="border-b border-r border-slate-200 px-3 py-2 align-top whitespace-nowrap">{{
-                  formatNumber(item.osAxialChange, 'mm')
-                }}</td>
-                <td class="border-b border-slate-200 px-3 py-2 align-top whitespace-pre-wrap break-all">{{ displayText(item.details) }}</td>
+              <tr v-for="item in chartRows" :key="item.id">
+                <td class="whitespace-nowrap border px-2 py-3">{{ formatDate(item.recordDate) }}</td>
+                <td class="whitespace-nowrap border px-2 py-3">{{ formatNumber(item.odAxialLength, 'mm') }}</td>
+                <td class="whitespace-nowrap border px-2 py-3">{{ formatNumber(item.osAxialLength, 'mm') }}</td>
+                <td class="whitespace-nowrap border px-2 py-3">{{ formatNumber(item.odAxialChange, 'mm') }}</td>
+                <td class="whitespace-nowrap border px-2 py-3">{{ formatNumber(item.osAxialChange, 'mm') }}</td>
+                <td class="whitespace-nowrap border px-2 py-3">{{ displayText(item.details) }}</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div v-else class="px-4 py-6 text-sm text-slate-500">暂无眼轴记录</div>
+        <div v-else class="p-4 text-sm text-gray-500">暂无数据</div>
       </section>
 
-      <var-paper class="p-4 my-2">
+      <var-paper class="p-4">
         <div class="mb-2 font-semibold">眼轴趋势图</div>
         <axiosChart :data="axiosData" />
       </var-paper>
 
-      <section class="overflow-hidden rounded-lg border border-slate-200 bg-white">
-        <div class="border-b border-slate-200 bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-700">最近视力检查</div>
-        <div v-if="latestVisionExam" class="space-y-4 p-4">
-          <div class="grid grid-cols-1 gap-2 text-sm md:grid-cols-2">
-            <div
-              ><span class="text-slate-500">检查日期：</span
-              ><span class="text-slate-800">{{ formatDate(latestVisionExam.examinationDate) }}</span></div
-            >
-            <div
-              ><span class="text-slate-500">检查类型：</span
-              ><span class="text-slate-800">{{ displayText(latestVisionExam.examType) }}</span></div
-            >
-            <div
-              ><span class="text-slate-500">检查医生：</span
-              ><span class="text-slate-800">{{ displayText(latestVisionExam.examiner) }}</span></div
-            >
-            <div
-              ><span class="text-slate-500">轴比计算：</span
-              ><span class="text-slate-800">{{ formatNumber(latestVisionExam.axisRatioCalculation) }}</span></div
-            >
-          </div>
-
-          <div class="overflow-x-auto">
-            <table class="min-w-full border-collapse text-sm">
-              <thead>
-                <tr class="bg-slate-50 text-slate-600">
-                  <th class="border-b border-r border-slate-200 px-3 py-2 text-left font-medium">项目</th>
-                  <th class="border-b border-r border-slate-200 px-3 py-2 text-left font-medium">右眼</th>
-                  <th class="border-b border-slate-200 px-3 py-2 text-left font-medium">左眼</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="row in visionExamRows" :key="row.label" class="text-slate-700">
-                  <td class="border-b border-r border-slate-200 bg-slate-50 px-3 py-2 align-top whitespace-pre-wrap">{{ row.label }}</td>
-                  <td class="border-b border-r border-slate-200 px-3 py-2 align-top whitespace-pre-wrap break-all">{{ row.right }}</td>
-                  <td class="border-b border-slate-200 px-3 py-2 align-top whitespace-pre-wrap break-all">{{ row.left }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <table class="min-w-full border-collapse text-sm">
+      <section class="overflow-hidden rounded-lg border bg-white">
+        <div class="border-b px-4 py-3 text-sm font-semibold bg-slate-100">视力检查</div>
+        <div v-if="reportData.archiveDetail.visionExaminations" class="p-3">
+          <table class="min-w-full text-sm mb-3">
             <tbody>
-              <tr v-for="item in visionExamSummaryRows" :key="item.label" class="align-top">
-                <td class="w-32 border-b border-r border-slate-200 bg-slate-50 px-3 py-2 text-slate-500">{{ item.label }}</td>
-                <td class="border-b border-slate-200 px-3 py-2 whitespace-pre-wrap break-all text-slate-800">{{ item.value }}</td>
+              <tr v-for="row in visionExamSummaryRows" :key="row.label">
+                <td class="border px-2 py-1 bg-slate-50">{{ row.label }}</td>
+                <td class="border px-2 py-1">{{ row.value }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="min-w-full text-sm">
+            <tbody>
+              <tr v-for="row in visionExamRows" :key="row.label">
+                <td class="border px-2 py-1 bg-slate-50">{{ row.label }}</td>
+                <td class="border px-2 py-1">{{ row.right }}</td>
+                <td class="border px-2 py-1">{{ row.left }}</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div v-else class="px-4 py-6 text-sm text-slate-500">暂无视力检查记录</div>
+        <div v-else class="p-4 text-sm text-gray-500">暂无记录</div>
       </section>
 
-      <section class="overflow-hidden rounded-lg border border-slate-200 bg-white">
-        <div class="border-b border-slate-200 bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-700">最近视觉功能检查</div>
-        <table v-if="latestVisualFunctionTest" class="min-w-full border-collapse text-sm">
-          <tbody>
-            <tr v-for="item in visualFunctionRows" :key="item.label" class="align-top">
-              <td class="w-40 border-b border-r border-slate-200 bg-slate-50 px-3 py-2 text-slate-500">{{ item.label }}</td>
-              <td class="border-b border-slate-200 px-3 py-2 whitespace-pre-wrap break-all text-slate-800">{{ item.value }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div v-else class="px-4 py-6 text-sm text-slate-500">暂无视觉功能检查记录</div>
+      <section class="overflow-hidden rounded-lg border bg-white">
+        <div class="border-b px-4 py-3 text-sm font-semibold bg-slate-100">视功能检查</div>
+        <van-tabs v-if="reportData.archiveDetail?.visualFunctionTests?.length" v-model:active="activeFunctionIndex" shrink>
+          <van-tab v-for="(item, index) in reportData.archiveDetail.visualFunctionTests" :key="index" :title="formatDate(item.examDate)">
+            <div class="p-3">
+              <table class="min-w-full text-sm">
+                <tbody>
+                  <tr v-for="row in visualFunctionRows" :key="row.label">
+                    <td class="border px-2 py-1 bg-slate-50">{{ row.label }}</td>
+                    <td class="border px-2 py-1">{{ row.value }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </van-tab>
+        </van-tabs>
+        <div v-else class="p-4 text-sm text-gray-500">暂无记录</div>
       </section>
 
-      <section class="overflow-hidden rounded-lg border border-slate-200 bg-white">
-        <div class="border-b border-slate-200 bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-700">最近随访记录</div>
-        <div v-if="latestFollowupRecord" class="space-y-4 p-4">
-          <table class="min-w-full border-collapse text-sm">
-            <tbody>
-              <tr v-for="item in followupSummaryRows" :key="item.label" class="align-top">
-                <td class="w-36 border-b border-r border-slate-200 bg-slate-50 px-3 py-2 text-slate-500">{{ item.label }}</td>
-                <td class="border-b border-slate-200 px-3 py-2 whitespace-pre-wrap break-all text-slate-800">{{ item.value }}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="overflow-x-auto">
-            <table class="min-w-full border-collapse text-sm">
-              <thead>
-                <tr class="bg-slate-50 text-slate-600">
-                  <th class="border-b border-r border-slate-200 px-3 py-2 text-left font-medium">项目</th>
-                  <th class="border-b border-r border-slate-200 px-3 py-2 text-left font-medium">右眼</th>
-                  <th class="border-b border-slate-200 px-3 py-2 text-left font-medium">左眼</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="row in followupRows" :key="row.label" class="text-slate-700">
-                  <td class="border-b border-r border-slate-200 bg-slate-50 px-3 py-2 align-top whitespace-pre-wrap">{{ row.label }}</td>
-                  <td class="border-b border-r border-slate-200 px-3 py-2 align-top whitespace-pre-wrap break-all">{{ row.right }}</td>
-                  <td class="border-b border-slate-200 px-3 py-2 align-top whitespace-pre-wrap break-all">{{ row.left }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div v-else class="px-4 py-6 text-sm text-slate-500">暂无随访记录</div>
+      <section class="overflow-hidden rounded-lg border bg-white">
+        <div class="border-b px-4 py-3 text-sm font-semibold bg-slate-100">随访记录</div>
+        <van-tabs v-if="reportData.archiveDetail?.followupRecords?.length" v-model:active="activeFollowIndex" shrink>
+          <van-tab v-for="(item, index) in reportData.archiveDetail.followupRecords" :key="index" :title="formatDate(item.recordDate)">
+            <div class="p-3">
+              <table class="min-w-full text-sm mb-3">
+                <tbody>
+                  <tr v-for="row in followupSummaryRows" :key="row.label">
+                    <td class="border px-2 py-1 bg-slate-50">{{ row.label }}</td>
+                    <td class="border px-2 py-1">{{ row.value }}</td>
+                  </tr>
+                </tbody></table
+              >
+              <table class="min-w-full text-sm">
+                <tbody>
+                  <tr v-for="row in followupRows" :key="row.label">
+                    <td class="border px-2 py-1 bg-slate-50">{{ row.label }}</td>
+                    <td class="border px-2 py-1">{{ row.right }}</td>
+                    <td class="border px-2 py-1">{{ row.left }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </van-tab>
+        </van-tabs>
+        <div v-else class="p-4 text-sm text-gray-500">暂无记录</div>
       </section>
 
-      <section class="overflow-hidden rounded-lg border border-slate-200 bg-white">
-        <div class="border-b border-slate-200 bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-700">医生分析</div>
-        <div class="px-4 py-4 text-sm leading-7 text-slate-700">{{ displayText(reportData.analysis) }}</div>
+      <section class="overflow-hidden rounded-lg border bg-white">
+        <div class="border-b px-4 py-3 text-sm font-semibold">医生分析</div>
+        <div class="p-4 text-sm">{{ displayText(reportData.analysis) }}</div>
       </section>
     </div>
 
@@ -188,6 +151,8 @@
   const loading = ref(false);
   const userStore = useUserStore();
   const axiosData = ref<Array<API.Misc.AxiosChartUnit>>([]);
+  const activeFunctionIndex = ref<number>(0);
+  const activeFollowIndex = ref<number>(0);
 
   const reportData = ref<API.Intervene.report>({
     patientId: '',
@@ -357,9 +322,19 @@
     return typeof value === 'boolean' ? (value ? '是' : '否') : '暂无';
   };
 
+  const formatSCA = (eye: any, prefix: string) =>
+    displayText(`${eye?.[prefix + 'S'] || '暂无'}/${eye?.[prefix + 'C'] || '暂无'}*${eye?.[prefix + 'A'] || '暂无'}`);
+
   const latestVisionExam = computed(() => reportData.value.archiveDetail?.visionExaminations);
-  const latestVisualFunctionTest = computed(() => reportData.value.archiveDetail?.visualFunctionTests?.[0]);
-  const latestFollowupRecord = computed(() => reportData.value.archiveDetail?.followupRecords?.[0]);
+  const latestVisualFunctionTest = computed(() => {
+    const list = reportData.value.archiveDetail?.visualFunctionTests || [];
+    return list[activeFunctionIndex.value];
+  });
+
+  const latestFollowupRecord = computed(() => {
+    const list = reportData.value.archiveDetail?.followupRecords || [];
+    return list[activeFollowIndex.value];
+  });
   const chartRows = computed(() => reportData.value.chartPoints || []);
 
   const basicInfoRows = computed(() => [
@@ -424,27 +399,17 @@
       { label: '矫正视力', right: formatNumber(exam.rightEye.correctedVision), left: formatNumber(exam.leftEye.correctedVision) },
       { label: '眼压', right: formatNumber(exam.rightEye.eyePressure), left: formatNumber(exam.leftEye.eyePressure) },
       { label: '眼轴长度', right: formatNumber(exam.rightEye.axialLength, 'mm'), left: formatNumber(exam.leftEye.axialLength, 'mm') },
-      { label: '自动验光 S', right: displayText(exam.rightEye.autoRefractionS), left: displayText(exam.leftEye.autoRefractionS) },
-      { label: '自动验光 C', right: displayText(exam.rightEye.autoRefractionC), left: displayText(exam.leftEye.autoRefractionC) },
-      { label: '自动验光 A', right: displayText(exam.rightEye.autoRefractionA), left: displayText(exam.leftEye.autoRefractionA) },
+      { label: '自动验光 SCA', right: formatSCA(exam.rightEye, 'autoRefraction'), left: formatSCA(exam.leftEye, 'autoRefraction') },
       {
-        label: '主觉验光 S',
-        right: displayText(exam.rightEye.subjectiveRefractionS),
-        left: displayText(exam.leftEye.subjectiveRefractionS),
+        label: '主觉验光 SCA',
+        right: formatSCA(exam.rightEye, 'subjectiveRefraction'),
+        left: formatSCA(exam.leftEye, 'subjectiveRefraction'),
       },
       {
-        label: '主觉验光 C',
-        right: displayText(exam.rightEye.subjectiveRefractionC),
-        left: displayText(exam.leftEye.subjectiveRefractionC),
+        label: '最终处方 SCA',
+        right: formatSCA(exam.rightEye, 'prescription'),
+        left: formatSCA(exam.leftEye, 'prescription'),
       },
-      {
-        label: '主觉验光 A',
-        right: displayText(exam.rightEye.subjectiveRefractionA),
-        left: displayText(exam.leftEye.subjectiveRefractionA),
-      },
-      { label: '最终处方 S', right: displayText(exam.rightEye.prescriptionS), left: displayText(exam.leftEye.prescriptionS) },
-      { label: '最终处方 C', right: displayText(exam.rightEye.prescriptionC), left: displayText(exam.leftEye.prescriptionC) },
-      { label: '最终处方 A', right: displayText(exam.rightEye.prescriptionA), left: displayText(exam.leftEye.prescriptionA) },
     ];
   });
 
@@ -510,32 +475,48 @@
   });
 
   const followupRows = computed(() => {
-    const item = latestFollowupRecord.value;
-    if (!item) return [];
+    const exam = latestFollowupRecord.value;
+    if (!exam) return [];
+
     return [
-      { label: '裸眼远视力', right: formatNumber(item.rightEye.uncorrectedDistant), left: formatNumber(item.leftEye.uncorrectedDistant) },
-      { label: '裸眼近视力', right: formatNumber(item.rightEye.uncorrectedNear), left: formatNumber(item.leftEye.uncorrectedNear) },
-      { label: '矫正视力', right: formatNumber(item.rightEye.correctedVision), left: formatNumber(item.leftEye.correctedVision) },
-      { label: '眼压', right: formatNumber(item.rightEye.eyePressure), left: formatNumber(item.leftEye.eyePressure) },
-      { label: '眼轴长度', right: formatNumber(item.rightEye.axialLength, 'mm'), left: formatNumber(item.leftEye.axialLength, 'mm') },
-      { label: '自动验光 S', right: displayText(item.rightEye.autoRefractionS), left: displayText(item.leftEye.autoRefractionS) },
-      { label: '自动验光 C', right: displayText(item.rightEye.autoRefractionC), left: displayText(item.leftEye.autoRefractionC) },
-      { label: '自动验光 A', right: displayText(item.rightEye.autoRefractionA), left: displayText(item.leftEye.autoRefractionA) },
+      { label: '裸眼远视力', right: formatNumber(exam.rightEye?.uncorrectedDistant), left: formatNumber(exam.leftEye?.uncorrectedDistant) },
+      { label: '裸眼近视力', right: formatNumber(exam.rightEye?.uncorrectedNear), left: formatNumber(exam.leftEye?.uncorrectedNear) },
+      { label: '矫正视力', right: formatNumber(exam.rightEye?.correctedVision), left: formatNumber(exam.leftEye?.correctedVision) },
+
+      { label: '旧镜 S', right: displayText(exam.rightEye?.previousPrescriptionS), left: displayText(exam.leftEye?.previousPrescriptionS) },
+      { label: '旧镜 C', right: displayText(exam.rightEye?.previousPrescriptionC), left: displayText(exam.leftEye?.previousPrescriptionC) },
+      { label: '旧镜 A', right: displayText(exam.rightEye?.previousPrescriptionA), left: displayText(exam.leftEye?.previousPrescriptionA) },
+
+      { label: '眼压', right: formatNumber(exam.rightEye?.eyePressure), left: formatNumber(exam.leftEye?.eyePressure) },
+      { label: '眼轴长度', right: formatNumber(exam.rightEye?.axialLength, 'mm'), left: formatNumber(exam.leftEye?.axialLength, 'mm') },
+
+      { label: '自动验光 SCA', right: formatSCA(exam.rightEye, 'autoRefraction'), left: formatSCA(exam.leftEye, 'autoRefraction') },
       {
-        label: '主觉验光 S',
-        right: displayText(item.rightEye.subjectiveRefractionS),
-        left: displayText(item.leftEye.subjectiveRefractionS),
+        label: '主觉验光 SCA',
+        right: formatSCA(exam.rightEye, 'subjectiveRefraction'),
+        left: formatSCA(exam.leftEye, 'subjectiveRefraction'),
       },
       {
-        label: '主觉验光 C',
-        right: displayText(item.rightEye.subjectiveRefractionC),
-        left: displayText(item.leftEye.subjectiveRefractionC),
+        label: '散瞳自动 SCA',
+        right: formatSCA(exam.rightEye, 'dilatedAutoRefraction'),
+        left: formatSCA(exam.leftEye, 'dilatedAutoRefraction'),
       },
       {
-        label: '主觉验光 A',
-        right: displayText(item.rightEye.subjectiveRefractionA),
-        left: displayText(item.leftEye.subjectiveRefractionA),
+        label: '散瞳主觉 SCA',
+        right: formatSCA(exam.rightEye, 'dilatedSubjectiveRefraction'),
+        left: formatSCA(exam.leftEye, 'dilatedSubjectiveRefraction'),
       },
+
+      { label: '眼底检查', right: displayText(exam.rightEye?.fundusExam), left: displayText(exam.leftEye?.fundusExam) },
+      { label: '裂隙灯检查', right: displayText(exam.rightEye?.slitLampExam), left: displayText(exam.leftEye?.slitLampExam) },
+      { label: '角膜曲率', right: displayText(exam.rightEye?.keratometry), left: displayText(exam.leftEye?.keratometry) },
+
+      { label: '远立体视', right: displayText(exam.rightEye?.distantStereoVision), left: displayText(exam.leftEye?.distantStereoVision) },
+      { label: '近立体视', right: displayText(exam.rightEye?.nearStereoVision), left: displayText(exam.leftEye?.nearStereoVision) },
+      { label: '遮盖试验', right: displayText(exam.rightEye?.coverTest), left: displayText(exam.leftEye?.coverTest) },
+
+      { label: '远矫正度数', right: formatNumber(exam.rightEye?.correctDegreeD), left: formatNumber(exam.leftEye?.correctDegreeD) },
+      { label: '近矫正度数', right: formatNumber(exam.rightEye?.correctDegreeN), left: formatNumber(exam.leftEye?.correctDegreeN) },
     ];
   });
 

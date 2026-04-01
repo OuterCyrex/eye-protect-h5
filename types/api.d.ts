@@ -181,6 +181,7 @@ declare namespace API {
 
   namespace Intervene {
     interface interveneInfo {
+      id: string;
       institutionName: string;
       doctorSignature: string;
       planType: string;

@@ -16,7 +16,8 @@ export type langType = {
     intervene: string;
     article: string;
     charity: string;
-    glasses: string;
+    expert: string;
+    expertDetail: string;
   };
   account: {
     editInfo: string;

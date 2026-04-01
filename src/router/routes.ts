@@ -67,7 +67,7 @@ export const routes: RouteRecordRaw[] = [
         path: 'home/experts',
         component: () => import('@/views/home/experts.vue'),
         meta: {
-          title: '专家风采',
+          title: 'common.home.expert',
           keepAlive: false,
         },
       },
@@ -75,7 +75,7 @@ export const routes: RouteRecordRaw[] = [
         path: 'home/experts/detail',
         component: () => import('@/views/home/expertDetail.vue'),
         meta: {
-          title: '专家详情',
+          title: 'common.home.expertDetail',
           keepAlive: false,
         },
       },

@@ -112,11 +112,9 @@
 
 <script setup lang="ts">
   import { computed, ref } from 'vue';
-  import { fetchGetInterventionList } from '@/api/intervention';
-  import { useUserStore } from '@/store/modules/user';
+  import { fetchGetInterventionInfo } from '@/api/intervention';
 
   const route = useRoute();
-  const userStore = useUserStore();
   const data = ref<API.Intervene.interveneInfo | null>(null);
 
   const displayText = (value?: string | null) => {
@@ -170,16 +168,10 @@
     return joinOrDefault(intervention.items);
   });
 
-  const getInterventionKey = (item: API.Intervene.interveneInfo, index: number) =>
-    `${item.planDate || ''}_${item.institutionName || ''}_${index}`;
-
   const handleGetDetail = async () => {
-    const patientId = userStore.getStudent?.patientId;
-    if (!patientId) return;
     const detailId = typeof route.query.id === 'string' ? route.query.id : '';
-    const res = await fetchGetInterventionList(patientId);
-    const list = Array.isArray(res) ? res : [];
-    data.value = list.find((item, index) => getInterventionKey(item, index) === detailId) ?? null;
+    if (!detailId) return;
+    data.value = (await fetchGetInterventionInfo(detailId)) || null;
   };
 
   onMounted(async () => {

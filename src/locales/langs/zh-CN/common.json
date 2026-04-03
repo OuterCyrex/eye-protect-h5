@@ -3,7 +3,7 @@
   "tabbar": {
     "home": "首页",
     "appoint": "预约",
-    "notice": "通知",
+    "consult": "咨询",
     "account": "我的"
   },
   "language": {
@@ -19,9 +19,7 @@
     "expert": "专家风采",
     "expertDetail":"专家详情"
   },
-  "notice": {
-    "notice": "通知",
-    "noticeDetail": "通知详情"
+  "consult": {
   },
   "account": {
     "editInfo": "个人信息更改",
@@ -31,7 +29,9 @@
     "children": "切换学生",
     "editChild": "编辑学生信息",
     "addChild": "绑定学生信息",
-    "feedback": "用户反馈"
+    "feedback": "用户反馈",
+    "notice": "通知",
+    "noticeDetail": "通知详情"
   },
   "btn": {
     "confirm": "确认",

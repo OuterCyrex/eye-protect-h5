@@ -12,7 +12,7 @@
     "config/**/*.d.ts",
     "mock/**/*.ts",
     "build/**/*.ts"
-  ],
+, "src/views/account/noticeDetail.vue"  ],
   "exclude": ["src/**/__tests__/*", "node_modules", "tests/server/**/*.ts", "dist", "**/*.js"],
   "compilerOptions": {
     "composite": true,

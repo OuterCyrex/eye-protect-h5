@@ -177,6 +177,15 @@ declare namespace API {
       content: string;
       images: string[];
     }
+
+    interface QRCodeInfo {
+      id: string;
+      qrcodeUrl: string;
+      areaCodes: string[];
+      areaNames: string[];
+      createTime: string;
+      updateTime: string;
+    }
   }
 
   namespace Intervene {
@@ -598,6 +607,7 @@ declare namespace API {
     interface reservationInfo {
       id: string;
       patientId: string;
+      patientName: string;
       scheduleDate: string;
       timeSlot: number;
       timeSlotDesc: string;

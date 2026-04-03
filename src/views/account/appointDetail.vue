@@ -15,6 +15,10 @@
           <span class="font-medium text-gray-700">{{ reservation.timeSlotDesc }}</span>
         </div>
         <div class="flex justify-between text-sm">
+          <span class="text-gray-500">就诊人：</span>
+          <span class="font-medium text-gray-700">{{ reservation.patientName }}</span>
+        </div>
+        <div class="flex justify-between text-sm">
           <span class="text-gray-500">预约编号：</span>
           <span class="font-medium text-gray-700">{{ reservation.id }}</span>
         </div>
@@ -84,6 +88,7 @@
     id: '',
     patientId: '',
     scheduleDate: '',
+    patientName: '',
     timeSlot: 0,
     timeSlotDesc: '',
     appointmentType: 0,
@@ -125,6 +130,7 @@
     '0': '待就诊',
     '1': '就诊中',
     '2': '已就诊',
+    '3': '已取消',
     '-1': '已取消',
   };
 

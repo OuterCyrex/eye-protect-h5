@@ -17,13 +17,7 @@
       @tab-switch="tabSwitch"
       safe-area-inset-bottom
     >
-      <nut-tabbar-item
-        v-for="item in tabItem"
-        :key="item.key"
-        :tab-title="$t(`common.tabbar.${item.key}`)"
-        :icon="item.icon"
-        :dot="item.key === 'notice' && Number(userStore.getUnread) > 0"
-      />
+      <nut-tabbar-item v-for="item in tabItem" :key="item.key" :tab-title="$t(`common.tabbar.${item.key}`)" :icon="item.icon" />
     </nut-tabbar>
   </div>
 </template>
@@ -31,15 +25,12 @@
 <script lang="ts" setup name="BasicLayoutPage">
   import { ref, watch } from 'vue';
   import { useRouter } from 'vue-router';
-  import { Home, Date, Notice, My } from '@nutui/icons-vue';
-  import { useUserStore } from '@/store/modules/user';
-
-  const userStore = useUserStore();
+  import { Home, Date, My, Ask2 } from '@nutui/icons-vue';
 
   const tabItem = [
     { key: 'home', icon: Home },
     { key: 'appoint', icon: Date },
-    { key: 'notice', icon: Notice },
+    { key: 'consult', icon: Ask2 },
     { key: 'account', icon: My },
   ];
 
@@ -71,7 +62,7 @@
         router.push('/appoint');
         break;
       case 2:
-        router.push('/notice');
+        router.push('/consult');
         break;
       case 3:
         router.push('/account');

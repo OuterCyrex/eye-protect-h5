@@ -9,7 +9,7 @@
       <InputBar prepend-icon="phone" isNumber v-model="phoneNumber" :validator="validatePhone" placeholder="输入手机号" />
 
       <template v-if="loginMode === 'password'">
-        <InputBar prepend-icon="lock" v-model="password" placeholder="请输入密码" />
+        <InputBar prepend-icon="lock" type="password" show-password-toggle v-model="password" placeholder="请输入密码" />
       </template>
 
       <template v-else>

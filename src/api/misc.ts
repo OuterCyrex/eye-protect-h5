@@ -26,6 +26,10 @@ export function fetchGetArticleList(data: API.Misc.GetArticleListRequest) {
   return httpAuth.post(`api/news/articles/page`, data);
 }
 
+export function fetchGetArticleLink(articleId: string) {
+  return httpAuth.get(`/api/news/articles/${articleId}`);
+}
+
 export function fetchGetExpertList(data: API.Misc.GetExpertListRequest) {
   return httpAuth.post('/expert/page', data);
 }
@@ -44,4 +48,8 @@ export function fetchGetCityList(provinceCode: string) {
       provinceCode: provinceCode,
     },
   });
+}
+
+export function fetchGetQRCode(areaCode: string) {
+  return httpAuth.get(`/system/config/wechat-qrcodes/${areaCode}`);
 }

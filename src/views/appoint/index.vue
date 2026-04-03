@@ -38,6 +38,7 @@
   import { useUserStore } from '@/store/modules/user';
 
   const userStore = useUserStore();
+  const router = useRouter();
   const showHospitalPicker = ref<boolean>(false);
   const columns = ref<Array<{ text: string; value: string }>>([]);
   const hospitalName = ref<string>('');
@@ -89,6 +90,7 @@
       timeSlot: selectedTime.value,
     }).then(() => {
       showToast('预约成功');
+      router.push({ path: '/account/appoint' });
     });
   };
 

@@ -26,7 +26,7 @@
 
       <van-field
         label="学校"
-        v-model="formData.schoolId"
+        v-model="schoolName"
         placeholder="请选择"
         readonly
         is-link
@@ -74,6 +74,8 @@
     parentName: '',
   });
 
+  const schoolName = ref<string>('');
+
   const genderColumns = ref([
     { text: '男', value: '男' },
     { text: '女', value: '女' },
@@ -100,6 +102,7 @@
   const showSchoolPicker = ref<boolean>(false);
   const onSchoolChange = (value: any) => {
     formData.schoolId = value.selectedOptions[0].value;
+    schoolName.value = value.selectedOptions[0].text;
     showSchoolPicker.value = false;
   };
 

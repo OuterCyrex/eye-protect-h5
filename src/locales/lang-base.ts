@@ -3,7 +3,7 @@ export type langType = {
   tabbar: {
     home: string;
     appoint: string;
-    notice: string;
+    consult: string;
     account: string;
   };
   language: {
@@ -28,8 +28,6 @@ export type langType = {
     editChild: string;
     addChild: string;
     feedback: string;
-  };
-  notice: {
     notice: string;
     noticeDetail: string;
   };

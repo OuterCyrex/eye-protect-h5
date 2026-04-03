@@ -23,12 +23,11 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
-        name: 'notice',
-        path: '/notice',
-        component: () => import('@/views/notice/index.vue'),
+        path: 'consult',
+        component: () => import('@/views/consult/index.vue'),
         meta: {
-          title: 'common.tabbar.notice',
-          border: false,
+          title: 'common.tabbar.consult',
+          KeepAlive: false,
         },
       },
       {
@@ -80,14 +79,6 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'notice/detail',
-        component: () => import('@/views/notice/noticeDetail.vue'),
-        meta: {
-          title: 'common.notice.noticeDetail',
-          keepAlive: true,
-        },
-      },
-      {
         path: 'account/edit',
         component: () => import('@/views/account/editInfo.vue'),
         meta: {
@@ -124,6 +115,22 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('@/views/account/addChild.vue'),
         meta: {
           title: 'common.account.addChild',
+          keepAlive: false,
+        },
+      },
+      {
+        path: 'account/notice',
+        component: () => import('@/views/account/notice.vue'),
+        meta: {
+          title: 'common.account.notice',
+          KeepAlive: false,
+        },
+      },
+      {
+        path: 'account/notice/detail',
+        component: () => import('@/views/account/noticeDetail.vue'),
+        meta: {
+          title: 'common.account.noticeDetail',
           keepAlive: false,
         },
       },

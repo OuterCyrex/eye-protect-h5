@@ -48,7 +48,7 @@
       userStore.setUnread(userStore.getUnread - 1);
     }
     router.push({
-      path: '/notice/detail',
+      path: 'notice/detail',
       query: { id: item.id },
       state: { message: item as any },
     });

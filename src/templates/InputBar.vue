@@ -3,14 +3,17 @@
     <var-paper class="input-bar-container" :class="{ 'input-error-container': hasError }">
       <var-icon class="prepend-icon" v-if="prependIcon" :name="prependIcon" :size="24" />
       <input
-        type="text"
+        :type="inputType"
         class="native-input"
         :value="modelValue"
         @input="handleInput"
         :placeholder="placeholder"
-        maxlength="11"
+        :maxlength="resolvedMaxLength"
         :class="{ 'input-error': hasError }"
       />
+      <button v-if="showPasswordToggle" type="button" class="append-icon-btn" @click="togglePasswordVisible">
+        <van-icon :name="isPasswordVisible ? 'eye-o' : 'closed-eye'" size="20" color="#999" />
+      </button>
     </var-paper>
     <div class="error-tip" v-if="hasError">
       {{ errorMessage }}
@@ -26,6 +29,9 @@
     modelValue: string;
     placeholder?: string;
     isNumber?: boolean;
+    type?: 'text' | 'password';
+    maxLength?: number;
+    showPasswordToggle?: boolean;
     validator?: (value: string) => string;
     validateTrigger?: boolean;
   }>();
@@ -35,6 +41,26 @@
   }>();
 
   const isInputted = ref(false);
+  const isPasswordVisible = ref(false);
+
+  const inputType = computed(() => {
+    if (props.type !== 'password') {
+      return 'text';
+    }
+    return isPasswordVisible.value ? 'text' : 'password';
+  });
+
+  const resolvedMaxLength = computed(() => {
+    if (typeof props.maxLength === 'number') {
+      return props.maxLength;
+    }
+    return props.isNumber ? 11 : undefined;
+  });
+
+  const togglePasswordVisible = () => {
+    isPasswordVisible.value = !isPasswordVisible.value;
+  };
+
   const handleInput = (e: Event) => {
     const target = e.target as HTMLInputElement;
     let inputValue = target.value;
@@ -87,6 +113,16 @@
   .prepend-icon {
     flex-shrink: 0;
     color: #999;
+  }
+
+  .append-icon-btn {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: transparent;
+    border: none;
   }
 
   .native-input {

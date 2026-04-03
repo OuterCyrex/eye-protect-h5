@@ -66,10 +66,8 @@
     return date.getDate();
   };
 
-  const isDisabled = (day: WeekDay): boolean => {
-    const today = new Date();
-    const todayFormat = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    return day.formatDate === todayFormat;
+  const isDisabled = (): boolean => {
+    return false;
   };
 
   const isSelected = (day: WeekDay): boolean => {

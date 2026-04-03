@@ -26,6 +26,17 @@
           <var-icon class="mr-4" size="22" name="cog-outline" />
         </template>
       </van-cell>
+      <van-cell title="消息" @click="router.push({ path: 'account/notice' })" center is-link>
+        <template #icon>
+          <var-icon class="mr-4" size="22" name="bell-outline" />
+        </template>
+        <template #right-icon>
+          <div class="items-center flex">
+            <div class="mr-2 text-sm bg-red-500 text-white rounded-full px-1">{{ userStore.getUnread }}</div>
+            <van-icon name="arrow"
+          /></div>
+        </template>
+      </van-cell>
       <van-cell title="我的公益券" @click="router.push({ path: 'account/coupon' })" center is-link>
         <template #icon>
           <var-icon class="mr-4" size="22" name="shopping-outline" />

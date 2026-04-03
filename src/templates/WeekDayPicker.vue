@@ -66,8 +66,8 @@
     return date.getDate();
   };
 
-  const isDisabled = (): boolean => {
-    return false;
+  const isDisabled = (day: WeekDay): boolean => {
+    return day && false;
   };
 
   const isSelected = (day: WeekDay): boolean => {

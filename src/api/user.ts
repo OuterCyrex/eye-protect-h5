@@ -45,3 +45,7 @@ export function fetchUploadAvatar(file: File) {
     },
   });
 }
+
+export function fetchJudgeNewUser() {
+  return httpAuth.get('/auth/isNewUser');
+}

@@ -52,13 +52,16 @@ declare namespace API {
       gender: string;
       idCard: string;
       status: string;
-      avatarUrl: string;
-      areaCode: string;
-      areaName: string;
       lastLoginTime: string;
+      areaCode: string;
+      provinceName: string;
+      cityName: string;
       emergencyContact: string;
       emergencyPhone: string;
       address: string;
+      avatarUrl: string;
+      birthDate: string;
+      email: string;
     }
 
     interface UpdateUserInfoRequest {

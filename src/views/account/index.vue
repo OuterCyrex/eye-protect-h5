@@ -32,7 +32,7 @@
         </template>
         <template #right-icon>
           <div class="items-center flex">
-            <div class="mr-2 text-sm bg-red-500 text-white rounded-full px-1">{{ userStore.getUnread }}</div>
+            <div v-if="userStore.getUnread > 0" class="mr-2 text-sm bg-red-500 text-white rounded-full px-1">{{ userStore.getUnread }}</div>
             <van-icon name="arrow"
           /></div>
         </template>

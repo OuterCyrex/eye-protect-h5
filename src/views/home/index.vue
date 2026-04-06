@@ -89,7 +89,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { fetchGetArticleLink, fetchGetArticleList, fetchGetAxiosChart } from '@/api/misc';
-  import { fetchGetUserInfo } from '@/api/user';
+  import { fetchJudgeNewUser } from '@/api/user';
   import homeBtn1 from '@/assets/font/icon/home/home-btns-1.png';
   import homeBtn2 from '@/assets/font/icon/home/home-btns-2.png';
   import homeBtn3 from '@/assets/font/icon/home/home-btns-3.png';
@@ -191,13 +191,7 @@
   };
 
   onMounted(async () => {
-    try {
-      const userInfo = await fetchGetUserInfo();
-      showCouponGuide.value = Number(userInfo?.loginCount || 0) <= 1;
-    } catch {
-      showCouponGuide.value = false;
-    }
-
+    showCouponGuide.value = await fetchJudgeNewUser();
     EyeInfo.value = userStore.getStudent as API.Student.studentInfo;
     axiosData.value = await fetchGetAxiosChart(userStore.getStudent.patientId);
   });

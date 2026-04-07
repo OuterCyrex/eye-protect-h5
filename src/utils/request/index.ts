@@ -11,6 +11,17 @@ const service: AxiosInstance = axios.create({
   timeout: 10000,
   baseURL: baseURL,
 });
+let loginRedirecting = false;
+
+const redirectToLogin = () => {
+  if (typeof window === 'undefined') return;
+  if (loginRedirecting) return;
+  if (window.location.pathname === '/login') return;
+
+  loginRedirecting = true;
+  const redirect = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  window.location.replace(`/login?redirect=${encodeURIComponent(redirect)}`);
+};
 
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
@@ -24,6 +35,14 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response: AxiosResponse) => {
     const res = response.data;
+    if (res.code === 4005) {
+      const userStore = useUserStore(store);
+      userStore.logout();
+      showToast(res.message || '登录已过期，请重新登录');
+      redirectToLogin();
+      return Promise.reject(res.message || 'Token expired');
+    }
+
     if (res.code !== 200) {
       showToast(res.message);
       return Promise.reject(res.message || 'Error');

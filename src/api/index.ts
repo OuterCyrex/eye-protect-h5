@@ -26,9 +26,10 @@ export function loginVerificationCode(data: API.Auth.LoginVerificationCodeReques
  * 微信登录
  * @returns
  */
-export function WeChatCode(code: string) {
+export function WeChatCode(code: string, phoneCode: string) {
   return http.post(`/auth/login`, {
     code,
+    phoneCode,
     port: 1,
   });
 }

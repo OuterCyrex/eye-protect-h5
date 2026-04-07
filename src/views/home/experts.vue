@@ -1,11 +1,11 @@
-<template>
+﻿<template>
   <div class="bg-gray-100 p-3 min-h-full">
     <div class="mb-3 flex gap-2">
-      <van-field v-model="provinceName" placeholder="选择省份" readonly is-link @click="openProvincePicker" />
-      <van-field v-model="cityName" placeholder="选择城市" readonly is-link @click="openCityPicker" />
+      <van-field v-model="provinceName" placeholder="选择省份" readonly is-link @click="handleOpenProvincePicker" />
+      <van-field v-model="cityName" placeholder="选择城市" readonly is-link @click="handleOpenCityPicker" />
     </div>
 
-    <var-list :finished="finished" :immediate-check="true" v-model:loading="loading" @load="loadExperts">
+    <var-list :finished="finished" :immediate-check="true" v-model:loading="loading" @load="handleLoadExperts">
       <div
         v-for="expert in expertList"
         :key="expert.id"
@@ -25,11 +25,11 @@
     </var-list>
 
     <van-popup v-model:show="showProvincePicker" position="bottom">
-      <van-picker :columns="provinceColumns" @cancel="showProvincePicker = false" @confirm="onProvinceChange" />
+      <van-picker :columns="provinceColumns" @cancel="showProvincePicker = false" @confirm="handleProvinceChange" />
     </van-popup>
 
     <van-popup v-model:show="showCityPicker" position="bottom">
-      <van-picker :columns="cityColumns" @cancel="showCityPicker = false" @confirm="onCityChange" />
+      <van-picker :columns="cityColumns" @cancel="showCityPicker = false" @confirm="handleCityChange" />
     </van-popup>
 
     <LoadLay v-model="pageLoading" />
@@ -47,6 +47,8 @@
   const loading = ref(false);
   const finished = ref(false);
   const pageLoading = ref(false);
+  const fetching = ref(false);
+  const loadVersion = ref(0);
 
   const query = ref({
     current: 1,
@@ -70,7 +72,7 @@
   const provinceName = ref('');
   const cityName = ref('');
 
-  const normalizeRegionOptions = (list: any) => {
+  const handleNormalizeRegionOptions = (list: any) => {
     const source = Array.isArray(list) ? list : Array.isArray(list?.records) ? list.records : [];
     return source.map((item: any) => ({
       text: item.name || item.areaName || '',
@@ -80,7 +82,7 @@
 
   const handleGetProvinceList = async () => {
     const res = await fetchGetProvinceList();
-    provinceColumns.value = normalizeRegionOptions(res);
+    provinceColumns.value = handleNormalizeRegionOptions(res);
   };
 
   const handleGetCityList = async (code: string) => {
@@ -89,17 +91,17 @@
       return;
     }
     const res = await fetchGetCityList(code);
-    cityColumns.value = normalizeRegionOptions(res);
+    cityColumns.value = handleNormalizeRegionOptions(res);
   };
 
-  const openProvincePicker = async () => {
+  const handleOpenProvincePicker = async () => {
     if (!provinceColumns.value.length) {
       await handleGetProvinceList();
     }
     showProvincePicker.value = true;
   };
 
-  const openCityPicker = () => {
+  const handleOpenCityPicker = () => {
     if (!selectedProvinceCode.value) {
       showToast('请先选择省份');
       return;
@@ -107,7 +109,7 @@
     showCityPicker.value = true;
   };
 
-  const onProvinceChange = async (value: any) => {
+  const handleProvinceChange = async (value: any) => {
     const option = value.selectedOptions[0];
     selectedProvinceCode.value = option.value;
     provinceName.value = option.text;
@@ -116,38 +118,58 @@
     query.value.areaCode = option.value;
     showProvincePicker.value = false;
     await handleGetCityList(option.value);
-    resetAndReload();
+    handleResetAndReload();
   };
 
-  const onCityChange = (value: any) => {
+  const handleCityChange = (value: any) => {
     const option = value.selectedOptions[0];
     cityName.value = option.text;
     query.value.areaCode = option.value;
     showCityPicker.value = false;
-    resetAndReload();
+    handleResetAndReload();
   };
 
-  const loadExperts = async () => {
-    if (finished.value) {
+  const handleLoadExperts = async () => {
+    if (finished.value || fetching.value) {
       loading.value = false;
       return;
     }
-    const res = await fetchGetExpertList(query.value);
-    const records = res?.records || [];
-    expertList.value.push(...records);
-    loading.value = false;
-    if (records.length < query.value.size) {
-      finished.value = true;
-      return;
+    fetching.value = true;
+    const version = loadVersion.value;
+    const currentPage = query.value.current;
+
+    try {
+      const res = await fetchGetExpertList(query.value);
+      if (version !== loadVersion.value) return;
+
+      const records = res?.records || [];
+      if (currentPage === 1) {
+        expertList.value = records;
+      } else {
+        expertList.value.push(...records);
+      }
+
+      if (records.length < query.value.size) {
+        finished.value = true;
+        return;
+      }
+
+      query.value.current += 1;
+    } finally {
+      if (version === loadVersion.value) {
+        loading.value = false;
+      }
+      fetching.value = false;
     }
-    query.value.current += 1;
   };
 
-  const resetAndReload = () => {
+  const handleResetAndReload = () => {
+    loadVersion.value += 1;
     query.value.current = 1;
     expertList.value = [];
     finished.value = false;
-    loadExperts();
+    loading.value = true;
+    handleLoadExperts();
   };
 
   onMounted(async () => {

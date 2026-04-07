@@ -38,7 +38,7 @@
       </div>
 
       <var-button text class="flex items-center" :loading="wechatLoading" @click="handleWeChatLogin">
-        <var-icon name="https://img.icons8.com/?size=100&id=4l0fwQnRnd10&format=png&color=000000" size="22" class="mr-2" />
+        <var-icon :name="WeChatIcon" size="22" class="mr-2" />
         <span class="text-lg">微信一键登录</span>
       </var-button>
     </div>
@@ -48,12 +48,14 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import InputBar from '@/templates/InputBar.vue';
-  import { WeChatCode, loginPassword, loginVerificationCode } from '@/api';
+  import { loginPassword, loginVerificationCode } from '@/api';
+  import WeChatIcon from '@/assets/font/icon/login/wechat.png';
   import { fetchGetCurrentStudent } from '@/api/student';
   import { fetchGetUserInfo, fetchSendLoginCode } from '@/api/user';
   import { useUserStore } from '@/store/modules/user';
+  import { buildWechatAuthUrl, loginByWechatCallback } from './utils';
 
-  const { VITE_WECHAT_APP_ID } = import.meta.env;
+  const { VITE_WECHAT_APP_ID, VITE_WECHAT_REDIRECT_ORIGIN } = import.meta.env;
 
   const phoneNumber = ref('');
   const password = ref('');
@@ -125,43 +127,24 @@
     await router.replace(redirect);
   };
 
-  const buildWechatRedirectUrl = () => {
-    const loginUrl = new URL(window.location.origin);
-    loginUrl.pathname = '/login';
-
-    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '';
-    if (redirect) {
-      loginUrl.searchParams.set('redirect', redirect);
-    }
-
-    loginUrl.searchParams.delete('code');
-    loginUrl.searchParams.delete('state');
-
-    const authUrl = new URL('https://open.weixin.qq.com/connect/oauth2/authorize');
-    authUrl.searchParams.set('appid', VITE_WECHAT_APP_ID);
-    authUrl.searchParams.set('redirect_uri', loginUrl.toString());
-    authUrl.searchParams.set('response_type', 'code');
-    authUrl.searchParams.set('scope', 'snsapi_userinfo');
-    authUrl.searchParams.set('state', 'wechat_login');
-    return `${authUrl.toString()}#wechat_redirect`;
-  };
-
   const handleWeChatLogin = async () => {
     if (!VITE_WECHAT_APP_ID) {
       showToast('微信登录配置缺失');
       return;
     }
-    window.location.href = buildWechatRedirectUrl();
+    window.location.href = buildWechatAuthUrl({
+      appId: VITE_WECHAT_APP_ID,
+      redirectOrigin: VITE_WECHAT_REDIRECT_ORIGIN,
+      routeQuery: route.query,
+    });
   };
 
   const handleWechatCallbackLogin = async () => {
-    const code = typeof route.query.code === 'string' ? route.query.code : '';
-    if (!code) return;
-
     wechatLoading.value = true;
     try {
-      const res = await WeChatCode(code);
-      await finishLogin(res.token);
+      const token = await loginByWechatCallback(route.query);
+      if (!token) return;
+      await finishLogin(token);
     } finally {
       wechatLoading.value = false;
     }

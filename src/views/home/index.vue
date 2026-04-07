@@ -70,7 +70,7 @@
     <var-paper class="mt-2 p-3">
       <div class="mb-2 font-semibold">热门推荐</div>
       <var-list :finished="articleFinished" :immediate-check="true" v-model:loading="articleLoading" @load="getArticlesList">
-        <ConsultCard
+        <ArticleCard
           v-for="item in recommendList"
           :key="item.id"
           class="my-3"
@@ -95,7 +95,7 @@
   import homeBtn3 from '@/assets/font/icon/home/home-btns-3.png';
   import homeBtn4 from '@/assets/font/icon/home/home-btns-4.png';
   import axiosChart from '@/templates/chart/axiosChart.vue';
-  import ConsultCard from '@/templates/ConsultCard.vue';
+  import ArticleCard from '@/templates/ArticleCard.vue';
   import IconButton from '@/templates/IconButton.vue';
   import CouponPopup from '@/templates/CouponPopup.vue';
   import { useUserStore } from '@/store/modules/user';

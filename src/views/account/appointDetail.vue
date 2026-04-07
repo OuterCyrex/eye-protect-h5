@@ -96,7 +96,7 @@
     isFirstVisit: true,
     institutionName: '',
     institutionId: '',
-    status: 0,
+    status: -1,
     createdAt: '',
   });
 

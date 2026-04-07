@@ -1,9 +1,9 @@
-<template>
-  <div class="flex gap-3 flex-wrap">
+﻿<template>
+  <div class="flex flex-wrap gap-3">
     <div
       v-for="(slot, index) in slots"
       :key="index"
-      class="flex items-center justify-center px-2 py-2 rounded-lg transition-all duration-200 text-sm font-medium"
+      class="flex basis-[calc(50%-0.375rem)] items-center justify-center rounded-lg px-2 py-2 text-sm font-medium transition-all duration-200"
       :class="{
         'bg-blue-500 text-white cursor-pointer font-semibold': slot.availableNumber > 0 && isSelected(slot.timeSlot),
         'bg-white text-gray-800 hover:bg-gray-50 cursor-pointer': slot.availableNumber > 0 && !isSelected(slot.timeSlot),
@@ -12,14 +12,16 @@
       @click="slot.availableNumber > 0 && handleSlotClick(slot.timeSlot)"
     >
       {{ slot.description }}
-      <span v-if="!(slot.availableNumber > 0)" class="ml-2 text-xs">已满</span>
+      <span v-if="!(slot.availableNumber > 0)" class="ml-2 text-xs">{{ slot.expired ? '已过期' : '已满' }}</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+  type DisplayTimeSlot = API.Misc.timeSlotInfo & { expired?: boolean };
+
   const props = defineProps<{
-    slots: API.Misc.timeSlotInfo[];
+    slots: DisplayTimeSlot[];
     modelValue: number;
   }>();
 

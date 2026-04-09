@@ -5,7 +5,7 @@
         v-for="(item, index) in interventionList"
         :key="`${item.planDate}-${item.institutionName}-${index}`"
         class="rounded-lg border border-slate-200 bg-white p-4"
-        @click="openDetail(item, index)"
+        @click="openDetail(item)"
       >
         <div class="flex items-start justify-between gap-3">
           <div class="min-w-0 flex-1">
@@ -55,11 +55,11 @@
     return text ? text : '暂无';
   };
 
-  const openDetail = (item: API.Intervene.interveneInfo, index: number) => {
+  const openDetail = (item: API.Intervene.interveneInfo) => {
     router.push({
       path: '/home/intervene/detail',
       query: {
-        id: `${item.planDate || ''}_${item.institutionName || ''}_${index}`,
+        id: item.id,
       },
     });
   };

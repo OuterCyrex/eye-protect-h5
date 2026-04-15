@@ -1,60 +1,72 @@
 <template>
-  <div class="bg-gray-50 min-h-screen p-2">
-    <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 mb-4">
+  <div class="min-h-screen bg-gray-50 p-2">
+    <div class="mb-4 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
       <div class="mb-4">
-        <div class="my-2">
-          <div class="font-semibold mb-2 text-sm text-gray-400">反馈方 <span class="text-red-500">*</span></div>
-          <van-field
-            class="mb-3 text-sm"
-            readonly
-            is-link
-            placeholder="请选择医院"
-            @click="showHospitalPicker = true"
-            v-model="hospitalName"
-          />
-          <van-popup v-model:show="showHospitalPicker" position="bottom">
-            <van-picker show-toolbar :columns="columns" @cancel="showHospitalPicker = false" @confirm="onConfirm" />
-          </van-popup>
-        </div>
-        <div class="font-semibold mb-2 text-sm text-gray-400">反馈标题 <span class="text-red-500">*</span></div>
+        <div class="mb-2 text-sm font-semibold text-gray-400">反馈对象 <span class="text-red-500">*</span></div>
+        <van-field
+          class="text-sm"
+          readonly
+          is-link
+          :model-value="feedbackTargetLabel"
+          placeholder="请选择反馈对象"
+          @click="showTargetPicker = true"
+        />
+        <van-popup v-model:show="showTargetPicker" position="bottom">
+          <van-picker show-toolbar :columns="targetColumns" @cancel="showTargetPicker = false" @confirm="onTargetConfirm" />
+        </van-popup>
+      </div>
+
+      <div v-if="isHospitalTarget" class="mb-4">
+        <div class="mb-2 text-sm font-semibold text-gray-400">反馈医院 <span class="text-red-500">*</span></div>
+        <van-field class="text-sm" readonly is-link :model-value="hospitalName" placeholder="请选择医院" @click="openHospitalPicker" />
+        <van-popup v-model:show="showHospitalPicker" position="bottom">
+          <van-picker show-toolbar :columns="hospitalColumns" @cancel="showHospitalPicker = false" @confirm="onHospitalConfirm" />
+        </van-popup>
+      </div>
+
+      <div class="mb-4">
+        <div class="mb-2 text-sm font-semibold text-gray-400">反馈标题 <span class="text-red-500">*</span></div>
         <input
           v-model="feedbackForm.title"
           type="text"
-          class="w-full h-10 px-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400"
-          placeholder="请输入反馈您要反馈的问题"
+          class="h-10 w-full rounded-lg border border-gray-200 px-3 text-sm focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+          placeholder="请输入反馈标题"
+          maxlength="100"
         />
       </div>
+
       <div class="mb-4">
-        <div class="font-semibold text-sm text-gray-400 mb-2">反馈内容 <span class="text-red-500">*</span></div>
+        <div class="mb-2 text-sm font-semibold text-gray-400">反馈内容</div>
         <textarea
           v-model="feedbackForm.content"
-          class="w-full min-h-[100px] px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400 resize-y"
-          placeholder="请详细描述您的问题、建议或遇到的异常情况"
+          class="min-h-[100px] w-full resize-y rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+          placeholder="请详细描述问题或建议（可选）"
+          maxlength="1000"
         ></textarea>
       </div>
 
       <div class="mb-2">
-        <div class="font-semibold text-sm text-gray-400 mb-2">上传图片（选填）</div>
+        <div class="mb-2 text-sm font-semibold text-gray-400">上传图片（选填）</div>
         <div class="flex flex-wrap gap-2">
           <div
             v-for="(image, index) in uploadedImages"
             :key="index"
-            class="w-20 h-20 relative rounded-lg overflow-hidden border border-gray-100"
+            class="relative h-20 w-20 overflow-hidden rounded-lg border border-gray-100"
           >
-            <img :src="image.previewUrl" alt="反馈图片" class="w-full h-full object-cover" />
+            <img :src="image.previewUrl" alt="反馈图片" class="h-full w-full object-cover" />
             <div
-              class="absolute top-1 right-1 w-5 h-5 bg-black/60 rounded-full flex items-center justify-center text-white text-xs cursor-pointer hover:bg-black/80"
+              class="absolute right-1 top-1 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-black/60 text-xs text-white hover:bg-black/80"
               @click="removeImage(index)"
-              :class="{ 'opacity-50 cursor-not-allowed': isLoading }"
+              :class="{ 'cursor-not-allowed opacity-50': isLoading }"
             >
               ×
             </div>
           </div>
 
           <div
-            class="w-20 h-20 border border-dashed border-gray-200 rounded-lg flex flex-col items-center justify-center text-gray-400 hover:border-blue-500 hover:text-blue-500"
+            class="flex h-20 w-20 flex-col items-center justify-center rounded-lg border border-dashed border-gray-200 text-gray-400 hover:border-blue-500 hover:text-blue-500"
             @click="fileInputRef?.click()"
-            v-if="!(isLoading || uploadedImages.length >= 5)"
+            v-if="!(isLoading || uploadedImages.length >= 10)"
           >
             <var-icon name="plus" />
             <span class="text-xs">添加图片</span>
@@ -65,13 +77,14 @@
               multiple
               class="hidden"
               @change="handleFileUpload"
-              :disabled="isLoading || uploadedImages.length >= 5"
+              :disabled="isLoading || uploadedImages.length >= 10"
             />
           </div>
         </div>
-        <p class="text-xs text-gray-400 mt-2">支持上传jpg、png格式图片，最多5张</p>
+        <p class="mt-2 text-xs text-gray-400">支持 jpg/png，一次最多上传 10 张</p>
       </div>
     </div>
+
     <var-button @click="submitFeedback" :disabled="!isFormValid || isLoading" block type="primary">
       {{ isLoading ? '提交中...' : '提交反馈' }}
     </var-button>
@@ -79,43 +92,117 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed } from 'vue';
-  import { fetchUploadPicture, fetchSubmitFeedback } from '@/api/misc';
+  import { computed, ref } from 'vue';
   import { fetchGetInstitutions } from '@/api/appoint';
+  import { fetchSendAdminFeedBack, fetchSendHospitalFeedBack, fetchUploadPicture } from '@/api/misc';
+
   const router = useRouter();
 
-  const showHospitalPicker = ref<boolean>(false);
-  const columns = ref<Array<{ text: string; value: string }>>([]);
-  const hospitalName = ref<string>('');
-  const hospitalValue = ref<string>('');
-  const onConfirm = (value: any) => {
-    hospitalName.value = value.selectedOptions[0].text;
-    hospitalValue.value = value.selectedOptions[0].value;
-    showHospitalPicker.value = false;
-  };
-  const handleGetInstitutions = async () => {
-    await fetchGetInstitutions().then((res) => {
-      const Hospitals = res.records.filter((item: { type: string }) => item.type === '医院');
-      columns.value = Hospitals.map((item: API.Misc.institution) => ({ text: item.name, value: item.id }));
-    });
+  type FeedbackTarget = '' | 'hospital' | 'admin';
+
+  const showTargetPicker = ref(false);
+  const targetColumns = ref([
+    { text: '向医院反馈', value: 'hospital' },
+    { text: '向区域管理员反馈', value: 'admin' },
+  ]);
+
+  const feedbackTarget = ref<FeedbackTarget>('');
+  const feedbackTargetLabel = computed(() => {
+    if (feedbackTarget.value === 'hospital') {
+      return '向医院反馈';
+    }
+    if (feedbackTarget.value === 'admin') {
+      return '向区域管理员反馈';
+    }
+    return '';
+  });
+
+  const isHospitalTarget = computed(() => feedbackTarget.value === 'hospital');
+
+  const showHospitalPicker = ref(false);
+  const hospitalColumns = ref<Array<{ text: string; value: string }>>([]);
+  const hospitalName = ref('');
+  const hospitalId = ref('');
+
+  const onTargetConfirm = (value: any) => {
+    const option = value?.selectedOptions?.[0];
+    feedbackTarget.value = (option?.value || '') as FeedbackTarget;
+    showTargetPicker.value = false;
+
+    if (feedbackTarget.value !== 'hospital') {
+      hospitalName.value = '';
+      hospitalId.value = '';
+    }
   };
 
-  const feedbackForm = ref<API.Misc.feedbackRequest>({ title: '', content: '', images: [] });
+  const isHospitalType = (type: unknown) => {
+    const text = String(type || '').toLowerCase();
+    return text.includes('医院') || text.includes('鍖婚櫌') || text.includes('hospital');
+  };
+
+  const loadHospitals = async () => {
+    if (hospitalColumns.value.length > 0) {
+      return;
+    }
+
+    const res = await fetchGetInstitutions();
+    const list = Array.isArray(res?.records) ? res.records : Array.isArray(res) ? res : [];
+    const hospitals = list.filter((item: API.Misc.institution) => isHospitalType(item.type));
+    const source = hospitals.length > 0 ? hospitals : list;
+
+    hospitalColumns.value = source.map((item: API.Misc.institution) => ({
+      text: item.name,
+      value: item.id,
+    }));
+  };
+
+  const openHospitalPicker = async () => {
+    await loadHospitals();
+    if (!hospitalColumns.value.length) {
+      showToast('暂无可选医院');
+      return;
+    }
+    showHospitalPicker.value = true;
+  };
+
+  const onHospitalConfirm = (value: any) => {
+    const option = value?.selectedOptions?.[0];
+    hospitalName.value = option?.text || '';
+    hospitalId.value = option?.value || '';
+    showHospitalPicker.value = false;
+  };
+
+  const feedbackForm = ref({
+    title: '',
+    content: '',
+  });
+
   const fileInputRef = ref<HTMLInputElement | null>(null);
   const uploadedImages = ref<{ file: File; previewUrl: string }[]>([]);
   const isLoading = ref(false);
 
-  const isFormValid = computed(() => hospitalValue.value !== '' && feedbackForm.value.title.trim() && feedbackForm.value.content.trim());
+  const isFormValid = computed(() => {
+    if (feedbackTarget.value === '') {
+      return false;
+    }
+
+    if (feedbackTarget.value === 'hospital' && !hospitalId.value) {
+      return false;
+    }
+
+    return feedbackForm.value.title.trim().length > 0;
+  });
 
   const handleFileUpload = (e: Event) => {
     const files = (e.target as HTMLInputElement).files;
     if (!files || isLoading.value) return;
 
     Array.from(files)
-      .slice(0, 5 - uploadedImages.value.length)
+      .slice(0, 10 - uploadedImages.value.length)
       .forEach((file) => {
         uploadedImages.value.push({ file, previewUrl: URL.createObjectURL(file) });
       });
+
     (e.target as HTMLInputElement).value = '';
   };
 
@@ -123,31 +210,73 @@
     if (isLoading.value) return;
     URL.revokeObjectURL(uploadedImages.value[index]!.previewUrl);
     uploadedImages.value.splice(index, 1);
-    feedbackForm.value.images.splice(index, 1);
+  };
+
+  const normalizeUploadedImages = (res: unknown): string[] => {
+    const source = Array.isArray(res) ? res : Array.isArray((res as any)?.records) ? (res as any).records : [];
+
+    return source
+      .map((item: unknown) => {
+        if (typeof item === 'string' && item.trim()) {
+          return item;
+        }
+
+        if (item && typeof item === 'object') {
+          const obj = item as Record<string, unknown>;
+          const urlCandidates = [obj.url, obj.imageUrl, obj.fileUrl, obj.path];
+          const hit = urlCandidates.find((url) => typeof url === 'string' && url.trim()) as string | undefined;
+          if (hit) {
+            return hit;
+          }
+        }
+
+        return '';
+      })
+      .filter((item: string) => Boolean(item));
+  };
+
+  const resetForm = () => {
+    feedbackTarget.value = '';
+    hospitalName.value = '';
+    hospitalId.value = '';
+    feedbackForm.value = {
+      title: '',
+      content: '',
+    };
+
+    uploadedImages.value.forEach((img) => URL.revokeObjectURL(img.previewUrl));
+    uploadedImages.value = [];
   };
 
   const submitFeedback = async () => {
     if (!isFormValid.value || isLoading.value) return;
 
     isLoading.value = true;
-    if (uploadedImages.value.length) {
-      const res = await fetchUploadPicture(uploadedImages.value.map((item) => item.file));
-      feedbackForm.value.images = res;
-    }
-    await fetchSubmitFeedback(hospitalValue.value, feedbackForm.value)
-      .then(() => {
-        showToast('反馈提交成功');
-        feedbackForm.value = { title: '', content: '', images: [] };
-        uploadedImages.value.forEach((img) => URL.revokeObjectURL(img.previewUrl));
-        uploadedImages.value = [];
-        router.back();
-      })
-      .finally(() => {
-        isLoading.value = false;
-      });
-  };
 
-  onMounted(async () => {
-    await handleGetInstitutions();
-  });
+    try {
+      let images: string[] = [];
+      if (uploadedImages.value.length) {
+        const uploadRes = await fetchUploadPicture(uploadedImages.value.map((item) => item.file));
+        images = normalizeUploadedImages(uploadRes);
+      }
+
+      const payload: API.Misc.feedbackRequest = {
+        title: feedbackForm.value.title.trim(),
+        content: feedbackForm.value.content.trim(),
+        images,
+      };
+
+      if (feedbackTarget.value === 'hospital') {
+        await fetchSendHospitalFeedBack(hospitalId.value, payload);
+      } else {
+        await fetchSendAdminFeedBack(payload);
+      }
+
+      showToast('反馈提交成功');
+      resetForm();
+      router.back();
+    } finally {
+      isLoading.value = false;
+    }
+  };
 </script>

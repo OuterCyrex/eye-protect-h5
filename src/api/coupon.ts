@@ -1,13 +1,17 @@
 import { httpAuth } from '@/utils/request';
 
 export function fetchGetCouponList() {
-  return httpAuth.get('/coupon/getVouchers');
+  return httpAuth.get<API.Coupon.couponInfo[]>('/parentGift/claimable');
 }
 
-export function fetchReceiveCoupon(data: { voucherId: string; institutionId: string }) {
-  return httpAuth.post('/user/coupon/receive', data);
+export function fetchGetCouponInfo(voucherId: string | number) {
+  return httpAuth.get<API.Coupon.couponInfo>(`/parentGift/${voucherId}`);
+}
+
+export function fetchReceiveCoupon(voucherId: string | number) {
+  return httpAuth.put(`/parentGift/${voucherId}/claim`);
 }
 
 export function fetchGetMyCoupons() {
-  return httpAuth.get('/user/coupon/view');
+  return httpAuth.get<API.Coupon.couponInfo[]>('/parentGift/claimed');
 }

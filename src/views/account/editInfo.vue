@@ -98,7 +98,8 @@
     status: '',
     avatarUrl: '',
     areaCode: '',
-    areaName: '',
+    provinceName: '',
+    cityName: '',
     lastLoginTime: '',
     emergencyContact: '',
     emergencyPhone: '',
@@ -117,8 +118,15 @@
   const provinceColumns = ref<RegionOption[]>([]);
   const cityColumns = ref<RegionOption[]>([]);
   const selectedProvinceCode = ref('');
+  const selectedProvinceName = ref('');
   const showProvincePicker = ref(false);
   const showCityPicker = ref(false);
+
+  const formatRegionName = (provinceName?: string, cityName?: string) => {
+    const province = provinceName || '';
+    const city = cityName || '';
+    return `${province}${city}`;
+  };
 
   const normalizeRegionOptions = (list: any) => {
     const source = Array.isArray(list) ? list : Array.isArray(list?.records) ? list.records : [];
@@ -156,7 +164,7 @@
       birthDate: (res as EditUserInfo).birthDate || '',
       email: (res as EditUserInfo).email || '',
     };
-    regionName.value = (res as EditUserInfo).areaName || '';
+    regionName.value = formatRegionName((res as EditUserInfo).provinceName, (res as EditUserInfo).cityName);
   };
 
   const handleUpdateUserInfo = async () => {
@@ -239,15 +247,25 @@
 
   const onProvinceChange = async (value: any) => {
     selectedProvinceCode.value = value.selectedOptions[0].value;
+    selectedProvinceName.value = value.selectedOptions[0].text;
     showProvincePicker.value = false;
     await handleGetCityList(selectedProvinceCode.value);
+    if (!cityColumns.value.length) {
+      userInfo.value.areaCode = selectedProvinceCode.value;
+      userInfo.value.provinceName = selectedProvinceName.value;
+      userInfo.value.cityName = '';
+      regionName.value = formatRegionName(userInfo.value.provinceName, userInfo.value.cityName);
+      return;
+    }
     showCityPicker.value = true;
   };
 
   const onCityChange = (value: any) => {
     const city = value.selectedOptions[0];
     userInfo.value.areaCode = city.value;
-    regionName.value = city.text;
+    userInfo.value.provinceName = selectedProvinceName.value || userInfo.value.provinceName;
+    userInfo.value.cityName = city.text;
+    regionName.value = formatRegionName(userInfo.value.provinceName, userInfo.value.cityName);
     showCityPicker.value = false;
   };
 
@@ -256,6 +274,8 @@
     await handleGetProvinceList();
     await handleGetUserDetail();
     selectedProvinceCode.value = findProvinceCodeByAreaCode(userInfo.value.areaCode);
+    selectedProvinceName.value =
+      provinceColumns.value.find((item) => item.value === selectedProvinceCode.value)?.text || userInfo.value.provinceName || '';
     await handleGetCityList(selectedProvinceCode.value);
     loading.value = false;
   });

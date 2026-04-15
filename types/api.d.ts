@@ -176,9 +176,13 @@ declare namespace API {
     }
 
     interface feedbackRequest {
+      province?: string;
+      city?: string;
       title: string;
       content: string;
       images: string[];
+      toDoctor?: boolean;
+      sendWeChatNotification?: boolean;
     }
 
     interface QRCodeInfo {
@@ -574,35 +578,23 @@ declare namespace API {
 
   namespace Coupon {
     interface couponInfo {
-      id: string;
-      institutionId: string;
-      institutionName: string;
-      name: string;
-      type: number;
-      description: string;
-      maxCouponCount: number;
-      validStartDate: string;
-      validEndDate: string;
-      usageRules: string;
-      status: number;
-    }
-
-    interface MyCoupon {
-      id: string;
-      status: number;
-      voucherId: string;
+      id: number;
+      serviceName: string;
+      giftName: string;
+      content: string;
+      targetAudience: string;
+      value: string;
+      patientId: string;
+      patientName: string;
       voucherCode: string;
+      barcodeBase64: string;
       status: number;
-      type: number;
-      receiveTime: string;
-      usedTime: string;
-      expireDate: string;
-      institutionId: string;
-      usedInstitutionId: string;
-      usedInstitutionName: string;
-      usageRules: string;
-      orderNumber: string;
-      note: string;
+      claimTime: string;
+      verifyLocation: string;
+      verifyTime: string;
+      verifier: string;
+      createdAt: string;
+      updatedAt: string;
     }
   }
 

@@ -16,12 +16,6 @@ export function fetchUploadPicture(files: Array<File>) {
   });
 }
 
-export function fetchSubmitFeedback(hospitalId: string, data: API.Misc.feedbackRequest) {
-  return httpAuth.post(`/feedback/submit/hospital`, data, {
-    params: { id: hospitalId },
-  });
-}
-
 export function fetchGetArticleList(data: API.Misc.GetArticleListRequest) {
   return httpAuth.post(`api/news/articles/page`, data);
 }
@@ -52,4 +46,14 @@ export function fetchGetCityList(provinceCode: string) {
 
 export function fetchGetQRCode(areaCode: string) {
   return httpAuth.get(`/system/config/wechat-qrcodes/${areaCode}`);
+}
+
+export function fetchSendHospitalFeedBack(id: string, data: API.Misc.feedbackRequest) {
+  return httpAuth.post(`/feedback/submit/hospital`, data, {
+    params: { id },
+  });
+}
+
+export function fetchSendAdminFeedBack(data: API.Misc.feedbackRequest) {
+  return httpAuth.post(`/feedback/submit`, data);
 }

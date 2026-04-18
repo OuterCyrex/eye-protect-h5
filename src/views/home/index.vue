@@ -4,7 +4,9 @@
       <div class="m-3 rounded-lg bg-blue-600 p-4 text-white">
         <div class="mb-4 flex items-center justify-between">
           <div class="text-sm font-semibold">最新筛查数据</div>
+          <button class="rounded-full bg-blue-500/40 px-2.5 py-1 text-xs text-blue-50" @click="handleOpenGroupPopup">查看分组</button>
         </div>
+
         <div class="mb-4 flex gap-4">
           <div class="flex-1 rounded-lg bg-blue-500 p-3 text-center">
             <div class="mb-2 flex items-center justify-center text-xs text-gray-200">
@@ -16,6 +18,7 @@
               {{ `S${(EyeInfo.leftSphere || 0).toFixed(2)}/C${(EyeInfo.leftCylinder || 0).toFixed(2)}/A${EyeInfo.leftAxis || 0}` }}
             </div>
           </div>
+
           <div class="flex-1 rounded-lg bg-blue-500 p-3 text-center">
             <div class="mb-2 flex items-center justify-center text-xs text-gray-200">
               <van-icon name="eye" size="16" class="mr-1" />
@@ -82,22 +85,21 @@
       </var-list>
     </var-paper>
 
-    <CouponPopup v-model:show="showCouponGuide" @view-coupon="goCouponPage" />
+    <GroupInfoPopup v-model:show="showGroupPopup" :loading="groupLoading" :groups="groupRows" />
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { fetchGetArticleLink, fetchGetArticleList, fetchGetAxiosChart } from '@/api/misc';
-  import { fetchJudgeNewUser } from '@/api/user';
+  import { computed, ref } from 'vue';
+  import { fetchGetArticleLink, fetchGetArticleList, fetchGetAxiosChart, fetchGetGroupInfo } from '@/api/misc';
   import homeBtn1 from '@/assets/font/icon/home/home-btns-1.png';
   import homeBtn2 from '@/assets/font/icon/home/home-btns-2.png';
   import homeBtn3 from '@/assets/font/icon/home/home-btns-3.png';
   import homeBtn4 from '@/assets/font/icon/home/home-btns-4.png';
   import axiosChart from '@/templates/chart/axiosChart.vue';
   import ArticleCard from '@/templates/ArticleCard.vue';
+  import GroupInfoPopup from '@/templates/GroupInfoPopup.vue';
   import IconButton from '@/templates/IconButton.vue';
-  import CouponPopup from '@/templates/CouponPopup.vue';
   import { useUserStore } from '@/store/modules/user';
 
   const router = useRouter();
@@ -135,7 +137,15 @@
   const recommendList = ref<Array<API.Misc.articleInfo>>([]);
   const articleLoading = ref(false);
   const articleFinished = ref(false);
-  const showCouponGuide = ref(false);
+
+  const showGroupPopup = ref(false);
+  const groupLoading = ref(false);
+  const groupInfo = ref<API.Misc.GroupInfo>({
+    patientId: '',
+    researchGroupIds: [],
+    researchGroupNames: [],
+  });
+
   const articleQuery = ref<API.Misc.GetArticleListRequest>({
     current: 1,
     size: 5,
@@ -146,7 +156,19 @@
     orderBy: '',
     orderDirection: '',
   });
+
   const articleLink = ref<string>('');
+
+  const groupRows = computed(() => {
+    const ids = groupInfo.value.researchGroupIds || [];
+    const names = (groupInfo.value.researchGroupNames || []).filter((item) => !!item);
+
+    if (names.length > 0) {
+      return names;
+    }
+
+    return ids.map((_, index) => `分组${index + 1}`);
+  });
 
   const jumpButtons = ref([
     { iconName: homeBtn1, label: '检查报告', to: '/home/report' },
@@ -185,14 +207,36 @@
     window.open(articleLink.value);
   };
 
-  const goCouponPage = () => {
-    showCouponGuide.value = false;
-    router.push({ path: '/account/coupon' });
+  const handleOpenGroupPopup = async () => {
+    const patientId = userStore.getStudent?.patientId;
+    if (!patientId) {
+      showToast('暂无学生信息');
+      return;
+    }
+
+    showGroupPopup.value = true;
+    groupLoading.value = true;
+
+    try {
+      const res = await fetchGetGroupInfo(patientId);
+      groupInfo.value = {
+        patientId: res?.patientId || patientId,
+        researchGroupIds: res?.researchGroupIds || [],
+        researchGroupNames: res?.researchGroupNames || [],
+      };
+    } finally {
+      groupLoading.value = false;
+    }
   };
 
   onMounted(async () => {
-    showCouponGuide.value = await fetchJudgeNewUser();
     EyeInfo.value = userStore.getStudent as API.Student.studentInfo;
-    axiosData.value = await fetchGetAxiosChart(userStore.getStudent.patientId);
+
+    const patientId = userStore.getStudent?.patientId;
+    if (!patientId) {
+      return;
+    }
+
+    axiosData.value = await fetchGetAxiosChart(patientId);
   });
 </script>

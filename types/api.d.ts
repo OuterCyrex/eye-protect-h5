@@ -193,6 +193,12 @@ declare namespace API {
       createTime: string;
       updateTime: string;
     }
+
+    interface GroupInfo {
+      patientId: string;
+      researchGroupIds: string[];
+      researchGroupNames: string[];
+    }
   }
 
   namespace Intervene {

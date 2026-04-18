@@ -7,7 +7,7 @@
     <var-paper class="rounded-md bg-white p-4">
       <div class="my-1">
         <div class="text-sm font-semibold text-gray-400">预约医院</div>
-        <van-field class="my-2" v-model="hospitalName" readonly is-link placeholder="请选择医院" @click="showHospitalPicker = true" />
+        <van-field class="my-2" v-model="hospitalName" readonly is-link placeholder="请选择医院" @click="handleOpenHospitalPicker" />
         <van-popup v-model:show="showHospitalPicker" position="bottom">
           <van-picker show-toolbar :columns="columns" @cancel="showHospitalPicker = false" @confirm="handleConfirm" />
         </van-popup>
@@ -65,6 +65,15 @@
     hospitalName.value = value.selectedOptions[0].text;
     hospitalValue.value = value.selectedOptions[0].value;
     showHospitalPicker.value = false;
+  };
+
+  const handleOpenHospitalPicker = () => {
+    if (!columns.value.length) {
+      showToast('当前地区暂无可预约医院');
+      return;
+    }
+
+    showHospitalPicker.value = true;
   };
 
   const handleIsToday = (dateStr: string) => {

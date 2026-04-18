@@ -1,8 +1,8 @@
-<template>
+﻿<template>
   <div class="consult-page min-h-full p-3">
     <div class="hero-card overflow-hidden rounded-2xl p-4 text-white">
       <div class="relative z-10">
-        <div class="text-lg font-semibold">专家咨询</div>
+        <div class="text-lg font-semibold">服务咨询</div>
         <div class="mt-2 text-sm text-blue-100">为您提供在线咨询服务</div>
         <div class="mt-3 rounded-xl bg-white/20 px-3 py-2 text-sm">
           <div>服务地区：{{ userAreaName || displayAreaNames }}</div>
@@ -24,8 +24,6 @@
           <div class="mx-auto w-fit rounded-xl bg-white p-3 shadow-sm">
             <van-image width="230" height="230" :src="qrCodeInfo.qrcodeUrl" fit="cover" radius="8" />
           </div>
-          <div class="mt-3 text-sm font-medium text-gray-700">请使用微信扫一扫</div>
-          <div class="mt-1 text-xs text-gray-500">扫码后将跳转企业微信咨询页面</div>
         </div>
 
         <div v-else class="text-center text-sm text-gray-500">暂无可用二维码，请稍后重试</div>

@@ -57,3 +57,7 @@ export function fetchSendHospitalFeedBack(id: string, data: API.Misc.feedbackReq
 export function fetchSendAdminFeedBack(data: API.Misc.feedbackRequest) {
   return httpAuth.post(`/feedback/submit`, data);
 }
+
+export function fetchGetGroupInfo(patientId: string) {
+  return httpAuth.get(`/patient-research-groups/${patientId}`);
+}

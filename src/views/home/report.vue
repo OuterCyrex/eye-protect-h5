@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="h-full bg-gray-50">
     <div class="space-y-4">
       <section class="overflow-hidden rounded-lg border bg-white">
@@ -322,8 +322,22 @@
     return typeof value === 'boolean' ? (value ? '是' : '否') : '暂无';
   };
 
-  const formatSCA = (eye: any, prefix: string) =>
-    displayText(`${eye?.[prefix + 'S'] || '暂无'}/${eye?.[prefix + 'C'] || '暂无'}*${eye?.[prefix + 'A'] || '暂无'}`);
+  const formatEyeField = (value: unknown) => {
+    if (value === null || value === undefined || value === '') return '暂无';
+    return String(value);
+  };
+
+  const formatSCA = (eye: any, prefix: string) => {
+    const s = formatEyeField(eye?.[`${prefix}S`]);
+    const c = formatEyeField(eye?.[`${prefix}C`]);
+    const a = formatEyeField(eye?.[`${prefix}A`]);
+    return `${s}/${c}*${a}`;
+  };
+
+  const formatSCAWithVision = (eye: any, prefix: string, fallbackVision?: unknown) => {
+    const vision = formatEyeField(eye?.[`${prefix}Va`] ?? fallbackVision);
+    return `${formatSCA(eye, prefix)}→${vision}`;
+  };
 
   const latestVisionExam = computed(() => reportData.value.archiveDetail?.visionExaminations);
   const latestVisualFunctionTest = computed(() => {
@@ -394,21 +408,21 @@
     const exam = latestVisionExam.value;
     if (!exam) return [];
     return [
-      { label: '裸眼远视力', right: formatNumber(exam.rightEye.uncorrectedDistant), left: formatNumber(exam.leftEye.uncorrectedDistant) },
-      { label: '裸眼近视力', right: formatNumber(exam.rightEye.uncorrectedNear), left: formatNumber(exam.leftEye.uncorrectedNear) },
-      { label: '矫正视力', right: formatNumber(exam.rightEye.correctedVision), left: formatNumber(exam.leftEye.correctedVision) },
-      { label: '眼压', right: formatNumber(exam.rightEye.eyePressure), left: formatNumber(exam.leftEye.eyePressure) },
-      { label: '眼轴长度', right: formatNumber(exam.rightEye.axialLength, 'mm'), left: formatNumber(exam.leftEye.axialLength, 'mm') },
+      { label: '裸眼远视力', right: formatNumber(exam.rightEye?.uncorrectedDistant), left: formatNumber(exam.leftEye?.uncorrectedDistant) },
+      { label: '裸眼近视力', right: formatNumber(exam.rightEye?.uncorrectedNear), left: formatNumber(exam.leftEye?.uncorrectedNear) },
+      { label: '矫正视力', right: formatNumber(exam.rightEye?.correctedVision), left: formatNumber(exam.leftEye?.correctedVision) },
+      { label: '眼压', right: formatNumber(exam.rightEye?.eyePressure), left: formatNumber(exam.leftEye?.eyePressure) },
+      { label: '眼轴长度', right: formatNumber(exam.rightEye?.axialLength, 'mm'), left: formatNumber(exam.leftEye?.axialLength, 'mm') },
       { label: '自动验光 SCA', right: formatSCA(exam.rightEye, 'autoRefraction'), left: formatSCA(exam.leftEye, 'autoRefraction') },
       {
         label: '主觉验光 SCA',
-        right: formatSCA(exam.rightEye, 'subjectiveRefraction'),
-        left: formatSCA(exam.leftEye, 'subjectiveRefraction'),
+        right: formatSCAWithVision(exam.rightEye, 'subjectiveRefraction', exam.rightEye?.correctedVision),
+        left: formatSCAWithVision(exam.leftEye, 'subjectiveRefraction', exam.leftEye?.correctedVision),
       },
       {
         label: '最终处方 SCA',
-        right: formatSCA(exam.rightEye, 'prescription'),
-        left: formatSCA(exam.leftEye, 'prescription'),
+        right: formatSCAWithVision(exam.rightEye, 'prescription', exam.rightEye?.subjectiveRefractionVa ?? exam.rightEye?.correctedVision),
+        left: formatSCAWithVision(exam.leftEye, 'prescription', exam.leftEye?.subjectiveRefractionVa ?? exam.leftEye?.correctedVision),
       },
     ];
   });
@@ -493,8 +507,8 @@
       { label: '自动验光 SCA', right: formatSCA(exam.rightEye, 'autoRefraction'), left: formatSCA(exam.leftEye, 'autoRefraction') },
       {
         label: '主觉验光 SCA',
-        right: formatSCA(exam.rightEye, 'subjectiveRefraction'),
-        left: formatSCA(exam.leftEye, 'subjectiveRefraction'),
+        right: formatSCAWithVision(exam.rightEye, 'subjectiveRefraction', exam.rightEye?.correctedVision),
+        left: formatSCAWithVision(exam.leftEye, 'subjectiveRefraction', exam.leftEye?.correctedVision),
       },
       {
         label: '散瞳自动 SCA',
@@ -503,8 +517,8 @@
       },
       {
         label: '散瞳主觉 SCA',
-        right: formatSCA(exam.rightEye, 'dilatedSubjectiveRefraction'),
-        left: formatSCA(exam.leftEye, 'dilatedSubjectiveRefraction'),
+        right: formatSCAWithVision(exam.rightEye, 'dilatedSubjectiveRefraction', exam.rightEye?.correctedVision),
+        left: formatSCAWithVision(exam.leftEye, 'dilatedSubjectiveRefraction', exam.leftEye?.correctedVision),
       },
 
       { label: '眼底检查', right: displayText(exam.rightEye?.fundusExam), left: displayText(exam.leftEye?.fundusExam) },
@@ -523,8 +537,21 @@
   onMounted(async () => {
     loading.value = true;
     try {
-      axiosData.value = await fetchGetAxiosChart(userStore.getStudent.patientId);
-      reportData.value = await fetchGetLastReport(userStore.getStudent.patientId);
+      const patientId = userStore.getStudent?.patientId;
+      if (!patientId) {
+        showToast('暂无学生信息');
+        return;
+      }
+
+      const [chartResult, reportResult] = await Promise.allSettled([fetchGetAxiosChart(patientId), fetchGetLastReport(patientId)]);
+
+      if (chartResult.status === 'fulfilled') {
+        axiosData.value = chartResult.value;
+      }
+
+      if (reportResult.status === 'fulfilled') {
+        reportData.value = reportResult.value;
+      }
     } finally {
       loading.value = false;
     }

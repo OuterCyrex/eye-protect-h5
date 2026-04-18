@@ -69,13 +69,25 @@
       </div>
     </div>
 
+    <van-popup v-model:show="showCancelPopup" round :style="{ width: '88%', maxWidth: '360px' }">
+      <div class="px-5 pb-5 pt-6">
+        <div class="text-center text-lg font-semibold text-gray-800">确认取消预约</div>
+        <div class="mt-3 text-center text-sm leading-6 text-gray-500">取消后将释放当前时段名额，可重新预约。</div>
+        <div class="mt-6 grid grid-cols-2 gap-3">
+          <van-button plain class="!border-gray-200 !text-gray-600" @click="showCancelPopup = false">再想想</van-button>
+          <van-button type="danger" :loading="cancelling" :disabled="cancelling" @click="handleConfirmCancelReservation"
+            >确认取消</van-button
+          >
+        </div>
+      </div>
+    </van-popup>
+
     <LoadLay v-model="loading" />
   </div>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { showConfirmDialog } from 'vant';
   import { fetchDeleteReservation, fetchGetReservationInfo } from '@/api/reservation';
   import LoadLay from '@/templates/LoadLay.vue';
 
@@ -83,6 +95,8 @@
   const router = useRouter();
   const id = route.query.id;
   const loading = ref<boolean>(false);
+  const showCancelPopup = ref(false);
+  const cancelling = ref(false);
 
   const reservation = ref<API.Reservation.reservationInfo>({
     id: '',
@@ -107,22 +121,21 @@
   };
 
   const handleCancelReservation = async () => {
+    showCancelPopup.value = true;
+  };
+
+  const handleConfirmCancelReservation = async () => {
     if (!reservation.value.id) return;
-
-    await showConfirmDialog({
-      title: '确认取消',
-      message: '确定要取消当前预约吗？',
-    });
-
-    loading.value = true;
+    cancelling.value = true;
     await fetchDeleteReservation(reservation.value.id)
       .then(() => {
         reservation.value.status = -1 as never;
+        showCancelPopup.value = false;
         showToast('预约已取消');
         router.back();
       })
       .finally(() => {
-        loading.value = false;
+        cancelling.value = false;
       });
   };
 

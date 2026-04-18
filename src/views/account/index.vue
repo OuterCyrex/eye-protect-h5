@@ -11,6 +11,11 @@
     </var-paper>
 
     <var-paper class="p-2">
+      <van-cell title="挂号记录查询" @click="router.push({ path: 'account/appoint' })" center is-link>
+        <template #icon>
+          <var-icon class="mr-4" size="22" name="calendar-month-outline" />
+        </template>
+      </van-cell>
       <van-cell title="学生信息管理" @click="router.push({ path: 'account/children' })" center is-link>
         <template #icon>
           <var-icon class="mr-4" size="22" name="card-account-details-outline" />
@@ -40,11 +45,6 @@
       <van-cell title="我的公益券" @click="router.push({ path: 'account/coupon' })" center is-link>
         <template #icon>
           <var-icon class="mr-4" size="22" name="shopping-outline" />
-        </template>
-      </van-cell>
-      <van-cell title="挂号记录查询" @click="router.push({ path: 'account/appoint' })" center is-link>
-        <template #icon>
-          <var-icon class="mr-4" size="22" name="calendar-month-outline" />
         </template>
       </van-cell>
       <van-cell title="用户反馈" @click="router.push({ path: 'account/feedback' })" center is-link>

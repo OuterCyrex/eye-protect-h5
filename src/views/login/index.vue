@@ -1,46 +1,52 @@
 <template>
-  <div class="flex flex-col justify-center">
-    <div class="my-12 flex flex-col items-center justify-center">
-      <div class="mb-2 text-2xl font-semibold">近视防控</div>
-      <div class="text-center text-gray-500">守护青少年光明未来</div>
+  <div class="flex min-h-dvh flex-col">
+    <div class="flex-1 flex flex-col justify-center">
+      <div class="my-12 flex flex-col items-center justify-center">
+        <div class="mb-2 text-2xl font-semibold">近视防控</div>
+        <div class="text-center text-gray-500">守护青少年光明未来</div>
+      </div>
+
+      <div class="mx-8 grid gap-6">
+        <InputBar prepend-icon="phone" isNumber v-model="phoneNumber" :validator="validatePhone" placeholder="输入手机号" />
+
+        <template v-if="loginMode === 'password'">
+          <InputBar prepend-icon="lock" type="password" show-password-toggle v-model="password" placeholder="请输入密码" />
+        </template>
+
+        <template v-else>
+          <div class="flex items-center gap-3">
+            <div class="flex-1">
+              <InputBar prepend-icon="lock" isNumber v-model="verificationCode" placeholder="请输入验证码" />
+            </div>
+            <van-button class="min-w-24" size="small" type="primary" :disabled="countdown > 0" @click="handleSendCode">
+              <span class="text-xs">{{ countdown > 0 ? `${countdown}s后重试` : '获取验证码' }}</span>
+            </van-button>
+          </div>
+        </template>
+
+        <div class="-mt-3 flex justify-end">
+          <button type="button" class="border-none bg-transparent p-0 text-sm leading-none text-blue-500" @click="toggleLoginMode">
+            {{ loginMode === 'code' ? '使用密码登录' : '使用验证码登录' }}
+          </button>
+        </div>
+
+        <var-button class="login-btn" type="primary" block @click="handleLogin">登录/注册</var-button>
+
+        <div class="flex items-center justify-center gap-4">
+          <div class="h-px flex-1 bg-gray-200"></div>
+          <span class="whitespace-nowrap text-sm text-gray-500">其他登录方式</span>
+          <div class="h-px flex-1 bg-gray-200"></div>
+        </div>
+
+        <var-button text class="flex items-center" :loading="wechatLoading" @click="handleWeChatLogin">
+          <var-icon :name="WeChatIcon" size="22" class="mr-2" />
+          <span class="text-lg">微信一键登录</span>
+        </var-button>
+      </div>
     </div>
 
-    <div class="mx-8 grid gap-6">
-      <InputBar prepend-icon="phone" isNumber v-model="phoneNumber" :validator="validatePhone" placeholder="输入手机号" />
-
-      <template v-if="loginMode === 'password'">
-        <InputBar prepend-icon="lock" type="password" show-password-toggle v-model="password" placeholder="请输入密码" />
-      </template>
-
-      <template v-else>
-        <div class="flex items-center gap-3">
-          <div class="flex-1">
-            <InputBar prepend-icon="lock" isNumber v-model="verificationCode" placeholder="请输入验证码" />
-          </div>
-          <van-button class="min-w-24" size="small" type="primary" :disabled="countdown > 0" @click="handleSendCode">
-            <span class="text-xs">{{ countdown > 0 ? `${countdown}s后重试` : '获取验证码' }}</span>
-          </van-button>
-        </div>
-      </template>
-
-      <div class="-mt-3 flex justify-end">
-        <button type="button" class="border-none bg-transparent p-0 text-sm leading-none text-blue-500" @click="toggleLoginMode">
-          {{ loginMode === 'code' ? '使用密码登录' : '使用验证码登录' }}
-        </button>
-      </div>
-
-      <var-button class="login-btn" type="primary" block @click="handleLogin">登录/注册</var-button>
-
-      <div class="flex items-center justify-center gap-4">
-        <div class="h-px flex-1 bg-gray-200"></div>
-        <span class="whitespace-nowrap text-sm text-gray-500">其他登录方式</span>
-        <div class="h-px flex-1 bg-gray-200"></div>
-      </div>
-
-      <var-button text class="flex items-center" :loading="wechatLoading" @click="handleWeChatLogin">
-        <var-icon :name="WeChatIcon" size="22" class="mr-2" />
-        <span class="text-lg">微信一键登录</span>
-      </var-button>
+    <div class="pb-4 text-center text-xs text-gray-400">
+      <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="underline">京ICP备2025147132号-5</a>
     </div>
   </div>
 </template>

@@ -9,6 +9,10 @@
       </RouterView>
       <RouterView v-if="!$route.meta.keepAlive" :key="$route.path" />
     </div>
+    <div class="beian-link">
+      <span>备案号：</span>
+      <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">京ICP备2025147132号-5</a>
+    </div>
     <nut-tabbar
       unactive-color="#364636"
       active-color="#1989fa"
@@ -91,6 +95,19 @@
       flex: auto;
       min-height: 0;
       overflow: hidden auto;
+    }
+
+    .beian-link {
+      padding: 6px 12px;
+      font-size: 24px;
+      line-height: 1.4;
+      color: #9ca3af;
+      text-align: center;
+
+      a {
+        color: inherit;
+        text-decoration: underline;
+      }
     }
   }
 </style>

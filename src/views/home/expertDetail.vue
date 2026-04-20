@@ -3,7 +3,7 @@
     <div class="overflow-hidden rounded-lg border border-slate-200 bg-white">
       <div class="p-4">
         <div class="flex gap-4">
-          <img :src="expert.imageUrl" :alt="expert.name" class="h-28 w-28 shrink-0 rounded-lg bg-slate-100 object-cover" />
+          <img :src="expert.imageUrl || ExpertAvatar" :alt="expert.name" class="h-28 w-28 shrink-0 rounded-lg bg-slate-100 object-cover" />
           <div class="min-w-0 flex-1">
             <div class="text-lg font-semibold text-slate-800">{{ displayText(expert.name) }}</div>
             <div class="mt-2 text-sm text-blue-600">{{ displayText(expert.title) }}</div>
@@ -23,6 +23,7 @@
   import { ref } from 'vue';
   import { fetchGetExpertInfo } from '@/api/misc';
   import LoadLay from '@/templates/LoadLay.vue';
+  import ExpertAvatar from '@/assets/font/icon/home/home-experts-avatar.png';
 
   const route = useRoute();
   const loading = ref(false);

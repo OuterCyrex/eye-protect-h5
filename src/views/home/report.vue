@@ -14,6 +14,11 @@
       </section>
 
       <section class="overflow-hidden rounded-lg border bg-white">
+        <div class="border-b px-4 py-3 text-sm font-semibold bg-slate-100">防控措施</div>
+        <div class="p-4 text-sm">{{ displayText(reportData.interventionMeasures) }}</div>
+      </section>
+
+      <section class="overflow-hidden rounded-lg border bg-white">
         <div class="border-b px-4 py-3 text-sm font-semibold bg-slate-100">建档信息</div>
         <table class="min-w-full text-sm">
           <tbody>
@@ -131,7 +136,7 @@
       </section>
 
       <section class="overflow-hidden rounded-lg border bg-white">
-        <div class="border-b px-4 py-3 text-sm font-semibold">医生分析</div>
+        <div class="border-b px-4 py-3 text-sm font-semibold bg-slate-100">医生分析</div>
         <div class="p-4 text-sm">{{ displayText(reportData.analysis) }}</div>
       </section>
     </div>
@@ -143,7 +148,7 @@
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
   import { fetchGetLastReport } from '@/api/intervention';
-  import { fetchGetAxiosChart } from '@/api/misc';
+  import { fetchGetAxiosChart, fetchGetGroupInfo } from '@/api/misc';
   import axiosChart from '@/templates/chart/axiosChart.vue';
   import LoadLay from '@/templates/LoadLay.vue';
   import { useUserStore } from '@/store/modules/user';
@@ -153,6 +158,12 @@
   const axiosData = ref<Array<API.Misc.AxiosChartUnit>>([]);
   const activeFunctionIndex = ref<number>(0);
   const activeFollowIndex = ref<number>(0);
+
+  const groupInfo = ref<API.Misc.GroupInfo>({
+    patientId: '',
+    researchGroupIds: [],
+    researchGroupNames: [],
+  });
 
   const reportData = ref<API.Intervene.report>({
     patientId: '',
@@ -358,7 +369,7 @@
     { label: '出生日期', value: formatDate(reportData.value.birthDate) },
     { label: '联系电话', value: displayText(reportData.value.phone) },
     { label: '学校班级', value: `${displayText(reportData.value.school)} ${reportData.value.clazz || ''}`.trim() || '暂无' },
-    { label: '防控措施', value: displayText(reportData.value.interventionMeasures) },
+    { label: '分组', value: `${displayText(groupInfo.value.researchGroupNames.join('、'))}` || '暂无' },
   ]);
 
   const archiveRows = computed(() => {
@@ -413,14 +424,14 @@
       { label: '矫正视力', right: formatNumber(exam.rightEye?.correctedVision), left: formatNumber(exam.leftEye?.correctedVision) },
       { label: '眼压', right: formatNumber(exam.rightEye?.eyePressure), left: formatNumber(exam.leftEye?.eyePressure) },
       { label: '眼轴长度', right: formatNumber(exam.rightEye?.axialLength, 'mm'), left: formatNumber(exam.leftEye?.axialLength, 'mm') },
-      { label: '自动验光 SCA', right: formatSCA(exam.rightEye, 'autoRefraction'), left: formatSCA(exam.leftEye, 'autoRefraction') },
+      { label: '电脑验光', right: formatSCA(exam.rightEye, 'autoRefraction'), left: formatSCA(exam.leftEye, 'autoRefraction') },
       {
-        label: '主觉验光 SCA',
+        label: '主觉验光',
         right: formatSCAWithVision(exam.rightEye, 'subjectiveRefraction', exam.rightEye?.correctedVision),
         left: formatSCAWithVision(exam.leftEye, 'subjectiveRefraction', exam.leftEye?.correctedVision),
       },
       {
-        label: '最终处方 SCA',
+        label: '最终处方',
         right: formatSCAWithVision(exam.rightEye, 'prescription', exam.rightEye?.subjectiveRefractionVa ?? exam.rightEye?.correctedVision),
         left: formatSCAWithVision(exam.leftEye, 'prescription', exam.leftEye?.subjectiveRefractionVa ?? exam.leftEye?.correctedVision),
       },
@@ -504,19 +515,19 @@
       { label: '眼压', right: formatNumber(exam.rightEye?.eyePressure), left: formatNumber(exam.leftEye?.eyePressure) },
       { label: '眼轴长度', right: formatNumber(exam.rightEye?.axialLength, 'mm'), left: formatNumber(exam.leftEye?.axialLength, 'mm') },
 
-      { label: '自动验光 SCA', right: formatSCA(exam.rightEye, 'autoRefraction'), left: formatSCA(exam.leftEye, 'autoRefraction') },
+      { label: '电脑验光', right: formatSCA(exam.rightEye, 'autoRefraction'), left: formatSCA(exam.leftEye, 'autoRefraction') },
       {
-        label: '主觉验光 SCA',
+        label: '主觉验光',
         right: formatSCAWithVision(exam.rightEye, 'subjectiveRefraction', exam.rightEye?.correctedVision),
         left: formatSCAWithVision(exam.leftEye, 'subjectiveRefraction', exam.leftEye?.correctedVision),
       },
       {
-        label: '散瞳自动 SCA',
+        label: '散瞳电脑',
         right: formatSCA(exam.rightEye, 'dilatedAutoRefraction'),
         left: formatSCA(exam.leftEye, 'dilatedAutoRefraction'),
       },
       {
-        label: '散瞳主觉 SCA',
+        label: '散瞳主觉',
         right: formatSCAWithVision(exam.rightEye, 'dilatedSubjectiveRefraction', exam.rightEye?.correctedVision),
         left: formatSCAWithVision(exam.leftEye, 'dilatedSubjectiveRefraction', exam.leftEye?.correctedVision),
       },
@@ -543,7 +554,11 @@
         return;
       }
 
-      const [chartResult, reportResult] = await Promise.allSettled([fetchGetAxiosChart(patientId), fetchGetLastReport(patientId)]);
+      const [chartResult, reportResult, groupResult] = await Promise.allSettled([
+        fetchGetAxiosChart(patientId),
+        fetchGetLastReport(patientId),
+        fetchGetGroupInfo(patientId),
+      ]);
 
       if (chartResult.status === 'fulfilled') {
         axiosData.value = chartResult.value;
@@ -551,6 +566,10 @@
 
       if (reportResult.status === 'fulfilled') {
         reportData.value = reportResult.value;
+      }
+
+      if (groupResult.status === 'fulfilled') {
+        groupInfo.value = groupResult.value;
       }
     } finally {
       loading.value = false;

@@ -62,11 +62,11 @@
     </van-popup>
 
     <van-popup v-model:show="showProvincePicker" position="bottom">
-      <van-picker :columns="provinceColumns" @cancel="showProvincePicker = false" @confirm="onProvinceChange" />
+      <van-picker title="请选择省份" :columns="provinceColumns" @cancel="showProvincePicker = false" @confirm="onProvinceChange" />
     </van-popup>
 
     <van-popup v-model:show="showCityPicker" position="bottom">
-      <van-picker :columns="cityColumns" @cancel="showCityPicker = false" @confirm="onCityChange" />
+      <van-picker title="请选择城市" :columns="cityColumns" @cancel="showCityPicker = false" @confirm="onCityChange" />
     </van-popup>
 
     <LoadLay v-model="loading" />

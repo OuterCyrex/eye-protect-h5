@@ -8,14 +8,14 @@
 
       <div v-else class="mt-4 max-h-80 overflow-y-auto mb-2">
         <div v-if="groups.length <= 0" class="py-6 text-center text-sm text-gray-500">暂无分组</div>
-        <div v-else class="rounded-lg border border-gray-100 bg-gray-50">
+        <div v-else>
           <div
             v-for="(item, index) in groups"
             :key="`${item}-${index}`"
             class="flex items-center px-3 py-2.5 text-sm text-gray-700"
             :class="{ 'border-t border-gray-100': index > 0 }"
           >
-            <span class="mr-2 text-gray-400">-</span>
+            <span class="mr-2 font-semibold">{{ index + 1 }}.</span>
             <span>{{ item }}</span>
           </div>
         </div>

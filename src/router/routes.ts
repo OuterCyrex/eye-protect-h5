@@ -35,7 +35,7 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('@/views/account/index.vue'),
         meta: {
           title: 'common.tabbar.account',
-          keepAlive: true,
+          keepAlive: false,
         },
       },
       {

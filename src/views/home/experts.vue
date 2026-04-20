@@ -12,7 +12,7 @@
         class="mb-3 flex gap-3 rounded-lg border border-slate-200 bg-white p-3"
         @click="router.push({ path: '/home/experts/detail', query: { id: expert.id } })"
       >
-        <img :src="expert.imageUrl" class="h-24 w-24 rounded-lg object-cover" />
+        <img :src="expert.imageUrl || ExpertAvatar" class="h-24 w-24 rounded-lg object-cover" />
         <div class="flex-1">
           <div class="flex justify-between">
             <div class="font-semibold">{{ expert.name }}</div>
@@ -40,6 +40,7 @@
   import { ref, onMounted } from 'vue';
   import { fetchGetExpertList, fetchGetProvinceList, fetchGetCityList } from '@/api/misc';
   import LoadLay from '@/templates/LoadLay.vue';
+  import ExpertAvatar from '@/assets/font/icon/home/home-experts-avatar.png';
 
   const router = useRouter();
 

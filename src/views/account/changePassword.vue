@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 py-1">
+  <div class="bg-gray-100 min-h-full py-1">
     <van-cell-group class="mt-2">
       <van-field label="手机号" v-model="formData.phone" readonly class="border-b border-gray-100" />
       <van-field v-model="formData.verificationCode" label="验证码" placeholder="请输入验证码" class="border-b border-gray-100">
@@ -25,8 +25,8 @@
       />
     </van-cell-group>
 
-    <div class="mt-6 flex w-full justify-center">
-      <van-button type="primary" class="h-14 w-96 rounded-xl bg-blue-600 text-white font-medium" @click="handleChangePassword">
+    <div class="mt-6 flex w-full justify-center px-2">
+      <van-button type="primary" class="h-14 w-full rounded-xl bg-blue-600 text-white font-medium" @click="handleChangePassword">
         确认修改
       </van-button>
     </div>

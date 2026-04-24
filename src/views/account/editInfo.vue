@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 py-1">
+  <div class="bg-gray-100 min-h-full py-1">
     <van-cell-group class="my-3 mx-0 rounded-lg shadow-sm">
       <van-cell class="items-center" title="头像" is-link @click="openAvatarPicker">
         <template #right-icon>
@@ -47,8 +47,8 @@
       <van-field label="地址" v-model="userInfo.address" placeholder="请输入地址" class="border-b border-gray-100" />
     </van-cell-group>
 
-    <div class="mt-6 flex w-full justify-center">
-      <van-button type="primary" class="h-14 w-96 rounded-xl bg-blue-600 text-white font-medium" @click="handleUpdateUserInfo">
+    <div class="mt-6 flex w-full justify-center px-2">
+      <van-button type="primary" class="h-14 w-full rounded-xl bg-blue-600 text-white font-medium" @click="handleUpdateUserInfo">
         确认修改
       </van-button>
     </div>

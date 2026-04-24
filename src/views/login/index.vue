@@ -1,6 +1,6 @@
-<template>
+﻿<template>
   <div class="flex min-h-dvh flex-col">
-    <div class="flex-1 flex flex-col justify-center">
+    <div class="justify-center">
       <div class="my-12 flex flex-col items-center justify-center">
         <div class="mb-2 text-2xl font-semibold">近视防控</div>
         <div class="text-center text-gray-500">守护青少年光明未来</div>
@@ -19,7 +19,7 @@
               <InputBar prepend-icon="lock" isNumber v-model="verificationCode" placeholder="请输入验证码" />
             </div>
             <van-button class="min-w-24" size="small" type="primary" :disabled="countdown > 0" @click="handleSendCode">
-              <span class="text-xs">{{ countdown > 0 ? `${countdown}s后重试` : '获取验证码' }}</span>
+              <span class="text-sm">{{ countdown > 0 ? `${countdown}s后重试` : '获取验证码' }}</span>
             </van-button>
           </div>
         </template>
@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <div class="pb-4 text-center text-xs text-gray-400">
+    <div class="pb-4 text-center text-xs text-gray-400 absolute bottom-2 right-0 left-0">
       <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="underline">京ICP备2025147132号-5</a>
     </div>
   </div>

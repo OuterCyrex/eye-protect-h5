@@ -31,7 +31,7 @@
           <var-icon class="mr-4" size="22" name="cog-outline" />
         </template>
       </van-cell>
-      <van-cell title="消息" @click="router.push({ path: 'account/notice' })" center is-link>
+      <van-cell title="通知" @click="router.push({ path: 'account/notice' })" center is-link>
         <template #icon>
           <var-icon class="mr-4" size="22" name="bell-outline" />
         </template>
@@ -54,8 +54,8 @@
       </van-cell>
     </var-paper>
 
-    <div class="mt-6 flex justify-center">
-      <var-button @click="handleLogout" class="w-96" color="#fef2f2" text outline type="danger">退出登录</var-button>
+    <div class="mt-6 flex justify-center w-full px-2">
+      <var-button @click="handleLogout" class="w-full" color="#fef2f2" text outline type="danger">退出登录</var-button>
     </div>
   </div>
 </template>

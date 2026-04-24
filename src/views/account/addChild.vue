@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 py-2">
+  <div class="bg-gray-100 min-h-full py-2">
     <van-cell-group>
       <van-field label="学生姓名" v-model="formData.name" placeholder="请输入" class="border-b border-gray-100"> </van-field>
       <van-field
@@ -109,7 +109,7 @@
   const handleSubmit = async () => {
     await fetchAddStudent(formData).then(() => {
       showToast('添加成功');
-      router.push('/account/children');
+      router.back();
     });
   };
 

@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white rounded-lg border border-gray-100 px-4 py-5 flex items-center justify-between">
     <div class="flex items-center gap-3 min-w-0 pr-3">
-      <div class="text-red-500 font-bold text-lg whitespace-nowrap">{{ coupon.value || '公益券' }}</div>
+      <div class="text-red-500 font-bold text-lg whitespace-nowrap w-20">{{ coupon.value || '公益券' }}</div>
 
       <div class="min-w-0 text-sm text-gray-600">
         <div class="font-semibold text-gray-800 truncate">{{ coupon.giftName || '公益券' }}</div>

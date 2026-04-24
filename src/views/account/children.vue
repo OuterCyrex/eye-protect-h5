@@ -22,7 +22,7 @@
 
       <div class="flex justify-between text-sm text-gray-600">
         <div>学校: {{ schoolsList.find((school) => school.id === student.schoolId)?.name }}</div>
-        <div>班级: {{ student.className }}</div>
+        <div>班级: {{ student.className || '暂无' }}</div>
       </div>
     </div>
 

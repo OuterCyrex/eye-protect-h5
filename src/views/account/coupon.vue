@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 min-h-screen p-3">
+  <div class="bg-gray-100 max-w-md mx-auto min-h-full p-3">
     <div v-if="couponList && couponList.length > 0">
       <div v-for="item of couponList" :key="item.id">
         <CouponItem class="mb-2" :coupon="item" @verify="openVerifyPopup" />

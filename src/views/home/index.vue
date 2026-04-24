@@ -1,5 +1,5 @@
-<template>
-  <div class="bg-gray-100">
+﻿<template>
+  <div class="bg-gray-100 pb-3">
     <div class="bg-white">
       <div class="m-3 rounded-lg bg-blue-600 p-4 text-white">
         <div class="mb-4 flex items-center justify-between">
@@ -70,7 +70,7 @@
       <axiosChart :data="axiosData" />
     </var-paper>
 
-    <var-paper class="mt-2 p-3">
+    <var-paper class="mt-2 px-3 pt-3">
       <div class="mb-2 font-semibold">热门推荐</div>
       <var-list :finished="articleFinished" :immediate-check="true" v-model:loading="articleLoading" @load="getArticlesList">
         <ArticleCard

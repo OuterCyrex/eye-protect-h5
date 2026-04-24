@@ -1,5 +1,5 @@
 <template>
-  <div class="p-3 max-w-md mx-auto bg-gray-100 min-h-full">
+  <div class="p-3 max-w-md bg-gray-100 min-h-full">
     <div v-if="appointmentData && appointmentData.length > 0">
       <div
         v-for="item in appointmentData"

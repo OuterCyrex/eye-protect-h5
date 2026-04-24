@@ -58,13 +58,12 @@
       <div class="text-xs leading-relaxed">
         <div>1. 请提前30分钟到医院分诊台报到，迟到15分钟以上预约号作废；</div>
         <div>2. 就诊时请携带身份证、医保卡、既往病历及检查报告；</div>
-        <div>3. 已预约时段如需取消，请提前24小时操作，否则视为爽约；</div>
-        <div>4. 如有疑问可拨打医院咨询电话：028-12345678。</div>
+        <div>3. 已预约时段如需取消，请提前3小时操作；</div>
       </div>
     </div>
 
-    <div class="fixed bottom-0 left-0 right-0 z-10">
-      <div class="mx-auto max-w-md px-4 py-3">
+    <div class="fixed bottom-6 left-0 right-0 z-10">
+      <div class="mx-auto w-full px-4 py-3">
         <van-button v-if="reservation.status === 0" type="primary" class="w-full" @click="handleCancelReservation"> 取消预约 </van-button>
       </div>
     </div>
@@ -74,9 +73,11 @@
         <div class="text-center text-lg font-semibold text-gray-800">确认取消预约</div>
         <div class="mt-3 text-center text-sm leading-6 text-gray-500">取消后将释放当前时段名额，可重新预约。</div>
         <div class="mt-6 grid grid-cols-2 gap-3">
-          <van-button plain class="!border-gray-200 !text-gray-600" @click="showCancelPopup = false">再想想</van-button>
-          <van-button type="danger" :loading="cancelling" :disabled="cancelling" @click="handleConfirmCancelReservation"
-            >确认取消</van-button
+          <van-button size="small" plain class="!border-gray-200 !text-gray-600" @click="showCancelPopup = false"
+            ><span class="text-nowrap">再想想</span></van-button
+          >
+          <van-button size="small" type="danger" :loading="cancelling" :disabled="cancelling" @click="handleConfirmCancelReservation"
+            ><span class="text-nowrap">确认取消</span></van-button
           >
         </div>
       </div>

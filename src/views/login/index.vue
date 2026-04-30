@@ -74,6 +74,7 @@
   const route = useRoute();
   const router = useRouter();
   const userStore = useUserStore();
+  const WECHAT_BIND_USER_STORAGE_KEY = 'wechat_bind_user';
 
   const validatePhone = (value: string) => {
     if (!value) {
@@ -148,9 +149,29 @@
   const handleWechatCallbackLogin = async () => {
     wechatLoading.value = true;
     try {
-      const token = await loginByWechatCallback(route.query);
-      if (!token) return;
-      await finishLogin(token);
+      const res = await loginByWechatCallback(route.query);
+      if (!res) return;
+
+      if (res.needBindPhone) {
+        localStorage.setItem(
+          WECHAT_BIND_USER_STORAGE_KEY,
+          JSON.stringify({
+            userId: res.userId,
+            nickname: res.nickname,
+            avatar: res.avatar,
+          }),
+        );
+        const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/';
+        await router.replace({
+          path: '/bind-phone',
+          query: {
+            redirect,
+          },
+        });
+        return;
+      }
+
+      await finishLogin(res.token);
     } finally {
       wechatLoading.value = false;
     }

@@ -9,7 +9,6 @@ interface BuildWechatAuthUrlOptions {
 
 interface WechatCallbackParams {
   code: string;
-  phoneCode: string;
 }
 
 const WECHAT_AUTH_BASE_URL = 'https://open.weixin.qq.com/connect/oauth2/authorize';
@@ -37,11 +36,6 @@ function buildWechatLoginRedirectUrl(redirectOrigin: string | undefined, routeQu
     loginUrl.searchParams.set('redirect', redirect);
   }
 
-  const phoneCode = getQueryStringValue(routeQuery, 'phoneCode');
-  if (phoneCode) {
-    loginUrl.searchParams.set('phoneCode', phoneCode);
-  }
-
   loginUrl.searchParams.delete('code');
   loginUrl.searchParams.delete('state');
   return loginUrl;
@@ -61,13 +55,12 @@ export function buildWechatAuthUrl(options: BuildWechatAuthUrlOptions): string {
 export function getWechatCallbackParams(routeQuery: LocationQuery): WechatCallbackParams {
   return {
     code: getQueryStringValue(routeQuery, 'code'),
-    phoneCode: getQueryStringValue(routeQuery, 'phoneCode'),
   };
 }
 
-export async function loginByWechatCallback(routeQuery: LocationQuery): Promise<string> {
-  const { code, phoneCode } = getWechatCallbackParams(routeQuery);
-  if (!code) return '';
-  const res = await WeChatCode(code, phoneCode);
-  return res.token;
+export async function loginByWechatCallback(routeQuery: LocationQuery): Promise<API.Auth.WeChatLoginResponse | null> {
+  const { code } = getWechatCallbackParams(routeQuery);
+  if (!code) return null;
+  const res = await WeChatCode(code);
+  return res;
 }

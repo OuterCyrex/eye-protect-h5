@@ -26,12 +26,15 @@ export function loginVerificationCode(data: API.Auth.LoginVerificationCodeReques
  * 微信登录
  * @returns
  */
-export function WeChatCode(code: string, phoneCode: string) {
-  return http.post(`/auth/login`, {
+export function WeChatCode(code: string) {
+  return http.post<API.Auth.WeChatLoginResponse>(`/auth/login`, {
     code,
-    phoneCode,
     port: 1,
   });
+}
+
+export function WeChatBindPhone(data: { userId: number; phone: string; code: string }) {
+  return http.post<API.Auth.WeChatLoginResponse>('/auth/bind-phone', data);
 }
 
 /**

@@ -202,6 +202,15 @@ export const routes: RouteRecordRaw[] = [
     },
   },
   {
+    name: 'bind-phone',
+    path: '/bind-phone',
+    component: () => import('@/views/login/bindPhone.vue'),
+    meta: {
+      title: '',
+      keepAlive: false,
+    },
+  },
+  {
     path: '/:pathMatch(.*)',
     redirect: '/Home',
   },

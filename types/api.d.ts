@@ -84,6 +84,16 @@ declare namespace API {
         address: string;
       };
     }
+
+    interface WeChatLoginResponse {
+      token: string;
+      message: string;
+      needBindPhone: boolean;
+      userId: number;
+      nickname: string;
+      avatar: string;
+      port: number;
+    }
   }
 
   namespace Misc {

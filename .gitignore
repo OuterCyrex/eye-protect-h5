@@ -28,3 +28,4 @@ types/components.d.ts
 *.sw?
 .env.local
 .env.*.local
+.env

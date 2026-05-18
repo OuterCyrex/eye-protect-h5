@@ -12,7 +12,7 @@ const router: Router = createRouter({
   routes: routes,
 });
 
-router.beforeEach((to, _from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const userStore = useUserStore(store);
   const hasToken = Boolean(userStore.getToken);
   const redirect = typeof to.query.redirect === 'string' ? to.query.redirect : '/';
@@ -27,6 +27,7 @@ router.beforeEach((to, _from, next) => {
   }
 
   if (!hasToken) {
+    userStore.setNeedsAreaCodeCompletion(false);
     next({
       path: LOGIN_PATH,
       query: {
@@ -34,6 +35,15 @@ router.beforeEach((to, _from, next) => {
       },
     });
     return;
+  }
+
+  if (to.path !== LOGIN_PATH && to.path !== BIND_PHONE_PATH) {
+    try {
+      await userStore.refreshAreaCodeRequirement();
+    } catch (error) {
+      console.error(error);
+      userStore.setNeedsAreaCodeCompletion(false);
+    }
   }
 
   next();

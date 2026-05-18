@@ -43,6 +43,8 @@ declare namespace API {
       wechatOpenId: string;
       wechatUnionId: string;
       wechatGender: string;
+      newUser: number;
+      areaCode: string;
     }
 
     interface UserDetail {

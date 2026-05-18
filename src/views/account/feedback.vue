@@ -140,20 +140,47 @@
     return text.includes('医院') || text.includes('鍖婚櫌') || text.includes('hospital');
   };
 
-  const loadHospitals = async () => {
-    if (hospitalColumns.value.length > 0) {
+  const currentPage = ref(1);
+  const pageSize = ref(100);
+  const finished = ref(false);
+
+  const loadHospitals = async (pageNum = 1) => {
+    if (hospitalColumns.value.length > 0 && pageNum === 1) {
       return;
     }
 
-    const res = await fetchGetInstitutions();
+    const res = await fetchGetInstitutions({ pageNum, pageSize: pageSize.value, type: '医院' });
     const list = Array.isArray(res?.records) ? res.records : Array.isArray(res) ? res : [];
-    const hospitals = list.filter((item: API.Misc.institution) => isHospitalType(item.type));
-    const source = hospitals.length > 0 ? hospitals : list;
+    if (pageNum === 1) {
+      hospitalColumns.value = list.map((item: API.Misc.institution) => ({
+        text: item.name,
+        value: item.id,
+      }));
+    } else {
+      const loadMoreIndex = hospitalColumns.value.findIndex((col) => col.value === 'load_more');
+      if (loadMoreIndex !== -1) {
+        hospitalColumns.value.splice(loadMoreIndex, 1);
+      }
+      hospitalColumns.value.push(...list.map((item: API.Misc.institution) => ({
+        text: item.name,
+        value: item.id,
+      })));
+    }
 
-    hospitalColumns.value = source.map((item: API.Misc.institution) => ({
-      text: item.name,
-      value: item.id,
-    }));
+    const totalPages = typeof res.pages === 'number' ? res.pages : res.total && pageSize.value ? Math.ceil(res.total / pageSize.value) : pageNum;
+    if (pageNum < totalPages) {
+      finished.value = false;
+      currentPage.value = pageNum + 1;
+      if (!hospitalColumns.value.some((col) => col.value === 'load_more')) {
+        hospitalColumns.value.push({ text: '加载更多...', value: 'load_more' });
+      }
+    } else {
+      finished.value = true;
+      const loadMoreIndex = hospitalColumns.value.findIndex((col) => col.value === 'load_more');
+      if (loadMoreIndex !== -1) {
+        hospitalColumns.value.splice(loadMoreIndex, 1);
+      }
+    }
   };
 
   const openHospitalPicker = async () => {
@@ -165,10 +192,18 @@
     showHospitalPicker.value = true;
   };
 
-  const onHospitalConfirm = (value: any) => {
+  const onHospitalConfirm = async (value: any) => {
     const option = value?.selectedOptions?.[0];
-    hospitalName.value = option?.text || '';
-    hospitalId.value = option?.value || '';
+    if (!option) return;
+
+    if (option.value === 'load_more') {
+      await loadHospitals(currentPage.value);
+      showHospitalPicker.value = true;
+      return;
+    }
+
+    hospitalName.value = option.text || '';
+    hospitalId.value = option.value || '';
     showHospitalPicker.value = false;
   };
 

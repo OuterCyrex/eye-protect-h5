@@ -31,8 +31,10 @@
         readonly
         is-link
         class="border-b border-gray-100"
-        @click="showSchoolPicker = true"
+        @click="openSchoolPicker"
       />
+
+      <van-field label="校区" v-model="formData.campus" placeholder="请输入" class="border-b border-gray-100"> </van-field>
 
       <van-field label="班级" v-model="formData.className" placeholder="请输入" class="border-b border-gray-100"> </van-field>
     </van-cell-group>
@@ -79,6 +81,21 @@
   });
   const schoolName = ref<string>('');
 
+  // 解析学校名称和校区信息
+  const parseSchoolInfo = (schoolNameStr: string) => {
+    if (!schoolNameStr) return { name: '', campus: '' };
+    
+    // 匹配括号中的内容，支持中文括号和英文括号
+    const match = schoolNameStr.match(/^(.+?)[（(](.+?)[）)]$/);
+    if (match) {
+      return {
+        name: match[1].trim(),
+        campus: match[2].trim()
+      };
+    }
+    return { name: schoolNameStr.trim(), campus: '' };
+  };
+
   const genderColumns = ref([
     { text: '男', value: '男' },
     { text: '女', value: '女' },
@@ -96,23 +113,85 @@
   };
 
   const schoolColumns = ref<{ text: string; value: string }[]>([]);
-  const handleGetInstitutions = async () => {
-    await fetchGetInstitutions().then((res) => {
-      const schools = res.records.filter((item: { type: string }) => item.type === '学校');
-      schoolColumns.value = schools.map((item: API.Misc.institution) => ({ text: item.name, value: item.id }));
-    });
+  const currentPage = ref(1);
+  const pageSize = ref(100);
+  const finished = ref(false);
+
+  const handleGetInstitutions = async (pageNum = 1) => {
+    if (loading.value || finished.value) return;
+    loading.value = true;
+    try {
+      const res = await fetchGetInstitutions({ pageNum, pageSize: pageSize.value, type: '学校' });
+      const schools = Array.isArray(res.records) ? res.records : [];
+      if (pageNum === 1) {
+        schoolColumns.value = schools.map((item: API.Misc.institution) => ({ text: item.name, value: item.id }));
+      } else {
+        const loadMoreIndex = schoolColumns.value.findIndex((col) => col.value === 'load_more');
+        if (loadMoreIndex !== -1) {
+          schoolColumns.value.splice(loadMoreIndex, 1);
+        }
+        schoolColumns.value.push(...schools.map((item: API.Misc.institution) => ({ text: item.name, value: item.id })));
+      }
+
+      const totalPages = typeof res.pages === 'number' ? res.pages : res.total && pageSize.value ? Math.ceil(res.total / pageSize.value) : pageNum;
+      if (pageNum < totalPages) {
+        finished.value = false;
+        currentPage.value = pageNum + 1;
+        if (!schoolColumns.value.some((col) => col.value === 'load_more')) {
+          schoolColumns.value.push({ text: '加载更多...', value: 'load_more' });
+        }
+      } else {
+        finished.value = true;
+        const loadMoreIndex = schoolColumns.value.findIndex((col) => col.value === 'load_more');
+        if (loadMoreIndex !== -1) {
+          schoolColumns.value.splice(loadMoreIndex, 1);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loading.value = false;
+    }
   };
   const showSchoolPicker = ref<boolean>(false);
-  const onSchoolChange = (value: any) => {
-    formData.schoolId = value.selectedOptions[0].value;
-    schoolName.value = value.selectedOptions[0].text;
+  const openSchoolPicker = async () => {
+    if (!schoolColumns.value.length) {
+      await handleGetInstitutions(1);
+    }
+    if (!schoolColumns.value.length) {
+      showToast('当前地区暂无可选学校');
+      return;
+    }
+    showSchoolPicker.value = true;
+  };
+  const onSchoolChange = async (value: any) => {
+    const option = value?.selectedOptions?.[0];
+    if (!option) return;
+
+    if (option.value === 'load_more') {
+      await handleGetInstitutions(currentPage.value);
+      showSchoolPicker.value = true;
+      return;
+    }
+
+    formData.schoolId = option.value;
+    schoolName.value = option.text;
     showSchoolPicker.value = false;
   };
 
   const handleSubmit = async () => {
     loading.value = true;
 
-    await fetchUpdateStudent(formData).then(() => {
+    // 构建提交数据，过滤掉所有空值字段（空字符串、null、undefined）
+    const submitData: any = {};
+    Object.keys(formData).forEach((key) => {
+      const value = (formData as any)[key];
+      if (value !== '' && value !== null && value !== undefined) {
+        submitData[key] = value;
+      }
+    });
+
+    await fetchUpdateStudent(submitData).then(() => {
       showToast('更新成功');
       router.back();
     });
@@ -131,7 +210,10 @@
       formData.province = res.province;
       formData.schoolId = res.schoolId;
 
-      schoolName.value = schoolColumns.value.find((item) => `${item.value}` === formData.schoolId)?.text || '';
+      // 解析学校名称和校区信息
+      const { name, campus } = parseSchoolInfo(res.schoolName || '');
+      schoolName.value = name || schoolColumns.value.find((item) => `${item.value}` === formData.schoolId)?.text || '';
+      formData.campus = campus;
     });
   };
 

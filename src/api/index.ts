@@ -27,7 +27,7 @@ export function loginVerificationCode(data: API.Auth.LoginVerificationCodeReques
  * @returns
  */
 export function WeChatCode(code: string) {
-  return http.post<API.Auth.WeChatLoginResponse>(`/auth/login`, {
+  return http.post<API.Auth.WeChatLoginResponse>(`/auth/wechat-login`, {
     code,
     port: 1,
   });

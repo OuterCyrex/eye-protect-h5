@@ -20,7 +20,7 @@ export function fetchGetUserInfo() {
  * @returns
  */
 export function fetchUpdateUserInfo(data: API.Auth.UpdateUserInfoRequest) {
-  return httpAuth.put(`/auth/user-detail/current`, data);
+  return httpAuth.put<API.Auth.UpdateUserInfoResponse>(`/auth/user-detail/current`, data);
 }
 
 export function fetchSendLoginCode(phone: string) {

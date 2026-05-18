@@ -57,15 +57,15 @@
     return '';
   };
 
-  const getWechatBindUser = (): { userId: number } | null => {
+  const getWechatBindUser = (): { userId: string } | null => {
     const raw = localStorage.getItem(WECHAT_BIND_USER_STORAGE_KEY);
     if (!raw) {
       return null;
     }
 
     try {
-      const parsed = JSON.parse(raw) as { userId?: number };
-      if (typeof parsed.userId !== 'number') {
+      const parsed = JSON.parse(raw) as { userId?: string };
+      if (typeof parsed.userId !== 'string') {
         return null;
       }
       return { userId: parsed.userId };

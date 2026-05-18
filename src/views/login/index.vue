@@ -2,7 +2,7 @@
   <div class="flex min-h-dvh flex-col">
     <div class="justify-center">
       <div class="my-12 flex flex-col items-center justify-center">
-        <div class="mb-2 text-2xl font-semibold">近视防控</div>
+        <div class="mb-2 text-2xl font-semibold">睛准防控</div>
         <div class="text-center text-gray-500">守护青少年光明未来</div>
       </div>
 

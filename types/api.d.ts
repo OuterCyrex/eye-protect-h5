@@ -85,11 +85,16 @@ declare namespace API {
       };
     }
 
+    interface UpdateUserInfoResponse {
+      token?: string;
+      message?: string;
+    }
+
     interface WeChatLoginResponse {
       token: string;
       message: string;
       needBindPhone: boolean;
-      userId: number;
+      userId: string;
       nickname: string;
       avatar: string;
       port: number;
@@ -560,6 +565,7 @@ declare namespace API {
       idCard: string;
       className: string;
       schoolId: string;
+      campus?: string;
       province: string;
       parentName: string;
       phone: string;
@@ -587,6 +593,7 @@ declare namespace API {
       idCard: string;
       className: string;
       schoolId: string;
+      campus?: string;
       province: string;
       parentName: string;
     }

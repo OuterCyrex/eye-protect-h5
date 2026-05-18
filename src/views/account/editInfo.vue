@@ -77,6 +77,7 @@
   import { DatePicker } from 'vant';
   import { fetchGetCityList, fetchGetProvinceList } from '@/api/misc';
   import { fetchGetUserInfoDetail, fetchUpdateUserInfo, fetchUploadAvatar } from '@/api/user';
+  import { useUserStore } from '@/store/modules/user';
   import LoadLay from '@/templates/LoadLay.vue';
 
   interface EditUserInfo extends API.Auth.UserDetail {
@@ -189,7 +190,13 @@
         address: userInfo.value.address,
       },
     })
-      .then(async () => {
+      .then(async (response: API.Auth.UpdateUserInfoResponse) => {
+        // 如果返回新token，更新store中的token
+        if (response?.token) {
+          const userStore = useUserStore();
+          userStore.setToken(response.token);
+        }
+
         if (pendingAvatarFile.value) {
           await fetchUploadAvatar(pendingAvatarFile.value);
           pendingAvatarFile.value = null;

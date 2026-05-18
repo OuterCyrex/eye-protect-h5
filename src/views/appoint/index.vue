@@ -24,7 +24,13 @@
       </div>
 
       <div v-if="showDayTimeSelector" class="my-4">
-        <div class="text-sm font-semibold text-gray-400">选择时段</div>
+        <div class="flex items-center justify-between">
+          <div class="text-sm font-semibold text-gray-400">选择时段</div>
+          <var-button type="primary" size="small" plain @click="handleRefreshTimeSlots">
+            <var-icon name="refresh" />
+            刷新
+          </var-button>
+        </div>
         <DayTimePicker class="my-4" :slots="timeSlots" v-model="selectedTime" />
       </div>
     </var-paper>
@@ -52,6 +58,11 @@
   const hospitalName = ref('');
   const hospitalValue = ref('');
 
+  const currentPage = ref(1);
+  const pageSize = ref(100);
+  const loading = ref(false);
+  const finished = ref(false);
+
   const appointTabs = ref<Array<string>>(['常规检查', '视功能训练']);
   const appointType = ref(0);
   const reservationTypeMap = [1, 2];
@@ -61,9 +72,18 @@
   const selectedTime = ref(0);
   const timeSlots = ref<Array<DisplayTimeSlot>>([]);
 
-  const handleConfirm = (value: any) => {
-    hospitalName.value = value.selectedOptions[0].text;
-    hospitalValue.value = value.selectedOptions[0].value;
+  const handleConfirm = async (value: any) => {
+    const option = value?.selectedOptions?.[0];
+    if (!option) return;
+
+    if (option.value === 'load_more') {
+      await handleGetInstitutions(currentPage.value);
+      showHospitalPicker.value = true;
+      return;
+    }
+
+    hospitalName.value = option.text;
+    hospitalValue.value = option.value;
     showHospitalPicker.value = false;
   };
 
@@ -112,10 +132,41 @@
     });
   };
 
-  const handleGetInstitutions = async () => {
-    const res = await fetchGetInstitutions();
-    const hospitals = res.records.filter((item: { type: string }) => item.type === '医院');
-    columns.value = hospitals.map((item: API.Misc.institution) => ({ text: item.name, value: item.id }));
+  const handleGetInstitutions = async (pageNum = 1) => {
+    if (loading.value || finished.value) return;
+    loading.value = true;
+    try {
+      const res = await fetchGetInstitutions({ pageNum: pageNum, pageSize: pageSize.value, type: '医院' });
+      const institutions = Array.isArray(res.records) ? res.records : [];
+      if (pageNum === 1) {
+        columns.value = institutions.map((item: API.Misc.institution) => ({ text: item.name, value: item.id }));
+      } else {
+        const loadMoreIndex = columns.value.findIndex((col) => col.value === 'load_more');
+        if (loadMoreIndex !== -1) {
+          columns.value.splice(loadMoreIndex, 1);
+        }
+        columns.value.push(...institutions.map((item: API.Misc.institution) => ({ text: item.name, value: item.id })));
+      }
+
+      const totalPages = typeof res.pages === 'number' ? res.pages : res.total && pageSize.value ? Math.ceil(res.total / pageSize.value) : pageNum;
+      if (pageNum < totalPages) {
+        finished.value = false;
+        currentPage.value = pageNum + 1;
+        if (!columns.value.some((col) => col.value === 'load_more')) {
+          columns.value.push({ text: '加载更多...', value: 'load_more' });
+        }
+      } else {
+        finished.value = true;
+        const loadMoreIndex = columns.value.findIndex((col) => col.value === 'load_more');
+        if (loadMoreIndex !== -1) {
+          columns.value.splice(loadMoreIndex, 1);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loading.value = false;
+    }
   };
 
   const handleGetTimeList = async () => {
@@ -132,6 +183,12 @@
     if (!timeSlots.value.some((slot) => slot.timeSlot === selectedTime.value && slot.availableNumber > 0)) {
       selectedTime.value = 0;
     }
+  };
+
+  const handleRefreshTimeSlots = async () => {
+    showToast('刷新中...');
+    await handleGetTimeList();
+    showToast('刷新成功');
   };
 
   const handleSubmitReservation = async () => {
@@ -153,7 +210,7 @@
   };
 
   onMounted(async () => {
-    await handleGetInstitutions();
+    await handleGetInstitutions(1);
   });
 
   watch(

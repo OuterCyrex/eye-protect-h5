@@ -75,8 +75,8 @@
   };
 
   const handleGetInstitutions = () => {
-    fetchGetInstitutions().then((res) => {
-      schoolsList.value = res.records.filter((item: { type: string }) => item.type === '学校');
+    fetchGetInstitutions({ pageNum: 1, pageSize: 100, type: '学校' }).then((res) => {
+      schoolsList.value = Array.isArray(res.records) ? res.records : [];
     });
   };
 

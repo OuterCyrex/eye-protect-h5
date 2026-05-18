@@ -1,5 +1,6 @@
 import { useCookies } from '@vueuse/integrations/useCookies';
 import { defineStore } from 'pinia';
+import { fetchGetUserInfoDetail } from '@/api/user';
 import { WebsocketManager, channels } from '@/utils/stomp';
 
 const { VITE_TOKEN_KEY } = import.meta.env;
@@ -10,6 +11,7 @@ interface StoreUser {
   info: Record<any, any>;
   student: Record<any, any>;
   unread: number;
+  needsAreaCodeCompletion: boolean;
 }
 
 export const useUserStore = defineStore('user', {
@@ -18,12 +20,14 @@ export const useUserStore = defineStore('user', {
     info: {},
     student: {},
     unread: 0,
+    needsAreaCodeCompletion: false,
   }),
   getters: {
     getToken: (state) => state.token,
     getInfo: (state) => state.info,
     getStudent: (state) => state.student,
     getUnread: (state) => state.unread,
+    getNeedsAreaCodeCompletion: (state) => state.needsAreaCodeCompletion,
   },
   actions: {
     setToken(token: string) {
@@ -38,11 +42,25 @@ export const useUserStore = defineStore('user', {
     setUnread(unread: number) {
       this.unread = Math.max(0, unread);
     },
+    setNeedsAreaCodeCompletion(needsAreaCodeCompletion: boolean) {
+      this.needsAreaCodeCompletion = needsAreaCodeCompletion;
+    },
+    async refreshAreaCodeRequirement() {
+      if (!this.token) {
+        this.needsAreaCodeCompletion = false;
+        return false;
+      }
+      const detail = await fetchGetUserInfoDetail();
+      this.setInfo(detail);
+      this.needsAreaCodeCompletion = !detail?.areaCode;
+      return this.needsAreaCodeCompletion;
+    },
     logout() {
       this.token = '';
       this.info = {};
       this.student = {};
       this.unread = 0;
+      this.needsAreaCodeCompletion = false;
       const ws = new WebsocketManager();
       ws.disconnect();
     },
@@ -57,7 +75,7 @@ export const useUserStore = defineStore('user', {
   },
   persist: {
     key: 'user',
-    pick: ['token', 'info', 'student', 'unread'],
+    pick: ['token', 'info', 'student', 'unread', 'needsAreaCodeCompletion'],
     storage: localStorage,
   },
 });

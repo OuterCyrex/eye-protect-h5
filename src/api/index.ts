@@ -33,7 +33,7 @@ export function WeChatCode(code: string) {
   });
 }
 
-export function WeChatBindPhone(data: { userId: number; phone: string; code: string }) {
+export function WeChatBindPhone(data: { userId: string; phone: string; code: string }) {
   return http.post<API.Auth.WeChatLoginResponse>('/auth/bind-phone', data);
 }
 

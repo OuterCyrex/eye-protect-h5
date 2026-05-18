@@ -1,9 +1,11 @@
 <template>
   <router-view />
+  <UserAreaCodeDialog />
 </template>
 <script setup lang="ts">
   import { fetchGetUnreadCount } from '@/api/message';
   import { useUserStore } from './store/modules/user';
+  import UserAreaCodeDialog from '@/templates/UserAreaCodeDialog.vue';
   const userStore = useUserStore();
 
   onMounted(async () => {
